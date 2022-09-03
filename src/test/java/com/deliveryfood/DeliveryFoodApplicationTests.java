@@ -1,0 +1,14 @@
+package com.deliveryfood;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class DeliveryFoodApplicationTests {
+
+	@Test
+	void contextLoads() {
+		System.out.println("spring start test");
+	}
+
+}
