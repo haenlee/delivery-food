@@ -33,12 +33,12 @@ public class RestaurantController {
     }
 
     @GetMapping("/{userId}")
-    public void findUser(@PathVariable String userId) {
+    public void findUser(@PathVariable int userId) {
         // 가게 회원 조회
     }
 
     @PutMapping("/{userId}")
-    public void modifyUser(@PathVariable String userId) {
+    public void modifyUser(@PathVariable int userId) {
         // 가게 회원 정보 수정
     }
 }

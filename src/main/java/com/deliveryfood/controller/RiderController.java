@@ -33,12 +33,12 @@ public class RiderController {
     }
 
     @GetMapping("/{userId}")
-    public void findUser(@PathVariable String userId) {
+    public void findUser(@PathVariable int userId) {
         // 라이더 회원 조회
     }
 
     @PutMapping("/{userId}")
-    public void modifyUser(@PathVariable String userId) {
+    public void modifyUser(@PathVariable int userId) {
         // 라이더 회원 정보 수정
     }
 }

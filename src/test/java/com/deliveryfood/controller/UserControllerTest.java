@@ -61,7 +61,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("userId로부터 회원을 조회한다.")
+    @DisplayName("userId 로부터 회원을 조회한다.")
     public void testFindUser() throws Exception {
         int userId = ArgumentMatchers.anyInt();
         mockMvc.perform(get("/users/" + userId))
