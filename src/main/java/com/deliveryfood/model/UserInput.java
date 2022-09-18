@@ -1,5 +1,8 @@
 package com.deliveryfood.model;
 
+import lombok.Data;
+
+@Data
 public class UserInput {
     private Long userId;
     private String name;

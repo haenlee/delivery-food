@@ -13,13 +13,13 @@ public class UserController {
         // 입력한 코드로 본인 인증
     }
 
-    @PostMapping("/signin")
-    public void signin(UserInput userInput) {
+    @PostMapping("/register")
+    public void register(UserInput userInput) {
         // 회원 가입
     }
 
-    @PostMapping("/signout")
-    public void signout(UserRequest userRequest) {
+    @PostMapping("/withdraw")
+    public void withdraw(UserRequest userRequest) {
         // 회원 탈퇴 (session을 삭제할 뿐 정보의 변경은 없다.)
     }
 

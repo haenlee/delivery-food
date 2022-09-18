@@ -1,5 +1,6 @@
 package com.deliveryfood.controller;
 
+import com.deliveryfood.model.UserInput;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,33 +42,33 @@ public class RestaurantControllerTest {
 
     @Test
     @DisplayName("가게 회원 가입을 한다")
-    public void testSignin() throws Exception {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.set("userId", String.valueOf(ArgumentMatchers.anyInt()));
-        map.set("name", "테스트");
-        map.set("email", "test@gmail.com");
-        map.set("password", "testpassword");
-        map.set("phone", "010-1234-5678");
-        map.set("address", "서울시 구로구 디지털로");
+    public void testRegister() throws Exception {
+        UserInput userInput = new UserInput();
+        userInput.setUserId(ArgumentMatchers.anyLong());
+        userInput.setName("테스트");
+        userInput.setEmail("test@gmail.com");
+        userInput.setPassword("testpassword");
+        userInput.setPhone("010-1234-5678");
+        userInput.setAddress("서울시 구로구 디지털로");
 
         ObjectMapper objectMapper = new ObjectMapper();
-        mockMvc.perform(post("/restaurants/signin")
+        mockMvc.perform(post("/restaurants/register")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(map)))
+                .content(objectMapper.writeValueAsString(userInput)))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
     @Test
     @DisplayName("가게 회원 탈퇴를 한다.")
-    public void testSignout() throws Exception {
+    public void testWithdraw() throws Exception {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.set("userId", String.valueOf(ArgumentMatchers.anyInt()));
         map.set("password", "testpassword");
 
         ObjectMapper objectMapper = new ObjectMapper();
-        mockMvc.perform(post("/restaurants/signout")
+        mockMvc.perform(post("/restaurants/withdraw")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(map)))
