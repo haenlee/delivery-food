@@ -1,5 +1,6 @@
 package com.deliveryfood.controller;
 
+import com.deliveryfood.model.UserInput;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -115,5 +116,14 @@ class UserControllerTest {
         mockMvc.perform(put("/users/" + userId))
                 .andExpect(status().isOk())
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("유저의 모든 주문을 조회한다.")
+    void findOrderByUserId() throws Exception {
+        int userId = ArgumentMatchers.anyInt();
+        mockMvc.perform(get("/users/" + userId + "/orders")
+                        .param("userId", String.valueOf(userId)))
+                .andExpect(status().isOk());
     }
 }

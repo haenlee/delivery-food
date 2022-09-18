@@ -116,4 +116,120 @@ public class RestaurantControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("레스토랑ID로 레스토랑을 조회한다.")
+    void searchRestaurants() throws Exception {
+        //given and when
+        int restaurantId = 1;
+
+        //then
+        mockMvc.perform(get("/restaurants/" + restaurantId))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("레스토랑을 생성 후 해당 레스토랑을 조회한다.")
+    void createRestaurant() throws Exception {
+        //given and when
+        int restaurantId = 2;
+        int userId = restaurantId + 10000;
+        String name = "양념치킨 전문점";
+
+        mockMvc.perform(post("/restaurants/" + restaurantId)
+                        .param("userId", String.valueOf(userId))
+                        .param("name", name))
+                .andExpect(status().isOk());
+
+        //then
+        mockMvc.perform(get("/restaurants/" + restaurantId))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("레스토랑의 메뉴를 생성 후 해당 레스토랑의 메뉴들을 조회한다.")
+    void createMenus_searchMenusByRestaurantId() throws Exception {
+        //given and when
+        int restaurantId = 1;
+        int menuId = restaurantId + 20000;
+        String name = "후라이드치킨";
+
+        mockMvc.perform(post("/restaurants/" + restaurantId + "/menus")
+                        .param("menuId", String.valueOf(menuId))
+                        .param("name", name))
+                .andExpect(status().isOk());
+
+        //then
+        mockMvc.perform(get("/restaurants/" + restaurantId + "/menus"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("레스토랑의 메뉴를 2개 생성 후 해당 레스토랑의 메뉴들을 모두 조회한다.")
+    void createMenus_searchMenusByRestaurantId_many() throws Exception {
+        //given and then
+        int restaurantId = 2;
+        int menuId_1st = restaurantId + 20000;
+        String name_1st = "후라이드치킨";
+        int menuId_2nd = restaurantId + 30000;
+        String name_2nd = "양념치킨";
+
+        mockMvc.perform(post("/restaurants/" + restaurantId + "/menus")
+                        .param("menuId", String.valueOf(menuId_1st))
+                        .param("name", name_1st))
+                .andExpect(status().isOk());
+        mockMvc.perform(post("/restaurants/" + restaurantId + "/menus")
+                        .param("menuId", String.valueOf(menuId_2nd))
+                        .param("name", name_2nd))
+                .andExpect(status().isOk());
+
+        //then
+        mockMvc.perform(get("/restaurants/" + restaurantId + "/menus"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("메뉴를 조회한다.")
+    void searchMenuByRestaurantIdAndMenuId() throws Exception {
+        //given and when
+        int restaurantId = 1;
+        int menuId = restaurantId + 20000;
+        /*
+        MockHttpServletResponse response   = mvc.perform(get("/restaurants/" + restaurantId + "/menus/" + menuId))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getContentAsString(Charset.forName("UTF-8"))).isEqualTo(resMsg);
+        */
+
+        //then
+        mockMvc.perform(get("/restaurants/" + restaurantId + "/menus/" + menuId))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("메뉴 정보를 수정 후 해당 메뉴를 조회한다.")
+    void updateMenusByRestaurantIdAndMenuId() throws Exception {
+        //given
+        int restaurantId = 1;
+        int menuId = restaurantId + 20000;
+        String name = "반반치킨";
+
+        //when
+        mockMvc.perform(put("/menu/" + restaurantId + "/" + menuId)
+                        .param("name", name))
+                .andExpect(status().isOk());
+
+        //then
+        mockMvc.perform(get("/restaurants/" + restaurantId + "/menus/" + menuId))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 }

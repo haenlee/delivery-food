@@ -42,4 +42,9 @@ public class UserController {
     public void modifyUser(UserInput userInput) {
         // 회원 정보 수정
    }
+
+    @GetMapping("/{userId}/orders")
+    public void findOrderByUserId(@PathVariable String userId) {
+        // 유저의 모든 주문을 조회
+    }
 }
