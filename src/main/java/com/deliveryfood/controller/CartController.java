@@ -1,5 +1,6 @@
 package com.deliveryfood.controller;
 
+import com.deliveryfood.model.CartInput;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +18,12 @@ public class CartController {
         // 장바구니 삭제
     }
 
-    @PutMapping("/add/{menuId}/{optionId}/{subOptionId}")
-    public void addMenu(@PathVariable int menuId, @PathVariable int optionId, @PathVariable int subOptionId) {
+    @PostMapping("/add")
+    public void addMenu(CartInput cartInput) {
         // 장바구니 메뉴 추가
     }
 
-    @DeleteMapping("/sub/{menuId}")
+    @PostMapping("/sub/{menuId}")
     public void deleteMenu(@PathVariable int menuId) {
         // 장바구니 메뉴 삭제
     }
