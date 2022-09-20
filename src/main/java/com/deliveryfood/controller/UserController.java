@@ -2,11 +2,16 @@ package com.deliveryfood.controller;
 
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
+import com.deliveryfood.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
+    private final UserService userService;
 
     @PostMapping("/certification")
     public void certification(@RequestParam int code)  {
@@ -15,7 +20,7 @@ public class UserController {
 
     @PostMapping("/register")
     public void register(UserInput userInput) {
-        // 회원 가입
+        userService.register(userInput);
     }
 
     @PostMapping("/withdraw")

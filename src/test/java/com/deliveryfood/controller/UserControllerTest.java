@@ -44,7 +44,7 @@ class UserControllerTest {
     @DisplayName("회원 가입을 한다")
     public void testRegister() throws Exception {
         UserInput userInput = new UserInput();
-        userInput.setUserId(ArgumentMatchers.anyLong());
+        userInput.setUserId(String.valueOf(ArgumentMatchers.anyLong()));
         userInput.setName("테스트");
         userInput.setEmail("test@gmail.com");
         userInput.setPassword("testpassword");
