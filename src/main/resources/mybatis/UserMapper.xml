@@ -4,9 +4,23 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.deliveryfood.mapper.UserMapper">
 
+    <select id="findById" resultType="com.deliveryfood.dto.UserDto">
+        SELECT *
+        FROM USER
+        WHERE email = #{email}
+    </select>
+
     <insert id="register" parameterType="com.deliveryfood.dto.UserDto">
         INSERT INTO USER(user_id, name , email, password, phone, address, status, reg_dt)
         VALUES(#{userId}, #{name}, #{email}, #{password}, #{phone}, #{address}, #{status}, #{regDt})
     </insert>
+
+    <update id="withdraw">
+        UPDATE USER
+        SET status = 'WITHDRAW',
+            udt_dt = NOW()
+        WHERE user_id = #{userId}
+    </update>
+
 
 </mapper>

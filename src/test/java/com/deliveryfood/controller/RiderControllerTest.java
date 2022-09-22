@@ -44,7 +44,6 @@ public class RiderControllerTest {
     @DisplayName("라이더 회원 가입을 한다")
     public void testRegister() throws Exception {
         UserInput userInput = new UserInput();
-        userInput.setUserId(String.valueOf(ArgumentMatchers.anyLong()));
         userInput.setName("테스트");
         userInput.setEmail("test@gmail.com");
         userInput.setPassword("testpassword");

@@ -19,18 +19,21 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public void register(UserInput userInput) {
+    public void register(@RequestBody UserInput userInput) {
+        // 회원 가입
         userService.register(userInput);
     }
 
     @PostMapping("/withdraw")
-    public void withdraw(UserRequest userRequest) {
+    public void withdraw(@RequestBody UserRequest userRequest) {
         // 회원 탈퇴 (session을 삭제할 뿐 정보의 변경은 없다.)
+        userService.withdraw(userRequest);
     }
 
     @PostMapping("/login")
     public void login(UserRequest userRequest) {
         // 로그인
+        userService.login(userRequest);
     }
 
     @PostMapping("/logout")

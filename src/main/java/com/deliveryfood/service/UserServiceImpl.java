@@ -1,8 +1,10 @@
 package com.deliveryfood.service;
 
+import com.deliveryfood.dao.UserDao;
 import com.deliveryfood.dto.UserDto;
 import com.deliveryfood.mapper.UserMapper;
 import com.deliveryfood.model.UserInput;
+import com.deliveryfood.model.UserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
+    private final UserDao userDao;
 
     @Override
     public boolean register(UserInput userInput) {
@@ -31,8 +34,42 @@ public class UserServiceImpl implements UserService {
                 .regDt(LocalDateTime.now())
                 .build();
 
-        userMapper.register(user);
+        userDao.register(user);
 
         return true;
     }
+
+    @Override
+    public boolean withdraw(UserRequest userRequest) {
+        UserDto user = userDao.findById(userRequest.getEmail());
+        if(user == null) {
+            // 유저가 존재하지 않음
+            return false;
+        }
+
+        if(!user.getPassword().equals(userRequest.getPassword())) {
+            // 비밀번호가 다름
+            return false;
+        }
+
+        userDao.withdraw(user.getUserId());
+        return true;
+    }
+
+    @Override
+    public boolean login(UserRequest userRequest) {
+        UserDto user = userDao.findById(userRequest.getEmail());
+        if(user == null) {
+            // 유저가 존재하지 않음
+            return false;
+        }
+
+        if(!user.getPassword().equals(userRequest.getPassword())) {
+            // 비밀번호가 다름
+            return false;
+        }
+        return true;
+    }
+
+
 }
