@@ -11,8 +11,8 @@ public class UserDao {
 
     private final SqlSessionTemplate sqlSessionTemplate;
 
-    public boolean register(UserDto userInput) {
-        sqlSessionTemplate.insert("com.deliveryfood.mapper.UserMapper.register", userInput);
+    public boolean register(UserDto user) {
+        sqlSessionTemplate.insert("com.deliveryfood.mapper.UserMapper.register", user);
         return true;
     }
 
@@ -20,8 +20,8 @@ public class UserDao {
         return sqlSessionTemplate.selectOne("com.deliveryfood.mapper.UserMapper.findById", email);
     }
 
-    public boolean withdraw(String userId) {
-        sqlSessionTemplate.update("com.deliveryfood.mapper.UserMapper.findById", userId);
+    public boolean withdraw(UserDto user) {
+        sqlSessionTemplate.update("com.deliveryfood.mapper.UserMapper.findById", user);
         return true;
     }
 }

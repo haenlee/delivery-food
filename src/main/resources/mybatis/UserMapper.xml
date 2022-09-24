@@ -15,9 +15,9 @@
         VALUES(#{userId}, #{name}, #{email}, #{password}, #{phone}, #{address}, #{status}, #{regDt})
     </insert>
 
-    <update id="withdraw">
+    <update id="withdraw" parameterType="com.deliveryfood.dto.UserDto">
         UPDATE USER
-        SET status = 'WITHDRAW',
+        SET status = #{status},
             udt_dt = NOW()
         WHERE user_id = #{userId}
     </update>

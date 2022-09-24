@@ -13,9 +13,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class UserDto {
 
-    public static final String STATUS_NONE = "NONE";
-    public static final String STATUS_REGISTER = "REGISTER";
-    public static final String STATUS_WITHDRAW = "WITHDRAW";
+    public enum Status {
+        NONE,
+        REGISTER,
+        WITHDRAW,
+    }
 
     private String userId;
     private String name;
@@ -23,7 +25,7 @@ public class UserDto {
     private String email;
     private String password;
     private String address;
-    private String status;
+    private Status status;
     private LocalDateTime regDt;
     private LocalDateTime udtDt;
 }

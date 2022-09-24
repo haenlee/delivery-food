@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
                 .password(userInput.getPassword())
                 .phone(userInput.getPhone())
                 .address(userInput.getAddress())
-                .status(UserDto.STATUS_REGISTER)
+                .status(UserDto.Status.REGISTER)
                 .regDt(LocalDateTime.now())
                 .build();
 
@@ -52,7 +52,8 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        userDao.withdraw(user.getUserId());
+        user.setStatus(UserDto.Status.WITHDRAW);
+        userDao.withdraw(user);
         return true;
     }
 
