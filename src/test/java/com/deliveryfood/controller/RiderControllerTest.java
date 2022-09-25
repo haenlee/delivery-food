@@ -43,13 +43,13 @@ public class RiderControllerTest {
     @Test
     @DisplayName("라이더 회원 가입을 한다")
     public void testRegister() throws Exception {
-        UserInput userInput = new UserInput();
-        userInput.setUserId(ArgumentMatchers.anyLong());
-        userInput.setName("테스트");
-        userInput.setEmail("test@gmail.com");
-        userInput.setPassword("testpassword");
-        userInput.setPhone("010-1234-5678");
-        userInput.setAddress("서울시 구로구 디지털로");
+        UserInput userInput = UserInput.builder()
+                .name("테스트")
+                .email("test@gmail.com")
+                .password("testpassword")
+                .phone("010-1234-5678")
+                .address("서울시 구로구 디지털로")
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
         mockMvc.perform(post("/riders/register")
