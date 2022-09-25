@@ -1,6 +1,7 @@
 package com.deliveryfood.controller;
 
 import com.deliveryfood.model.UserInput;
+import com.deliveryfood.model.UserRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -63,15 +64,15 @@ class UserControllerTest {
     @Test
     @DisplayName("회원 탈퇴를 한다.")
     public void testWithdraw() throws Exception {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.set("userId", String.valueOf(ArgumentMatchers.anyInt()));
-        map.set("password", "testpassword");
+        UserRequest userRequest = new UserRequest();
+        userRequest.setEmail("test@gmail.com");
+        userRequest.setPassword("testpassword");
 
         ObjectMapper objectMapper = new ObjectMapper();
         mockMvc.perform(post("/users/withdraw")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(map)))
+                .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
