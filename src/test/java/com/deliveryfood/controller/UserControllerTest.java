@@ -2,6 +2,7 @@ package com.deliveryfood.controller;
 
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
+import com.deliveryfood.service.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +37,7 @@ class UserControllerTest {
     @DisplayName("회원가입시 본인 인증을 처리한다.")
     public void testCertification() throws Exception {
         mockMvc.perform(post("/users/certification")
-                .param("code", String.valueOf(ArgumentMatchers.anyInt())))
+                .param("code", UserServiceImpl.REGISTER_CODE))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
