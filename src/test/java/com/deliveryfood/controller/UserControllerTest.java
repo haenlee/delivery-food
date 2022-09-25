@@ -36,7 +36,15 @@ class UserControllerTest {
     @Test
     @DisplayName("회원가입시 본인 인증을 처리한다.")
     public void testCertification() throws Exception {
+        UserRequest userRequest = UserRequest.builder()
+                .email("test@gmail.com")
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
         mockMvc.perform(post("/users/certification")
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userRequest))
                 .param("code", UserServiceImpl.REGISTER_CODE))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -65,9 +73,10 @@ class UserControllerTest {
     @Test
     @DisplayName("회원 탈퇴를 한다.")
     public void testWithdraw() throws Exception {
-        UserRequest userRequest = new UserRequest();
-        userRequest.setEmail("test@gmail.com");
-        userRequest.setPassword("testpassword");
+        UserRequest userRequest = UserRequest.builder()
+                .email("test@gmail.com")
+                .password("testpassword")
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
         mockMvc.perform(post("/users/withdraw")

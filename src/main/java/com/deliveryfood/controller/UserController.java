@@ -14,7 +14,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/certification")
-    public void certification(UserRequest userRequest, @RequestParam String code)  {
+    public void certification(@RequestBody UserRequest userRequest, @RequestParam String code)  {
         // 입력한 코드로 본인 인증
         userService.certification(userRequest, code);
     }

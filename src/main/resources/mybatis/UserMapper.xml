@@ -6,6 +6,9 @@
 
     <select id="findById" resultType="com.deliveryfood.dto.UserDto">
         SELECT *
+            , USER_ID as userId
+            , REG_DT as regDt
+            , UDT_DT as udtDt
         FROM USER
         WHERE email = #{email}
     </select>

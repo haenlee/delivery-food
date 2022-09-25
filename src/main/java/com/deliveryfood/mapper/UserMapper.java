@@ -10,5 +10,5 @@ public interface UserMapper {
 
     void register(UserDto userDto);
 
-    void withdraw(UserDto userDto);
+    void updateStatus(UserDto userDto);
 }
