@@ -48,10 +48,11 @@ class CartControllerTest {
     @Test
     @DisplayName("menuId, optionId, subOptionId 를 사용해서 장바구니에 메뉴를 추가한다.")
     public void testAddMenu() throws Exception {
-        CartInput cartInput = new CartInput();
-        cartInput.setMenuId(ArgumentMatchers.anyInt());
-        cartInput.setOptionId(ArgumentMatchers.anyInt());
-        cartInput.setSubOptionid(ArgumentMatchers.anyInt());
+        CartInput cartInput = CartInput.builder()
+                .menuId(ArgumentMatchers.anyInt())
+                .optionId(ArgumentMatchers.anyInt())
+                .subOptionid(ArgumentMatchers.anyInt())
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
         mockMvc.perform(post("/carts/add")

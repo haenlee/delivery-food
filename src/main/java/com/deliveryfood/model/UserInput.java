@@ -1,8 +1,10 @@
 package com.deliveryfood.model;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
 
-@Data
+@Builder
+@Value
 public class UserInput {
     private String name;
     private String email;
