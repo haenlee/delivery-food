@@ -106,6 +106,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto findUser(String email) {
+        UserDto userDto = userDao.findById(email);
+        if(userDto == null) {
+            // 유저가 존재하지 않음
+            return null;
+        }
+
+        return userDto;
+    }
+
+    @Override
+    public boolean modifyUser(UserInput userInput) {
+        UserDto userDto = userDao.findById(userInput.getEmail());
+        if(userDto == null) {
+            // 유저가 존재하지 않음
+            return false;
+        }
+
+        userDto.setPhone(userInput.getPhone());
+        userDto.setAddress(userInput.getAddress());
+        userDao.updateUser(userDto);
+        return true;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDto userDto = userDao.findById(username);
         if(userDto == null) {
