@@ -5,9 +5,15 @@ import com.deliveryfood.dto.UserDto;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -15,7 +21,9 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     public static final String REGISTER_CODE = "FLAB";
+
     private final UserDao userDao;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public boolean certification(UserRequest userRequest, String code) {
@@ -40,13 +48,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean register(UserInput userInput) {
         // 유저 중복 체크 추가
-        // 비밀번호 암호화 추가
+
+        // 비밀번호 암호화
+        String hashPw = BCrypt.hashpw(userInput.getPassword(), BCrypt.gensalt());
 
         UserDto userDto = UserDto.builder()
                 .userId(UUID.randomUUID().toString())
                 .name(userInput.getName())
                 .email(userInput.getEmail())
-                .password(userInput.getPassword())
+                .password(hashPw)
                 .phone(userInput.getPhone())
                 .address(userInput.getAddress())
                 .status(UserDto.Status.REGISTER_AUTH)
@@ -95,5 +105,19 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserDto userDto = userDao.findById(username);
+        if(userDto == null) {
+            // 유저가 존재하지 않음
+            return null;
+        }
 
+        if(userDto.getStatus().equals(UserDto.Status.REGISTER_AUTH)) {
+            // 본인 인증 완료 전
+            return null;
+        }
+
+        return new User(userDto.getEmail(), userDto.getPassword(), Collections.emptyList());
+    }
 }
