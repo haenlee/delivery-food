@@ -1,13 +1,21 @@
 package com.deliveryfood.service;
 
+import com.deliveryfood.dto.UserDto;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
+
+    boolean certification(UserRequest userRequest, String code);
 
     boolean register(UserInput userInput);
 
     boolean withdraw(UserRequest userRequest);
 
-    boolean login(UserRequest userInput);
+    boolean login(UserRequest userRequest);
+
+    UserDto findUser(String email);
+
+    boolean modifyUser(UserInput userInput);
 }

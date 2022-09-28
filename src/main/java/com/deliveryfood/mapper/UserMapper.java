@@ -1,6 +1,7 @@
 package com.deliveryfood.mapper;
 
 import com.deliveryfood.dto.UserDto;
+import com.deliveryfood.model.UserInput;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -10,5 +11,9 @@ public interface UserMapper {
 
     void register(UserDto userDto);
 
-    void withdraw(UserDto userDto);
+    void updateStatus(UserDto userDto);
+
+    void updateUser(UserDto userDto);
+
+    void modifyUser(UserInput userInput);
 }

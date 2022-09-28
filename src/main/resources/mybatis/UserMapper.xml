@@ -22,5 +22,13 @@
         WHERE user_id = #{userId}
     </update>
 
+    <update id="updateUser" parameterType="com.deliveryfood.dto.UserDto">
+        UPDATE USER
+        SET phone = #{phone},
+            address = #{address},
+            udt_dt = NOW()
+        WHERE user_id = #{userId}
+    </update>
+
 
 </mapper>

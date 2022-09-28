@@ -24,4 +24,8 @@ public class UserDao {
         sqlSessionTemplate.update("com.deliveryfood.mapper.UserMapper.findById", user);
         return true;
     }
+
+    public void updateUser(UserDto userDto) {
+        sqlSessionTemplate.update("com.deliveryfood.mapper.UserMapper.updateStatus", userDto);
+    }
 }
