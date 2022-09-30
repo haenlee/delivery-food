@@ -2,7 +2,7 @@ package com.deliveryfood.controller;
 
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
-import com.deliveryfood.service.UserServiceImpl;
+import com.deliveryfood.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,7 +45,7 @@ class UserControllerTest {
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userRequest))
-                .param("code", UserServiceImpl.REGISTER_CODE))
+                .param("code", UserService.REGISTER_CODE))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

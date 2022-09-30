@@ -3,7 +3,7 @@ package com.deliveryfood.controller;
 import com.deliveryfood.dto.UserDto;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
-import com.deliveryfood.service.UserService;
+import com.deliveryfood.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @PostMapping("/certification")
     public void certification(@RequestBody UserRequest userRequest, @RequestParam String code)  {
