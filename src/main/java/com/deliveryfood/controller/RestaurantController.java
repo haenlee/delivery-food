@@ -30,14 +30,14 @@ public class RestaurantController {
         // 입력한 코드로 본인 인증
     }
 
-    @PostMapping("/signin")
-    public void signin(@RequestBody RestaurantInput restaurant) {
+    @PostMapping("/register")
+    public void register(UserInput userInput) {
         // 가게 회원 가입
         restaurantService.signin(restaurant);
     }
 
-    @PostMapping("/signout")
-    public void signout(@RequestBody RestaurantInput restaurantInput) {
+    @PostMapping("/withdraw")
+    public void withdraw(UserRequest userRequest) {
         // 가게 회원 탈퇴 (session을 삭제할 뿐 정보의 변경은 없다.)
         RestaurantInput restaurant = RestaurantInput.builder()
                 .restaurantId(restaurantInput.getRestaurantId())

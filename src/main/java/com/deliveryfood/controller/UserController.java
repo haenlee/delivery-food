@@ -2,30 +2,38 @@ package com.deliveryfood.controller;
 
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
+import com.deliveryfood.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
+    private final UserService userService;
 
     @PostMapping("/certification")
     public void certification(@RequestParam int code)  {
         // 입력한 코드로 본인 인증
     }
 
-    @PostMapping("/signin")
-    public void signin(UserInput userInput) {
+    @PostMapping("/register")
+    public void register(@RequestBody UserInput userInput) {
         // 회원 가입
+        userService.register(userInput);
     }
 
-    @PostMapping("/signout")
-    public void signout(UserRequest userRequest) {
+    @PostMapping("/withdraw")
+    public void withdraw(@RequestBody UserRequest userRequest) {
         // 회원 탈퇴 (session을 삭제할 뿐 정보의 변경은 없다.)
+        userService.withdraw(userRequest);
     }
 
     @PostMapping("/login")
     public void login(UserRequest userRequest) {
         // 로그인
+        userService.login(userRequest);
     }
 
     @PostMapping("/logout")
