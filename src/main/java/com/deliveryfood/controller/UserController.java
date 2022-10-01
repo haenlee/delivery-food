@@ -42,7 +42,7 @@ public class UserController {
         // 로그아웃
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{email}")
     public void findUser(@PathVariable String email) {
         // 회원 조회
         UserDto userDto = userService.findUser(email);
