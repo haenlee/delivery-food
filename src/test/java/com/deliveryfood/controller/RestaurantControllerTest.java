@@ -1,7 +1,9 @@
 package com.deliveryfood.controller;
 
+import com.deliveryfood.model.RestaurantInput;
 import com.deliveryfood.model.UserInput;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,8 +16,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.UUID;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -119,117 +124,63 @@ public class RestaurantControllerTest {
     }
 
     @Test
-    @DisplayName("레스토랑ID로 레스토랑을 조회한다.")
-    void searchRestaurants() throws Exception {
+    void signin() throws Exception {
         //given and when
-        int restaurantId = 1;
+        RestaurantInput restaurantInput = RestaurantInput.builder()
+                        .restaurantId(String.valueOf(UUID.randomUUID()))
+                        .userId(String.valueOf(UUID.randomUUID()))
+                        .name("테스트")
+                        .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
 
         //then
-        mockMvc.perform(get("/restaurants/" + restaurantId))
+        mockMvc.perform(post("/restaurants/signin")
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(restaurantInput)))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
     @Test
-    @DisplayName("레스토랑을 생성 후 해당 레스토랑을 조회한다.")
-    void createRestaurant() throws Exception {
+    void findUsers() throws Exception {
+        //then
+        mockMvc.perform(get("/restaurants/"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void findUserById() throws Exception {
         //given and when
-        int restaurantId = 2;
-        int userId = restaurantId + 10000;
-        String name = "양념치킨 전문점";
-
-        mockMvc.perform(post("/restaurants/" + restaurantId)
-                        .param("userId", String.valueOf(userId))
-                        .param("name", name))
-                .andExpect(status().isOk());
+        RestaurantInput restaurantInput = RestaurantInput.builder()
+                .restaurantId("9419ab0c-9353-491a-aaee-fe0b8d175d5d")
+                .build();
 
         //then
-        mockMvc.perform(get("/restaurants/" + restaurantId))
+        mockMvc.perform(get("/restaurants/" + restaurantInput.getRestaurantId())
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
     @Test
-    @DisplayName("레스토랑의 메뉴를 생성 후 해당 레스토랑의 메뉴들을 조회한다.")
-    void createMenus_searchMenusByRestaurantId() throws Exception {
+    void modifyUserById() throws Exception {
         //given and when
-        int restaurantId = 1;
-        int menuId = restaurantId + 20000;
-        String name = "후라이드치킨";
+        RestaurantInput restaurantInput = RestaurantInput.builder()
+                .restaurantId("9419ab0c-9353-491a-aaee-fe0b8d175d5d")
+                .name("name 수정 완료")
+                .build();
 
-        mockMvc.perform(post("/restaurants/" + restaurantId + "/menus")
-                        .param("menuId", String.valueOf(menuId))
-                        .param("name", name))
-                .andExpect(status().isOk());
+        ObjectMapper objectMapper = new ObjectMapper();
 
         //then
-        mockMvc.perform(get("/restaurants/" + restaurantId + "/menus"))
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("레스토랑의 메뉴를 2개 생성 후 해당 레스토랑의 메뉴들을 모두 조회한다.")
-    void createMenus_searchMenusByRestaurantId_many() throws Exception {
-        //given and then
-        int restaurantId = 2;
-        int menuId_1st = restaurantId + 20000;
-        String name_1st = "후라이드치킨";
-        int menuId_2nd = restaurantId + 30000;
-        String name_2nd = "양념치킨";
-
-        mockMvc.perform(post("/restaurants/" + restaurantId + "/menus")
-                        .param("menuId", String.valueOf(menuId_1st))
-                        .param("name", name_1st))
-                .andExpect(status().isOk());
-        mockMvc.perform(post("/restaurants/" + restaurantId + "/menus")
-                        .param("menuId", String.valueOf(menuId_2nd))
-                        .param("name", name_2nd))
-                .andExpect(status().isOk());
-
-        //then
-        mockMvc.perform(get("/restaurants/" + restaurantId + "/menus"))
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("메뉴를 조회한다.")
-    void searchMenuByRestaurantIdAndMenuId() throws Exception {
-        //given and when
-        int restaurantId = 1;
-        int menuId = restaurantId + 20000;
-        /*
-        MockHttpServletResponse response   = mvc.perform(get("/restaurants/" + restaurantId + "/menus/" + menuId))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andReturn()
-                .getResponse();
-
-        assertThat(response.getContentAsString(Charset.forName("UTF-8"))).isEqualTo(resMsg);
-        */
-
-        //then
-        mockMvc.perform(get("/restaurants/" + restaurantId + "/menus/" + menuId))
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("메뉴 정보를 수정 후 해당 메뉴를 조회한다.")
-    void updateMenusByRestaurantIdAndMenuId() throws Exception {
-        //given
-        int restaurantId = 1;
-        int menuId = restaurantId + 20000;
-        String name = "반반치킨";
-
-        //when
-        mockMvc.perform(put("/menu/" + restaurantId + "/" + menuId)
-                        .param("name", name))
-                .andExpect(status().isOk());
-
-        //then
-        mockMvc.perform(get("/restaurants/" + restaurantId + "/menus/" + menuId))
+        mockMvc.perform(put("/restaurants/" + restaurantInput.getRestaurantId())
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(restaurantInput)))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

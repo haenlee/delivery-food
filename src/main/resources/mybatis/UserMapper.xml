@@ -6,6 +6,9 @@
 
     <select id="findById" resultType="com.deliveryfood.dto.UserDto">
         SELECT *
+            , USER_ID as userId
+            , REG_DT as regDt
+            , UDT_DT as udtDt
         FROM USER
         WHERE email = #{email}
     </select>
@@ -15,7 +18,7 @@
         VALUES(#{userId}, #{name}, #{email}, #{password}, #{phone}, #{address}, #{status}, #{regDt})
     </insert>
 
-    <update id="withdraw" parameterType="com.deliveryfood.dto.UserDto">
+    <update id="updateStatus" parameterType="com.deliveryfood.dto.UserDto">
         UPDATE USER
         SET status = #{status},
             udt_dt = NOW()

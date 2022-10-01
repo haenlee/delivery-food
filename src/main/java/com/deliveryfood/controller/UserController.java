@@ -15,13 +15,14 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/certification")
-    public void certification(@RequestParam int code)  {
+    public void certification(@RequestBody UserRequest userRequest, @RequestParam String code)  {
         // 입력한 코드로 본인 인증
+        userService.certification(userRequest, code);
     }
 
     @PostMapping("/register")
     public void register(@RequestBody UserInput userInput) {
-        // 회원 가입
+        // 회원 가입 > 본인 인증 요청
         userService.register(userInput);
     }
 
