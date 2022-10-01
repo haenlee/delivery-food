@@ -5,9 +5,11 @@ import com.deliveryfood.model.UserRequest;
 
 public interface UserService {
 
+    boolean certification(UserRequest userRequest, String code);
+
     boolean register(UserInput userInput);
 
     boolean withdraw(UserRequest userRequest);
 
-    boolean login(UserRequest userInput);
+    boolean login(UserRequest userRequest);
 }
