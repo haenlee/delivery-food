@@ -46,26 +46,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean certification(UserRequest userRequest, String code) {
-        // REGISTER_CODE 와 일치하면 인증 완료
-
-        UserDto userDto = userDao.findById(userRequest.getEmail());
-        if(userDto == null) {
-            // 유저가 존재하지 않음
-            return false;
-        }
-
-        if(!code.equals(REGISTER_CODE)) {
-            // 인증 코드가 다름
-            return false;
-        }
-
-        userDto.setStatus(UserDto.Status.REGISTER);
-        userDao.updateStatus(userDto);
-        return true;
-    }
-
-    @Override
     public boolean register(UserInput userInput) {
         // 유저 중복 체크 추가
 
@@ -122,6 +102,31 @@ public class UserServiceImpl implements UserService {
             // 비밀번호가 다름
             return false;
         }
+        return true;
+    }
+
+    @Override
+    public UserDto findUser(String email) {
+        UserDto userDto = userDao.findById(email);
+        if(userDto == null) {
+            // 유저가 존재하지 않음
+            return null;
+        }
+
+        return userDto;
+    }
+
+    @Override
+    public boolean modifyUser(UserInput userInput) {
+        UserDto userDto = userDao.findById(userInput.getEmail());
+        if(userDto == null) {
+            // 유저가 존재하지 않음
+            return false;
+        }
+
+        userDto.setPhone(userInput.getPhone());
+        userDto.setAddress(userInput.getAddress());
+        userDao.updateUser(userDto);
         return true;
     }
 

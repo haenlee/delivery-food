@@ -1,5 +1,6 @@
 package com.deliveryfood.controller;
 
+import com.deliveryfood.dto.UserDto;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
 import com.deliveryfood.service.UserService;
@@ -42,14 +43,16 @@ public class UserController {
         // 로그아웃
     }
 
-    @GetMapping("/{userId}")
-    public void findUser(@PathVariable int userId) {
+    @GetMapping("/{email}")
+    public void findUser(@PathVariable String email) {
         // 회원 조회
+        UserDto userDto = userService.findUser(email);
     }
 
     @PutMapping("/{userId}")
     public void modifyUser(UserInput userInput) {
-        // 회원 정보 수정
+        // 회원 정보 수정 (현재는 전화번호, 주소만 수정가능)
+        userService.modifyUser(userInput);
    }
 
     @GetMapping("/{userId}/orders")
