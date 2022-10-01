@@ -15,6 +15,7 @@ public class UserDto {
 
     public enum Status {
         NONE,
+        REGISTER_AUTH,
         REGISTER,
         WITHDRAW,
     }
@@ -26,6 +27,7 @@ public class UserDto {
     private String password;
     private String address;
     private Status status;
+    private boolean isAuth;
     private LocalDateTime regDt;
     private LocalDateTime udtDt;
 }

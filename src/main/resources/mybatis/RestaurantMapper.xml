@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.deliveryfood.mapper.RestaurantMapper">
+
+    <insert id="signin" parameterType="com.deliveryfood.dto.RestaurantDto">
+        INSERT INTO restaurant(restaurantId, userId, name)
+        VALUES(#{restaurantId}, #{userId}, #{name})
+    </insert>
+
+    <update id="signout" parameterType="com.deliveryfood.dto.RestaurantDto">
+        UPDATE restaurant SET state = '1'
+        WHERE restaurantId = #{restaurantId}
+    </update>
+
+    <select id="findUsers" resultType="com.deliveryfood.dto.RestaurantDto">
+        SELECT * FROM restaurant
+    </select>
+
+    <select id="findUserById" parameterType="com.deliveryfood.dto.RestaurantDto" resultType="com.deliveryfood.dto.RestaurantDto">
+        SELECT * FROM restaurant WHERE restaurantId = #{restaurantId}
+    </select>
+
+    <update id="modifyUserById" parameterType="com.deliveryfood.dto.RestaurantDto">
+        UPDATE restaurant SET name = #{name}
+        WHERE restaurantId = #{restaurantId}
+    </update>
+
+</mapper>
