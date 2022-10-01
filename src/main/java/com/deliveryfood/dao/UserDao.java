@@ -23,8 +23,4 @@ public class UserDao {
     public void updateUser(UserDto userDto) {
         sqlSessionTemplate.update("com.deliveryfood.mapper.UserMapper.updateUser", userDto);
     }
-
-    public void updateUser(UserDto userDto) {
-        sqlSessionTemplate.update("com.deliveryfood.mapper.UserMapper.updateStatus", userDto);
-    }
 }

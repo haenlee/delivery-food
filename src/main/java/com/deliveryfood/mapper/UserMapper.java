@@ -11,9 +11,5 @@ public interface UserMapper {
 
     void register(UserDto userDto);
 
-    void updateStatus(UserDto userDto);
-
     void updateUser(UserDto userDto);
-
-    void modifyUser(UserInput userInput);
 }
