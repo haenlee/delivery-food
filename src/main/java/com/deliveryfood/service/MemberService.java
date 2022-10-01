@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
@@ -19,6 +20,7 @@ import java.util.Collections;
 public class MemberService {
 
     private final MemberDao memberDao;
+    private final HttpSession session;
 
     public static final String REGISTER_CODE = "FLAB";
 
@@ -91,11 +93,12 @@ public class MemberService {
             return false;
         }
 
-        if(!memberDto.getPassword().equals(userRequest.getPassword())) {
+        if(!BCrypt.checkpw(userRequest.getPassword(), memberDto.getPassword())) {
             // 비밀번호가 다름
             return false;
         }
 
+        session.setAttribute("USER", memberDto.getUserId());
         return true;
     }
 
