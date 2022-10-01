@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,8 +18,8 @@ public class UserService extends MemberService implements IUserService {
 
     private final UserDao userDao;
 
-    public UserService(MemberDao memberDao, UserDao userDao) {
-        super(memberDao);
+    public UserService(MemberDao memberDao, HttpSession httpSession, UserDao userDao) {
+        super(memberDao, httpSession);
         this.userDao = userDao;
     }
 
