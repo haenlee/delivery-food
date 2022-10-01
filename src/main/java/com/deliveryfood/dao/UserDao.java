@@ -20,11 +20,7 @@ public class UserDao {
         return sqlSessionTemplate.selectOne("com.deliveryfood.mapper.UserMapper.findById", email);
     }
 
-    public void updateStatus(UserDto userDto) {
-        sqlSessionTemplate.update("com.deliveryfood.mapper.UserMapper.updateStatus", userDto);
-    }
-
     public void updateUser(UserDto userDto) {
-        sqlSessionTemplate.update("com.deliveryfood.mapper.UserMapper.updateStatus", userDto);
+        sqlSessionTemplate.update("com.deliveryfood.mapper.UserMapper.updateUser", userDto);
     }
 }
