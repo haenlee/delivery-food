@@ -6,25 +6,25 @@
 <mapper namespace="com.deliveryfood.mapper.MenuMapper">
 
     <insert id="createMenuById" parameterType="com.deliveryfood.dto.MenuDto">
-        INSERT INTO menu(menu_Id, restaurant_Id, name)
+        INSERT INTO menu(menu_id, restaurant_id, name)
         VALUES(#{menuId}, #{restaurantId}, #{name})
     </insert>
 
     <select id="findMenus" resultType="com.deliveryfood.dto.MenuDto">
         SELECT * FROM menu
         WHERE menu_Id = #{menuId}
-        AND restaurant_Id = #{restaurantId}
+        AND restaurant_id = #{restaurantId}
     </select>
 
     <select id="findMenuById" parameterType="com.deliveryfood.dto.MenuDto" resultType="com.deliveryfood.dto.MenuDto">
         SELECT * FROM menu
-        WHERE restaurant_Id = #{restaurantId}
+        WHERE restaurant_id = #{restaurantId}
     </select>
 
     <update id="modifyMenuById" parameterType="com.deliveryfood.dto.MenuDto">
         UPDATE menu SET name = #{name}
-        WHERE menu_Id = #{menuId}
-        AND restaurant_Id = #{restaurantId}
+        WHERE menu_id = #{menuId}
+        AND restaurant_id = #{restaurantId}
     </update>
 
 </mapper>

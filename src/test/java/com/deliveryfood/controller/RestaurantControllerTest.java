@@ -126,25 +126,6 @@ public class RestaurantControllerTest {
                 .andDo(print());
     }
 
-    @Test
-    void signin() throws Exception {
-        //given and when
-        RestaurantInput restaurantInput = RestaurantInput.builder()
-                        .restaurantId(String.valueOf(UUID.randomUUID()))
-                        .userId(String.valueOf(UUID.randomUUID()))
-                        .name("테스트")
-                        .build();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        //then
-        mockMvc.perform(post("/restaurants/signin")
-                        .characterEncoding("utf-8")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(restaurantInput)))
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
 
     @Test
     void findUsers() throws Exception {
