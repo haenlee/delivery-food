@@ -14,18 +14,18 @@ public class RestaurantDao {
     private final SqlSessionTemplate sqlSessionTemplate;
 
     public void signin(RestaurantDto restaurantDto) {
-        sqlSessionTemplate.insert("com.deliveryfood.mapper.signin", restaurantDto);
+        sqlSessionTemplate.insert("com.deliveryfood.mapper.RestaurantMapper.signin", restaurantDto);
     }
 
     public List<RestaurantDto> findUsers() {
-        return sqlSessionTemplate.selectList("com.deliveryfood.mapper.findUsers");
+        return sqlSessionTemplate.selectList("com.deliveryfood.mapper.RestaurantMapper.findUsers");
     }
 
     public RestaurantDto findUserById(RestaurantDto restaurantDto) {
-        return sqlSessionTemplate.selectOne("com.deliveryfood.mapper.findUserById", restaurantDto.getRestaurantId());
+        return sqlSessionTemplate.selectOne("com.deliveryfood.mapper.RestaurantMapper.findUserById", restaurantDto.getRestaurantId());
     }
 
     public void modifyUserById(RestaurantDto restaurantDto) {
-        sqlSessionTemplate.update("com.deliveryfood.mapper.signin", restaurantDto);
+        sqlSessionTemplate.update("com.deliveryfood.mapper.RestaurantMapper.modifyUserById", restaurantDto);
     }
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.deliveryfood.mapper.MenuMapper">
+
+    <insert id="createMenuById" parameterType="com.deliveryfood.dto.MenuDto">
+        INSERT INTO menu(menu_Id, restaurant_Id, name)
+        VALUES(#{menuId}, #{restaurantId}, #{name})
+    </insert>
+
+    <select id="findMenus" resultType="com.deliveryfood.dto.MenuDto">
+        SELECT * FROM menu
+        WHERE menu_Id = #{menuId}
+        AND restaurant_Id = #{restaurantId}
+    </select>
+
+    <select id="findMenuById" parameterType="com.deliveryfood.dto.MenuDto" resultType="com.deliveryfood.dto.MenuDto">
+        SELECT * FROM menu
+        WHERE restaurant_Id = #{restaurantId}
+    </select>
+
+    <update id="modifyMenuById" parameterType="com.deliveryfood.dto.MenuDto">
+        UPDATE menu SET name = #{name}
+        WHERE menu_Id = #{menuId}
+        AND restaurant_Id = #{restaurantId}
+    </update>
+
+</mapper>
