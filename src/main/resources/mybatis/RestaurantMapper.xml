@@ -6,13 +6,13 @@
 <mapper namespace="com.deliveryfood.mapper.RestaurantMapper">
 
     <insert id="signin" parameterType="com.deliveryfood.dto.RestaurantDto">
-        INSERT INTO restaurant(restaurantId, userId, name)
+        INSERT INTO restaurant(restaurant_id, user_id, name)
         VALUES(#{restaurantId}, #{userId}, #{name})
     </insert>
 
     <update id="signout" parameterType="com.deliveryfood.dto.RestaurantDto">
         UPDATE restaurant SET state = '1'
-        WHERE restaurantId = #{restaurantId}
+        WHERE restaurant_id = #{restaurantId}
     </update>
 
     <select id="findUsers" resultType="com.deliveryfood.dto.RestaurantDto">
@@ -20,12 +20,13 @@
     </select>
 
     <select id="findUserById" parameterType="com.deliveryfood.dto.RestaurantDto" resultType="com.deliveryfood.dto.RestaurantDto">
-        SELECT * FROM restaurant WHERE restaurantId = #{restaurantId}
+        SELECT * FROM restaurant
+        WHERE restaurant_id = #{restaurantId}
     </select>
 
     <update id="modifyUserById" parameterType="com.deliveryfood.dto.RestaurantDto">
         UPDATE restaurant SET name = #{name}
-        WHERE restaurantId = #{restaurantId}
+        WHERE restaurant_id = #{restaurantId}
     </update>
 
 </mapper>

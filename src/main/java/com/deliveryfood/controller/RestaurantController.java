@@ -2,6 +2,7 @@ package com.deliveryfood.controller;
 
 import com.deliveryfood.dto.MenuDto;
 import com.deliveryfood.dto.RestaurantDto;
+import com.deliveryfood.model.MenuInput;
 import com.deliveryfood.model.RestaurantInput;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
@@ -12,10 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Controller
@@ -33,16 +31,11 @@ public class RestaurantController {
     @PostMapping("/register")
     public void register(UserInput userInput) {
         // 가게 회원 가입
-        restaurantService.signin(restaurant);
     }
 
     @PostMapping("/withdraw")
     public void withdraw(UserRequest userRequest) {
         // 가게 회원 탈퇴 (session을 삭제할 뿐 정보의 변경은 없다.)
-        RestaurantInput restaurant = RestaurantInput.builder()
-                .restaurantId(restaurantInput.getRestaurantId())
-                .build();
-        restaurantService.modifyUserById(restaurant);
     }
 
     @PostMapping("/login")
@@ -73,13 +66,62 @@ public class RestaurantController {
 
     //TODO : 정책상 제공하지 않으므로 추후 삭제
     @PutMapping("/{restaurantId}")
-    public void modifyUserById(@PathVariable String restaurantId, @RequestBody RestaurantInput restaurantInput) {
+    public void modifyUserById(@PathVariable String restaurantId
+            , @RequestBody RestaurantInput restaurantInput) {
         // 가게 회원 정보 수정
         RestaurantInput restaurant = RestaurantInput.builder()
                 .restaurantId(restaurantId)
                 .name(restaurantInput.getName())
                 .build();
         restaurantService.modifyUserById(restaurant);
+    }
+
+
+
+
+    @PostMapping("/{restaurantId}/menus")
+    public void createMenuById(@PathVariable String restaurantId
+            , @RequestBody MenuInput menuInput) {
+        // 메뉴를 생성한다.
+        MenuInput menu = MenuInput.builder()
+                .menuId(String.valueOf(UUID.randomUUID()))
+                .restaurantId(restaurantId)
+                .name(menuInput.getName())
+                .build();
+        menuService.createMenuById(menu);
+    }
+
+    @GetMapping("/{restaurantId}/menus/{menuId}")
+    public MenuDto findMenus(@PathVariable String restaurantId
+            , @PathVariable String menuId) {
+        // 메뉴를 조회한다.
+        MenuInput menu = MenuInput.builder()
+                .restaurantId(restaurantId)
+                .menuId(menuId)
+                .build();
+        return menuService.findMenus(menu);
+    }
+
+    @GetMapping("/{restaurantId}/menus")
+    public List<MenuDto> findMenuById(@PathVariable String restaurantId) {
+        // 해당 레스토랑의 메뉴들을 조회한다.
+        MenuInput menu = MenuInput.builder()
+                .restaurantId(restaurantId)
+                .build();
+        return menuService.findMenuById(menu);
+    }
+
+    @PutMapping("/{restaurantId}/menus/{menuId}")
+    public void modifyMenuById(@PathVariable String restaurantId
+            , @PathVariable String menuId
+            , @RequestBody MenuInput menuInput) {
+        // 메뉴 정보를 수정한다.
+        MenuInput menu = MenuInput.builder()
+                .restaurantId(restaurantId)
+                .menuId(menuId)
+                .name(menuInput.getName())
+                .build();
+        menuService.modifyMenuById(menu);
     }
 
 }

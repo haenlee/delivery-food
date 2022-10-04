@@ -1,5 +1,6 @@
 package com.deliveryfood.controller;
 
+import com.deliveryfood.model.MenuInput;
 import com.deliveryfood.model.RestaurantInput;
 import com.deliveryfood.model.UserInput;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.UUID;
 
@@ -123,25 +126,6 @@ public class RestaurantControllerTest {
                 .andDo(print());
     }
 
-    @Test
-    void signin() throws Exception {
-        //given and when
-        RestaurantInput restaurantInput = RestaurantInput.builder()
-                        .restaurantId(String.valueOf(UUID.randomUUID()))
-                        .userId(String.valueOf(UUID.randomUUID()))
-                        .name("테스트")
-                        .build();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        //then
-        mockMvc.perform(post("/restaurants/signin")
-                        .characterEncoding("utf-8")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(restaurantInput)))
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
 
     @Test
     void findUsers() throws Exception {
@@ -184,4 +168,89 @@ public class RestaurantControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+
+
+    @Test
+    void createMenuById() throws Exception {
+        //given and when
+        MenuInput menuInput = MenuInput.builder()
+                .restaurantId("9419ab0c-9353-491a-aaee-fe0b8d175d5d")
+                .name("name 테스트")
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        //then
+        mockMvc.perform(post("/restaurants/"
+                        + menuInput.getRestaurantId()
+                        + "/menus")
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(menuInput)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+    }
+
+    @Test
+    void findMenus() throws Exception {
+        //given and when
+        MenuInput menuInput = MenuInput.builder()
+                .restaurantId("9419ab0c-9353-491a-aaee-fe0b8d175d5d")
+                .menuId("39902574-3b9a-4f3f-9b8c-785c130dd10a")
+                .build();
+
+        //then
+        mockMvc.perform(get("/restaurants/"
+                        + menuInput.getRestaurantId()
+                        + "/menus/"
+                        + menuInput.getMenuId())
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void findMenuById() throws Exception {
+        //given and when
+        MenuInput menuInput = MenuInput.builder()
+                .restaurantId("9419ab0c-9353-491a-aaee-fe0b8d175d5d")
+                .build();
+
+        //then
+        mockMvc.perform(get("/restaurants/"
+                        + menuInput.getRestaurantId()
+                        + "/menus/")
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void modifyMenuById() throws Exception {
+        //given and when
+        MenuInput menuInput = MenuInput.builder()
+                .restaurantId("9419ab0c-9353-491a-aaee-fe0b8d175d5d")
+                .menuId("39902574-3b9a-4f3f-9b8c-785c130dd10a")
+                .name("name 수정 완료")
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        //then
+        mockMvc.perform(put("/restaurants/"
+                        + menuInput.getRestaurantId()
+                        + "/menus/"
+                        + menuInput.getMenuId())
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(menuInput)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+    }
+
 }
