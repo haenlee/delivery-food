@@ -4,6 +4,7 @@ import com.deliveryfood.Util.MemberSession;
 import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.model.LoginResult;
+import com.deliveryfood.model.MemberInput;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
 import lombok.RequiredArgsConstructor;
@@ -43,21 +44,21 @@ public class MemberService {
         return true;
     }
 
-    public boolean register(UserInput userInput, String uuid) {
-        if(memberDao.findByEmail(userInput.getEmail()) != null) {
+    public boolean register(MemberInput memberInput, String uuid) {
+        if(memberDao.findByEmail(memberInput.getEmail()) != null) {
             // 중복 유저 존재
             return false;
         }
 
         // 비밀번호 암호화
-        String hashPw = BCrypt.hashpw(userInput.getPassword(), BCrypt.gensalt());
+        String hashPw = BCrypt.hashpw(memberInput.getPassword(), BCrypt.gensalt());
 
         MemberDto memberDto = MemberDto.builder()
                 .userId(uuid)
-                .name(userInput.getName())
-                .email(userInput.getEmail())
+                .name(memberInput.getName())
+                .email(memberInput.getEmail())
                 .password(hashPw)
-                .phone(userInput.getPhone())
+                .phone(memberInput.getPhone())
                 .status(MemberDto.Status.REGISTER_AUTH)
                 .regDt(LocalDateTime.now())
                 .build();

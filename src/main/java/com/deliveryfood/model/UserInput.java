@@ -1,19 +1,19 @@
 package com.deliveryfood.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Value;
 
-@NoArgsConstructor(force = true)
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
+@SuperBuilder
+@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Value
-public class UserInput {
-    private String name;
-    private String email;
-    private String password;
-    private String phone;
+@Getter
+@Setter
+public class UserInput extends MemberInput {
+
     private String address;
     private String nickname;
     private String imagePath;
