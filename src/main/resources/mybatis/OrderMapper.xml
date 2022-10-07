@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.deliveryfood.mapper.OrderMapper">
+
+    <insert id="createOrder" parameterType="com.deliveryfood.dto.OrderDto">
+        INSERT INTO orders(order_id, user_id, state)
+        VALUES(#{orderId}, #{userId}, #{state})
+    </insert>
+
+    <select id="findOrder" parameterType="com.deliveryfood.dto.OrderDto" resultType="com.deliveryfood.dto.OrderDto">
+        SELECT * FROM orders
+        WHERE order_id = #{orderId}
+    </select>
+
+    <select id="findOrderById" parameterType="com.deliveryfood.dto.OrderDto" resultType="com.deliveryfood.dto.OrderDto">
+        SELECT * FROM orders
+        WHERE user_id = #{userId}
+    </select>
+
+    <update id="modifyOrderById" parameterType="com.deliveryfood.dto.OrderDto">
+        UPDATE orders SET state = #{state}
+        WHERE order_id = #{orderId}
+    </update>
+
+</mapper>
