@@ -1,11 +1,15 @@
 package com.deliveryfood.controller;
 
 import com.deliveryfood.dto.UserDto;
+import com.deliveryfood.model.LoginResult;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
 import com.deliveryfood.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RequiredArgsConstructor
 @RestController
@@ -14,10 +18,15 @@ public class UserController {
 
     private final IUserService userService;
 
+    @GetMapping("/certification")
+    public void certification()  {
+        // redirect 된 본인 인증 폼
+    }
+
     @PostMapping("/certification")
-    public void certification(@RequestBody UserRequest userRequest, @RequestParam String code)  {
+    public void certification(@RequestParam String code)  {
         // 입력한 코드로 본인 인증
-        userService.certification(userRequest, code);
+        userService.certification(code);
     }
 
     @PostMapping("/register")
@@ -33,9 +42,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public void login(UserRequest userRequest) {
+    public HttpStatus login(HttpServletRequest request) {
         // 로그인
-        userService.login(userRequest);
+        UserRequest userRequest = new UserRequest(request.getParameter("username"), request.getParameter("password"));
+        LoginResult result = userService.login(userRequest);
+        if(result.equals(LoginResult.NOT_REGISTER_AUTH)) {
+            return HttpStatus.FOUND;
+        }
+
+        return HttpStatus.OK;
     }
 
     @PostMapping("/logout")
@@ -43,7 +58,7 @@ public class UserController {
         // 로그아웃
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{email}")
     public void findUser(@PathVariable String email) {
         // 회원 조회
         UserDto userDto = userService.findUser(email);

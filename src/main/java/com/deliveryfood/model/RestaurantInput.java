@@ -1,19 +1,19 @@
 package com.deliveryfood.model;
 
-
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Value;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-@NoArgsConstructor(force=true)
+@SuperBuilder
+@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Value
-public class RestaurantInput {
+@Getter
+@Setter
+public class RestaurantInput extends MemberInput {
     private String restaurantId;
     private String userId;
-    private String name;
     private String state;
     //TODO : 나머지 필드도 추가 예정
 }

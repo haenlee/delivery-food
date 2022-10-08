@@ -1,7 +1,10 @@
 package com.deliveryfood.service;
 
+import com.deliveryfood.Util.MemberSession;
 import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dto.MemberDto;
+import com.deliveryfood.model.LoginResult;
+import com.deliveryfood.model.MemberInput;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
@@ -20,19 +22,20 @@ import java.util.Collections;
 public class MemberService {
 
     private final MemberDao memberDao;
-    private final HttpSession session;
+    private final MemberSession session;
 
     public static final String REGISTER_CODE = "FLAB";
 
-    public boolean certification(UserRequest userRequest, String code) {
-        MemberDto memberDto = memberDao.findByEmail(userRequest.getEmail());
-        if(memberDto == null) {
-            // 유저가 존재하지 않음
+    public boolean certification(String code) {
+        if(!code.equals(REGISTER_CODE)) {
+            // 인증 코드가 다름
             return false;
         }
 
-        if(!code.equals(REGISTER_CODE)) {
-            // 인증 코드가 다름
+        String userId = (String) session.getLoginUserId();
+        MemberDto memberDto = memberDao.findByUserId(userId);
+        if(memberDto == null) {
+            // 유저가 존재하지 않음
             return false;
         }
 
@@ -41,21 +44,21 @@ public class MemberService {
         return true;
     }
 
-    public boolean register(UserInput userInput, String uuid) {
-        if(memberDao.findByEmail(userInput.getEmail()) != null) {
+    public boolean register(MemberInput memberInput, String uuid) {
+        if(memberDao.findByEmail(memberInput.getEmail()) != null) {
             // 중복 유저 존재
             return false;
         }
 
         // 비밀번호 암호화
-        String hashPw = BCrypt.hashpw(userInput.getPassword(), BCrypt.gensalt());
+        String hashPw = BCrypt.hashpw(memberInput.getPassword(), BCrypt.gensalt());
 
         MemberDto memberDto = MemberDto.builder()
                 .userId(uuid)
-                .name(userInput.getName())
-                .email(userInput.getEmail())
+                .name(memberInput.getName())
+                .email(memberInput.getEmail())
                 .password(hashPw)
-                .phone(userInput.getPhone())
+                .phone(memberInput.getPhone())
                 .status(MemberDto.Status.REGISTER_AUTH)
                 .regDt(LocalDateTime.now())
                 .build();
@@ -81,25 +84,20 @@ public class MemberService {
         return true;
     }
 
-    public boolean login(UserRequest userRequest) {
+    public LoginResult login(UserRequest userRequest) {
         MemberDto memberDto = memberDao.findByEmail(userRequest.getEmail());
         if(memberDto == null) {
             // 유저가 존재하지 않음
-            return false;
+            return LoginResult.NOT_EXIST_USER;
         }
 
         if(memberDto.getStatus().equals(MemberDto.Status.REGISTER_AUTH)) {
             // 본인 인증 완료 전
-            return false;
+            return LoginResult.NOT_REGISTER_AUTH;
         }
 
-        if(!BCrypt.checkpw(userRequest.getPassword(), memberDto.getPassword())) {
-            // 비밀번호가 다름
-            return false;
-        }
-
-        session.setAttribute("USER", memberDto.getUserId());
-        return true;
+        session.setLoginUserId(memberDto.getUserId());
+        return LoginResult.SUCCESS;
     }
 
     public boolean modifyUser(UserInput userInput) {
@@ -118,11 +116,6 @@ public class MemberService {
         MemberDto memberDto = memberDao.findByEmail(username);
         if(memberDto == null) {
             // 유저가 존재하지 않음
-            return null;
-        }
-
-        if(memberDto.getStatus().equals(MemberDto.Status.REGISTER_AUTH)) {
-            // 본인 인증 완료 전
             return null;
         }
 

@@ -1,15 +1,16 @@
 package com.deliveryfood.service;
 
+import com.deliveryfood.Util.MemberSession;
 import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dao.UserDao;
 import com.deliveryfood.dto.UserDto;
+import com.deliveryfood.model.LoginResult;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,22 +18,24 @@ import java.util.UUID;
 public class UserService extends MemberService implements IUserService {
 
     private final UserDao userDao;
+    private final MemberSession session;
 
-    public UserService(MemberDao memberDao, HttpSession httpSession, UserDao userDao) {
-        super(memberDao, httpSession);
+    public UserService(MemberDao memberDao, UserDao userDao, MemberSession session) {
+        super(memberDao, session);
         this.userDao = userDao;
+        this.session = session;
     }
 
     @Override
-    public boolean certification(UserRequest userRequest, String code) {
+    public boolean certification(String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
 
-        if(!super.certification(userRequest, code)) {
+        if(!super.certification(code)) {
             // 멤버 이슈가 있음
             return false;
         }
 
-        UserDto userDto = userDao.findById(userRequest.getEmail());
+        UserDto userDto = userDao.findByUserId(session.getLoginUserId());
         if(userDto == null) {
             // 유저가 존재하지 않음
             return false;
@@ -49,7 +52,7 @@ public class UserService extends MemberService implements IUserService {
             return false;
         }
 
-        if(userDao.findById(uuid) != null) {
+        if(userDao.findByUserId(uuid) != null) {
             // 중복 유저 존재
             return false;
         }
@@ -74,7 +77,7 @@ public class UserService extends MemberService implements IUserService {
             return false;
         }
 
-        UserDto userDto = userDao.findById(userRequest.getEmail());
+        UserDto userDto = userDao.findByEmail(userRequest.getEmail());
         if(userDto == null) {
             // 유저가 존재하지 않음
             return false;
@@ -84,13 +87,13 @@ public class UserService extends MemberService implements IUserService {
     }
 
     @Override
-    public boolean login(UserRequest userRequest) {
+    public LoginResult login(UserRequest userRequest) {
         return super.login(userRequest);
     }
 
     @Override
     public boolean modifyUser(UserInput userInput) {
-        UserDto userDto = userDao.findById(userInput.getEmail());
+        UserDto userDto = userDao.findByEmail(userInput.getEmail());
         if(userDto == null) {
             // 유저가 존재하지 않음
             return false;
@@ -105,7 +108,7 @@ public class UserService extends MemberService implements IUserService {
 
     @Override
     public UserDto findUser(String email) {
-        UserDto userDto = userDao.findById(email);
+        UserDto userDto = userDao.findByEmail(email);
         if(userDto == null) {
             // 유저가 존재하지 않음
             return null;
