@@ -2,7 +2,7 @@ package com.deliveryfood.controller;
 
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
-import com.deliveryfood.service.UserService;
+import com.deliveryfood.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +11,7 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -34,7 +35,6 @@ class UserControllerTest {
 
     @BeforeEach
     public void init() {
-
         mockMvc = MockMvcBuilders
                 .standaloneSetup(userController)
                 .apply(springSecurity(filterChainProxy))
@@ -43,17 +43,11 @@ class UserControllerTest {
 
     @Test
     @DisplayName("회원가입시 본인 인증을 처리한다.")
+    @WithMockUser()
     public void testCertification() throws Exception {
-        UserRequest userRequest = UserRequest.builder()
-                .email("test@gmail.com")
-                .build();
-
-        ObjectMapper objectMapper = new ObjectMapper();
         mockMvc.perform(post("/users/certification")
                 .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userRequest))
-                .param("code", UserService.REGISTER_CODE))
+                .param("code", MemberService.REGISTER_CODE))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -97,6 +91,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("회원 로그인을 한다.")
+    @WithMockUser(roles = "USER")
     public void testLogin() throws Exception {
         UserRequest userRequest = UserRequest.builder()
                 .email("test@gmail.com")

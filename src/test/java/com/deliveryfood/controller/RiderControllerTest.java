@@ -11,6 +11,7 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -43,17 +44,11 @@ public class RiderControllerTest {
 
     @Test
     @DisplayName("라이더 회원가입시 본인 인증을 처리한다.")
+    @WithMockUser()
     public void testCertification() throws Exception {
-        UserRequest userRequest = UserRequest.builder()
-                .email("rider@gmail.com")
-                .build();
-
-        ObjectMapper objectMapper = new ObjectMapper();
         mockMvc.perform(post("/riders/certification")
-                        .characterEncoding("utf-8")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userRequest))
-                        .param("code", MemberService.REGISTER_CODE))
+                .characterEncoding("utf-8")
+                .param("code", MemberService.REGISTER_CODE))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -97,6 +92,7 @@ public class RiderControllerTest {
 
     @Test
     @DisplayName("라이더 회원 로그인을 한다.")
+    @WithMockUser(roles = "USER")
     public void testLogin() throws Exception {
         UserRequest userRequest = UserRequest.builder()
                 .email("rider@gmail.com")
@@ -104,8 +100,8 @@ public class RiderControllerTest {
                 .build();
 
         mockMvc.perform(formLogin()
-                        .user(userRequest.getEmail())
-                        .password(userRequest.getPassword()))
+                .user(userRequest.getEmail())
+                .password(userRequest.getPassword()))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
