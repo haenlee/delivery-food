@@ -3,16 +3,24 @@ package com.deliveryfood.controller;
 import com.deliveryfood.dto.MenuDto;
 import com.deliveryfood.dto.RestaurantDto;
 import com.deliveryfood.model.MenuInput;
-import com.deliveryfood.model.RestaurantInput;
-import com.deliveryfood.model.UserInput;
-import com.deliveryfood.model.UserRequest;
+import com.deliveryfood.model.request.RestaurantRegisterRequest;
+import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.service.IMenuService;
 import com.deliveryfood.service.IRestaurantService;
+import com.deliveryfood.vo.RestaurantRegisterVO;
+import com.deliveryfood.vo.UserRegisterVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Controller
@@ -28,7 +36,7 @@ public class RestaurantController {
     }
 
     @PostMapping("/register")
-    public void register(UserInput userInput) {
+    public void register(RestaurantRegisterRequest registerRequest) {
         // 가게 회원 가입
     }
 
@@ -57,22 +65,23 @@ public class RestaurantController {
     @GetMapping("/{restaurantId}")
     public RestaurantDto findUserById(@PathVariable String restaurantId) {
         // 가게 회원 조회
-        RestaurantInput restaurant = RestaurantInput.builder()
+        RestaurantRegisterRequest registerRequest = RestaurantRegisterRequest.builder()
                 .restaurantId(restaurantId)
                 .build();
-        return restaurantService.findUserById(restaurant);
+        //return restaurantService.findUserById(registerRequest);
+        return null;
     }
 
     //TODO : 정책상 제공하지 않으므로 추후 삭제
     @PutMapping("/{restaurantId}")
     public void modifyUserById(@PathVariable String restaurantId
-            , @RequestBody RestaurantInput restaurantInput) {
+            , @RequestBody RestaurantRegisterVO restaurantInput) {
         // 가게 회원 정보 수정
-        RestaurantInput restaurant = RestaurantInput.builder()
+        RestaurantRegisterRequest registerRequest = RestaurantRegisterRequest.builder()
                 .restaurantId(restaurantId)
                 .name(restaurantInput.getName())
                 .build();
-        restaurantService.modifyUserById(restaurant);
+        //restaurantService.modifyUserById(restaurant);
     }
 
 

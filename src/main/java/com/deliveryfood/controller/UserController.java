@@ -2,8 +2,9 @@ package com.deliveryfood.controller;
 
 import com.deliveryfood.dto.UserDto;
 import com.deliveryfood.model.CustomUserDetails;
-import com.deliveryfood.model.UserInput;
-import com.deliveryfood.model.UserRequest;
+import com.deliveryfood.model.request.UserRegisterRequest;
+import com.deliveryfood.vo.UserRegisterVO;
+import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,9 +31,10 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody UserInput userInput) {
+    public void register(@RequestBody UserRegisterRequest registerRequest) {
         // 회원 가입 > 본인 인증 요청
-        userService.register(userInput);
+        UserRegisterVO registerVO = UserRegisterVO.convert(registerRequest);
+        userService.register(registerVO);
     }
 
     @PostMapping("/withdraw")
@@ -53,9 +55,10 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public void modifyUser(UserInput userInput) {
+    public void modifyUser(UserRegisterRequest registerRequest) {
         // 회원 정보 수정 (현재는 전화번호, 주소만 수정가능)
-        userService.modifyUser(userInput);
+        UserRegisterVO registerVO = UserRegisterVO.convert(registerRequest);
+        userService.modifyUser(registerVO);
    }
 
     @GetMapping("/{userId}/orders")

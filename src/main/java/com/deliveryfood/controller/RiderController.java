@@ -1,8 +1,8 @@
 package com.deliveryfood.controller;
 
 import com.deliveryfood.model.CustomUserDetails;
-import com.deliveryfood.model.RiderInput;
-import com.deliveryfood.model.UserRequest;
+import com.deliveryfood.vo.RiderRegisterVO;
+import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.service.IRiderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,7 +27,7 @@ public class RiderController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody RiderInput riderInput) {
+    public void register(@RequestBody RiderRegisterVO riderInput) {
         // 라이더 회원 가입
         riderService.register(riderInput);
     }
@@ -44,7 +44,7 @@ public class RiderController {
     }
 
     @PutMapping("/{userId}")
-    public void modifyUser(@RequestBody RiderInput riderInput) {
+    public void modifyUser(@RequestBody RiderRegisterVO riderInput) {
         // 라이더 회원 정보 수정 (현재는 커미션만 수정 가능)
         riderService.modifyRider(riderInput);
     }
