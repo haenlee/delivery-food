@@ -1,6 +1,10 @@
 package com.deliveryfood.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.time.LocalDateTime;
 
@@ -12,9 +16,16 @@ public class MemberDto {
 
     public enum Status {
         NONE,
-        REGISTER_AUTH,
         REGISTER,
         WITHDRAW;
+    }
+
+    public enum Role {
+        NONE,
+        ROLE_USER,
+        ROLE_RESTAURANT,
+        ROLE_RIDER,
+        ROLE_NOT_AUTH,
     }
 
     @NonNull
@@ -29,6 +40,9 @@ public class MemberDto {
     private String phone;
     @NonNull
     private Status status;
+    @NonNull
+    private Role role;
+    @NonNull
     private LocalDateTime regDt;
     private LocalDateTime udtDt;
 
