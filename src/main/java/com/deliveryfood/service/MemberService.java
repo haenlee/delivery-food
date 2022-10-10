@@ -3,9 +3,9 @@ package com.deliveryfood.service;
 import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.model.CustomUserDetails;
-import com.deliveryfood.model.MemberInput;
-import com.deliveryfood.model.UserInput;
-import com.deliveryfood.model.UserRequest;
+import com.deliveryfood.model.request.UserRequest;
+import com.deliveryfood.vo.MemberRegisterVO;
+import com.deliveryfood.vo.UserRegisterVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,21 +39,21 @@ public class MemberService {
         return true;
     }
 
-    public boolean register(MemberInput memberInput, String uuid) {
-        if(memberDao.findByEmail(memberInput.getEmail()) != null) {
+    public boolean register(MemberRegisterVO registerVO, String uuid) {
+        if(memberDao.findByEmail(registerVO.getEmail()) != null) {
             // 중복 유저 존재
             return false;
         }
 
         // 비밀번호 암호화
-        String hashPw = BCrypt.hashpw(memberInput.getPassword(), BCrypt.gensalt());
+        String hashPw = BCrypt.hashpw(registerVO.getPassword(), BCrypt.gensalt());
 
         MemberDto memberDto = MemberDto.builder()
                 .userId(uuid)
-                .name(memberInput.getName())
-                .email(memberInput.getEmail())
+                .name(registerVO.getName())
+                .email(registerVO.getEmail())
                 .password(hashPw)
-                .phone(memberInput.getPhone())
+                .phone(registerVO.getPhone())
                 .status(MemberDto.Status.REGISTER)
                 .role(MemberDto.Role.ROLE_NOT_AUTH)
                 .regDt(LocalDateTime.now())
@@ -80,14 +80,14 @@ public class MemberService {
         return true;
     }
 
-    public boolean modifyUser(UserInput userInput) {
-        MemberDto memberDto = memberDao.findByEmail(userInput.getEmail());
+    public boolean modifyUser(UserRegisterVO registerVO) {
+        MemberDto memberDto = memberDao.findByEmail(registerVO.getEmail());
         if(memberDto == null) {
             // 유저가 존재하지 않음
             return false;
         }
 
-        memberDto.setPhone(userInput.getPhone());
+        memberDto.setPhone(registerVO.getPhone());
         memberDao.updateUser(memberDto);
         return true;
     }

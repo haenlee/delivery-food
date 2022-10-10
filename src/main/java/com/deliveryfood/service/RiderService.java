@@ -4,8 +4,8 @@ import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dao.RiderDao;
 import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.dto.RiderDto;
-import com.deliveryfood.model.RiderInput;
-import com.deliveryfood.model.UserRequest;
+import com.deliveryfood.vo.RiderRegisterVO;
+import com.deliveryfood.model.request.UserRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,9 +40,9 @@ public class RiderService extends MemberService implements IRiderService {
     }
 
     @Override
-    public boolean register(RiderInput riderInput) {
+    public boolean register(RiderRegisterVO registerVO) {
         String uuid = UUID.randomUUID().toString();
-        if(!super.register(riderInput, uuid)) {
+        if(!super.register(registerVO, uuid)) {
             // 멤버 이슈가 있음
             return false;
         }
@@ -54,7 +54,7 @@ public class RiderService extends MemberService implements IRiderService {
 
         RiderDto riderDto = RiderDto.builder()
                 .userId(uuid)
-                .commission(riderInput.getCommission())
+                .commission(registerVO.getCommission())
                 .status(RiderDto.Status.NONE)
                 .regDt(LocalDateTime.now())
                 .build();
@@ -80,14 +80,14 @@ public class RiderService extends MemberService implements IRiderService {
     }
 
     @Override
-    public boolean modifyRider(RiderInput riderInput) {
-        RiderDto riderDto = riderDao.findByEmail(riderInput.getEmail());
+    public boolean modifyRider(RiderRegisterVO registerVO) {
+        RiderDto riderDto = riderDao.findByEmail(registerVO.getEmail());
         if(riderDto == null) {
             // 유저가 존재하지 않음
             return false;
         }
 
-        riderDto.setCommission(riderInput.getCommission());
+        riderDto.setCommission(registerVO.getCommission());
         riderDao.updateRider(riderDto);
         return true;
     }
