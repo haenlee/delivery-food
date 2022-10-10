@@ -1,4 +1,4 @@
-package com.deliveryfood.Util;
+package com.deliveryfood.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

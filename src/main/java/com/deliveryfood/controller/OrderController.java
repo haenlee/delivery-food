@@ -2,7 +2,7 @@ package com.deliveryfood.controller;
 
 import com.deliveryfood.dto.OrderDto;
 import com.deliveryfood.model.OrderInput;
-import com.deliveryfood.service.OrderService;
+import com.deliveryfood.service.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequestMapping("/orders")
 public class OrderController {
 
-    private final OrderService orderService;
+    private final IOrderService orderService;
 
     @PostMapping("/checkout")
     public void createOrder() {

@@ -6,13 +6,12 @@ import com.deliveryfood.model.MenuInput;
 import com.deliveryfood.model.RestaurantInput;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
-import com.deliveryfood.service.MenuService;
-import com.deliveryfood.service.RestaurantService;
+import com.deliveryfood.service.IMenuService;
+import com.deliveryfood.service.IRestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.*;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -20,8 +19,8 @@ import java.util.*;
 @RequestMapping("/restaurants")
 public class RestaurantController {
 
-    private final RestaurantService restaurantService;
-    private final MenuService menuService;
+    private final IRestaurantService restaurantService;
+    private final IMenuService menuService;
 
     @PostMapping("/certification")
     public void certification(@RequestParam int code) {
