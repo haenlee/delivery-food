@@ -1,7 +1,7 @@
 package com.deliveryfood.controller;
 
-import com.deliveryfood.model.RiderInput;
-import com.deliveryfood.model.UserRequest;
+import com.deliveryfood.model.request.RiderRegisterRequest;
+import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +56,7 @@ public class RiderControllerTest {
     @Test
     @DisplayName("라이더 회원 가입을 한다")
     public void testRegister() throws Exception {
-        RiderInput riderInput = RiderInput.builder()
+        RiderRegisterRequest registerRequest = RiderRegisterRequest.builder()
                 .name("라이더")
                 .email("rider@gmail.com")
                 .password("riderpassword")
@@ -68,7 +68,7 @@ public class RiderControllerTest {
         mockMvc.perform(post("/riders/register")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(riderInput)))
+                .content(objectMapper.writeValueAsString(registerRequest)))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
