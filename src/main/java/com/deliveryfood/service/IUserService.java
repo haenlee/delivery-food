@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface IUserService extends UserDetailsService {
 
-    boolean certification(String username, String code);
+    boolean certification(String userId, String code);
 
     boolean register(UserRegisterVO registerVO);
 
