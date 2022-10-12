@@ -2,10 +2,10 @@ package com.deliveryfood.controller;
 
 import com.deliveryfood.dto.MenuDto;
 import com.deliveryfood.dto.RestaurantDto;
-import com.deliveryfood.model.MenuInput;
-import com.deliveryfood.model.RestaurantInput;
-import com.deliveryfood.model.UserInput;
-import com.deliveryfood.model.UserRequest;
+import com.deliveryfood.dto.SubOptionDto;
+import com.deliveryfood.model.*;
+import com.deliveryfood.service.IOptionService;
+import com.deliveryfood.service.ISubOptionService;
 import com.deliveryfood.service.MenuService;
 import com.deliveryfood.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,8 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
     private final MenuService menuService;
+    private final IOptionService optionService;
+    private final ISubOptionService subOptionService;
 
     @PostMapping("/certification")
     public void certification(@RequestParam int code) {
@@ -124,4 +126,25 @@ public class RestaurantController {
         menuService.modifyMenuById(menu);
     }
 
+
+    @GetMapping("/{restaurantId}/menus/options")
+    public OptionInput findOptionById(@RequestBody OptionInput optionInput) {
+        // 해당 레스토랑의 메뉴옵션들을 조회한다.
+        OptionInput option = OptionInput.builder()
+                .optionId(optionInput.getOptionId())
+                .menuId(optionInput.getMenuId())
+                .build();
+        return optionService.findOptionById(option);
+    }
+
+
+    @GetMapping("/{restaurantId}/menus/suboptions")
+    public SubOptionInput findSubOptionById(@RequestBody SubOptionInput subOptionInput) {
+        // 해당 레스토랑의 메뉴하위옵션들을 조회한다.
+        SubOptionInput subOption = SubOptionInput.builder()
+                .optionId(subOptionInput.getOptionId())
+                .menuId(subOptionInput.getMenuId())
+                .build();
+        return subOptionService.findSubOptionById(subOption);
+    }
 }
