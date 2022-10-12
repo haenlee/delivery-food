@@ -22,13 +22,13 @@ public class MemberService {
 
     public static final String REGISTER_CODE = "FLAB";
 
-    public boolean certification(String username, String code, MemberDto.Role role) {
+    public boolean certification(String userId, String code, MemberDto.Role role) {
         if(!code.equals(REGISTER_CODE)) {
             // 인증 코드가 다름
             return false;
         }
 
-        MemberDto memberDto = memberDao.findByUserId(username);
+        MemberDto memberDto = memberDao.findByUserId(userId);
         if(memberDto == null) {
             // 유저가 존재하지 않음
             return false;
@@ -100,6 +100,7 @@ public class MemberService {
         }
 
         CustomUserDetails userDetails = new CustomUserDetails();
+        userDetails.setUserId(memberDto.getUserId());
         userDetails.setEmail(memberDto.getEmail());
         userDetails.setPassword(memberDto.getPassword());
         userDetails.setStatus(memberDto.getStatus());
