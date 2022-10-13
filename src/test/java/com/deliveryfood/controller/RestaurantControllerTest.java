@@ -1,10 +1,7 @@
 package com.deliveryfood.controller;
 
-import com.deliveryfood.model.MenuInput;
-import com.deliveryfood.model.RestaurantInput;
-import com.deliveryfood.model.UserInput;
+import com.deliveryfood.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,14 +13,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -251,6 +243,45 @@ public class RestaurantControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
 
+    }
+
+
+    @Test
+    void findOptionById() throws Exception {
+        //given and when
+        OptionInput optionInput = OptionInput.builder()
+                .optionId("1001")
+                .menuId("2001")
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        //then
+        mockMvc.perform(get("/restaurants/menus/options")
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(optionInput)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void findSubOptionById() throws Exception {
+        //given and when
+        SubOptionInput subOption = SubOptionInput.builder()
+                .optionId("1002")
+                .menuId("2002")
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        //then
+        mockMvc.perform(get("/restaurants/menus/subOptions")
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(subOption)))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
 }

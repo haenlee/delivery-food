@@ -5,10 +5,18 @@
 
 <mapper namespace="com.deliveryfood.mapper.SubOptionMapper">
 
-    <select id="findSubOptionById" parameterType="com.deliveryfood.dto.SubOptionDto" resultType="com.deliveryfood.dto.SubOptionInput">
+    <select id="findSubOptionById" parameterType="com.deliveryfood.dto.SubOptionDto" resultMap="SubOptionInfo">
         SELECT * FROM sub_options
         WHERE option_id = #{optionId}
         AND menu_id = #{menuId}
     </select>
+
+    <resultMap id="SubOptionInfo" type="com.deliveryfood.model.SubOptionInput">
+        <result column="option_id" property="optionId"/>
+        <result column="menu_id" property="menuId"/>
+        <result column="sub_option_id" property="subOptionId"/>
+        <result column="name" property="name"/>
+        <result column="price" property="price"/>
+    </resultMap>
 
 </mapper>

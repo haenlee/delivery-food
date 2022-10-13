@@ -2,19 +2,20 @@ package com.deliveryfood.controller;
 
 import com.deliveryfood.dto.MenuDto;
 import com.deliveryfood.dto.RestaurantDto;
-import com.deliveryfood.dto.SubOptionDto;
 import com.deliveryfood.model.*;
 import com.deliveryfood.service.IOptionService;
 import com.deliveryfood.service.ISubOptionService;
 import com.deliveryfood.service.MenuService;
 import com.deliveryfood.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.*;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/restaurants")
@@ -127,9 +128,10 @@ public class RestaurantController {
     }
 
 
-    @GetMapping("/{restaurantId}/menus/options")
+    @GetMapping("/menus/options")
     public OptionInput findOptionById(@RequestBody OptionInput optionInput) {
         // 해당 레스토랑의 메뉴옵션들을 조회한다.
+        log.info("findOptionById 컨트롤러 호출");
         OptionInput option = OptionInput.builder()
                 .optionId(optionInput.getOptionId())
                 .menuId(optionInput.getMenuId())
@@ -138,9 +140,10 @@ public class RestaurantController {
     }
 
 
-    @GetMapping("/{restaurantId}/menus/suboptions")
+    @GetMapping("/menus/subOptions")
     public SubOptionInput findSubOptionById(@RequestBody SubOptionInput subOptionInput) {
         // 해당 레스토랑의 메뉴하위옵션들을 조회한다.
+        log.info("findSubOptionById 컨트롤러 호출");
         SubOptionInput subOption = SubOptionInput.builder()
                 .optionId(subOptionInput.getOptionId())
                 .menuId(subOptionInput.getMenuId())
