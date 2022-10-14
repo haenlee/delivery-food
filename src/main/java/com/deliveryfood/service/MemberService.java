@@ -22,7 +22,7 @@ public class MemberService {
 
     public static final String REGISTER_CODE = "FLAB";
 
-    public boolean certification(String userId, String code, MemberDto.Role role) {
+    public boolean certification(String userId, String code) {
         if(!code.equals(REGISTER_CODE)) {
             // 인증 코드가 다름
             return false;
@@ -34,12 +34,12 @@ public class MemberService {
             return false;
         }
 
-        memberDto.setRole(role);
+        memberDto.certificateRole();
         memberDao.updateRole(memberDto);
         return true;
     }
 
-    public boolean register(MemberRegisterVO registerVO, String uuid) {
+    public boolean register(MemberRegisterVO registerVO, String uuid, MemberDto.Role role) {
         if(memberDao.findByEmail(registerVO.getEmail()) != null) {
             // 중복 유저 존재
             return false;
@@ -55,10 +55,10 @@ public class MemberService {
                 .password(hashPw)
                 .phone(registerVO.getPhone())
                 .status(MemberDto.Status.REGISTER)
-                .role(MemberDto.Role.ROLE_NOT_AUTH)
                 .regDt(LocalDateTime.now())
                 .build();
 
+        memberDto.registerRole(role);
         memberDao.register(memberDto);
         return true;
     }
@@ -104,7 +104,7 @@ public class MemberService {
         userDetails.setEmail(memberDto.getEmail());
         userDetails.setPassword(memberDto.getPassword());
         userDetails.setStatus(memberDto.getStatus());
-        userDetails.setAuthority(memberDto.getRole().name());
+        userDetails.setAuthority(memberDto.getRole());
         return userDetails;
     }
 }
