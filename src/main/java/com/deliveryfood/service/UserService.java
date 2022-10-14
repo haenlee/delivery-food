@@ -28,7 +28,7 @@ public class UserService extends MemberService implements IUserService {
     public boolean certification(String username, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
 
-        if(!super.certification(username, code, MemberDto.Role.ROLE_USER)) {
+        if(!super.certification(username, code)) {
             // 멤버 이슈가 있음
             return false;
         }
@@ -45,7 +45,7 @@ public class UserService extends MemberService implements IUserService {
     @Override
     public boolean register(UserInput userInput) {
         String uuid = UUID.randomUUID().toString();
-        if(!super.register(userInput, uuid)) {
+        if(!super.register(userInput, uuid, MemberDto.Role.ROLE_USER)) {
             // 멤버 이슈가 있음
             return false;
         }
