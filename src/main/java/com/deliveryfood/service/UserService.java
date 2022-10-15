@@ -4,10 +4,10 @@ import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dao.UserDao;
 import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.dto.UserDto;
+import com.deliveryfood.model.CustomUserDetails;
 import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.util.MemberSession;
 import com.deliveryfood.vo.UserRegisterVO;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -111,7 +111,7 @@ public class UserService extends MemberService implements IUserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return super.loadUserByUsername(username);
     }
 }

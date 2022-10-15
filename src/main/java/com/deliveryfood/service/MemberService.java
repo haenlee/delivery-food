@@ -7,7 +7,6 @@ import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.vo.MemberRegisterVO;
 import com.deliveryfood.vo.UserRegisterVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -92,11 +91,10 @@ public class MemberService {
         return true;
     }
 
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         MemberDto memberDto = memberDao.findByEmail(username);
         if(memberDto == null) {
-            // 유저가 존재하지 않음
-            return null;
+            throw new NullPointerException("Member DB에 member가 존재하지 않음 : " + username);
         }
 
         CustomUserDetails userDetails = new CustomUserDetails();
