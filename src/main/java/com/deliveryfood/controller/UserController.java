@@ -1,13 +1,12 @@
 package com.deliveryfood.controller;
 
 import com.deliveryfood.dto.UserDto;
-import com.deliveryfood.model.CustomUserDetails;
 import com.deliveryfood.model.request.UserRegisterRequest;
-import com.deliveryfood.vo.UserRegisterVO;
 import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.service.IUserService;
+import com.deliveryfood.util.SecurityPrincipal;
+import com.deliveryfood.vo.UserRegisterVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +24,10 @@ public class UserController {
     private final IUserService userService;
 
     @PostMapping("/certification")
-    public void certification(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam String code)  {
+    public void certification(@RequestParam String code)  {
         // 입력한 코드로 본인 인증
-        userService.certification(userDetails.getUserId(), code);
+        String userId = SecurityPrincipal.getLoginUserId();
+        userService.certification(userId, code);
     }
 
     @PostMapping("/register")
