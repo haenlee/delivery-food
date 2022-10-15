@@ -1,5 +1,6 @@
 package com.deliveryfood.controller;
 
+import com.deliveryfood.common.mock.auth.WithAuthMember;
 import com.deliveryfood.model.request.UserRegisterRequest;
 import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.service.MemberService;
@@ -7,43 +8,48 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.web.FilterChainProxy;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.servlet.Filter;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.testSecurityContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 class UserControllerTest {
 
     private MockMvc mockMvc;
 
     @Autowired
-    private UserController userController;
+    private Filter springSecurityFilterChain;
 
     @Autowired
-    private FilterChainProxy filterChainProxy;
+    private UserController userController;
 
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(userController)
-                .apply(springSecurity(filterChainProxy))
+                .defaultRequest(get("/").with(testSecurityContext()))
+                .addFilters(springSecurityFilterChain)
                 .build();
     }
 
     @Test
     @DisplayName("회원가입시 본인 인증을 처리한다.")
-    @WithMockUser()
+    @WithAuthMember(username = "test@gmail.com", authority = "ROLE_USER,ROLE_NOT_AUTH")
     public void testCertification() throws Exception {
         mockMvc.perform(post("/users/certification")
                 .characterEncoding("utf-8")
