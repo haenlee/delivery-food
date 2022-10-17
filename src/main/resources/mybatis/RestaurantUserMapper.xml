@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deliveryfood.mapper.RiderMapper">
+
+    <select id="findByEmail" resultType="com.deliveryfood.dto.RestaurantUserDto">
+        SELECT *
+             , USER_ID as userId
+             , REG_DT as regDt
+             , UDT_DT as udtDt
+        FROM RESTAURANT_USER
+        WHERE email = #{email}
+    </select>
+
+    <select id="findByUserId" resultType="com.deliveryfood.dto.RestaurantUserDto">
+        SELECT *
+            , USER_ID as userId
+            , REG_DT as regDt
+            , UDT_DT as udtDt
+        FROM RESTAURANT_USER
+        WHERE user_id = #{userId}
+    </select>
+
+    <insert id="register" parameterType="com.deliveryfood.dto.RestaurantUserDto">
+        INSERT INTO RESTAURANT_USER(user_id, reg_dt)
+        VALUES(#{userId}, #{regDt})
+    </insert>
+
+</mapper>
