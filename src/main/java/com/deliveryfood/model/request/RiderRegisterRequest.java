@@ -10,7 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 @Getter
-@Setter
 public class RiderRegisterRequest {
 
     private String name;
