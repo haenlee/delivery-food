@@ -97,12 +97,14 @@ public class MemberService {
             throw new NullPointerException("Member DB에 member가 존재하지 않음 : " + username);
         }
 
-        CustomUserDetails userDetails = new CustomUserDetails();
-        userDetails.setUserId(memberDto.getUserId());
-        userDetails.setEmail(memberDto.getEmail());
-        userDetails.setPassword(memberDto.getPassword());
-        userDetails.setStatus(memberDto.getStatus());
-        userDetails.setAuthority(memberDto.getRole().name());
+        CustomUserDetails userDetails = CustomUserDetails.builder()
+                .userId(memberDto.getUserId())
+                .email(memberDto.getEmail())
+                .password(memberDto.getPassword())
+                .status(memberDto.getStatus())
+                .authority(memberDto.getRole().name())
+                .build();
+
         return userDetails;
     }
 }
