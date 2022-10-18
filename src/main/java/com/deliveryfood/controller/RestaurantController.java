@@ -2,7 +2,12 @@ package com.deliveryfood.controller;
 
 import com.deliveryfood.dto.MenuDto;
 import com.deliveryfood.dto.RestaurantDto;
-import com.deliveryfood.model.*;
+import com.deliveryfood.model.MenuInput;
+import com.deliveryfood.model.OptionInput;
+import com.deliveryfood.model.RestaurantInput;
+import com.deliveryfood.model.SubOptionInput;
+import com.deliveryfood.model.UserInput;
+import com.deliveryfood.model.UserRequest;
 import com.deliveryfood.service.IOptionService;
 import com.deliveryfood.service.ISubOptionService;
 import com.deliveryfood.service.MenuService;
@@ -10,7 +15,14 @@ import com.deliveryfood.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.UUID;
@@ -81,7 +93,6 @@ public class RestaurantController {
 
 
 
-
     @PostMapping("/{restaurantId}/menus")
     public void createMenuById(@PathVariable String restaurantId
             , @RequestBody MenuInput menuInput) {
@@ -92,17 +103,6 @@ public class RestaurantController {
                 .name(menuInput.getName())
                 .build();
         menuService.createMenuById(menu);
-    }
-
-    @GetMapping("/{restaurantId}/menus/{menuId}")
-    public MenuDto findMenus(@PathVariable String restaurantId
-            , @PathVariable String menuId) {
-        // 메뉴를 조회한다.
-        MenuInput menu = MenuInput.builder()
-                .restaurantId(restaurantId)
-                .menuId(menuId)
-                .build();
-        return menuService.findMenus(menu);
     }
 
     @GetMapping("/{restaurantId}/menus")
@@ -128,26 +128,40 @@ public class RestaurantController {
     }
 
 
-    @GetMapping("/menus/options")
-    public OptionInput findOptionById(@RequestBody OptionInput optionInput) {
-        // 해당 레스토랑의 메뉴옵션들을 조회한다.
-        log.info("findOptionById 컨트롤러 호출");
-        OptionInput option = OptionInput.builder()
-                .optionId(optionInput.getOptionId())
-                .menuId(optionInput.getMenuId())
-                .build();
-        return optionService.findOptionById(option);
-    }
-
-
-    @GetMapping("/menus/subOptions")
-    public SubOptionInput findSubOptionById(@RequestBody SubOptionInput subOptionInput) {
-        // 해당 레스토랑의 메뉴하위옵션들을 조회한다.
+    @GetMapping("/{restaurantId}/menus/{menuId}")
+    public List<SubOptionInput> findSubOptionById(@PathVariable String menuId) throws Exception{
+        // 해당 메뉴의 하위옵션들을 조회한다.
         log.info("findSubOptionById 컨트롤러 호출");
-        SubOptionInput subOption = SubOptionInput.builder()
-                .optionId(subOptionInput.getOptionId())
-                .menuId(subOptionInput.getMenuId())
+        OptionInput optionInput = OptionInput.builder()
+                .menuId(menuId)
                 .build();
-        return subOptionService.findSubOptionById(subOption);
+
+        List<OptionInput> optionOutputs = optionService.findOptionById(optionInput);
+        List<SubOptionInput> subOptionOutputs = null;
+
+        if (ObjectUtils.isEmpty(optionOutputs)) {
+            //TODO : ExceptionHandler 개발 예정
+            log.warn("options 테이블 조회결과 없음");
+            throw new RuntimeException("SELECT options NOT EXISTS");
+        }
+        for (OptionInput option : optionOutputs) {
+            SubOptionInput subOptionInput = SubOptionInput.builder()
+                    .menuId(option.getMenuId())
+                    .optionId(option.getOptionId())
+                    .build();
+
+            subOptionOutputs = subOptionService.findSubOptionById(subOptionInput);
+
+            if (ObjectUtils.isEmpty(subOptionOutputs)) {
+                //TODO : ExceptionHandler 개발 예정
+                log.warn("subOptions 테이블 조회결과 없음");
+                throw new RuntimeException("SELECT subOptions NOT EXISTS");
+            }
+
+            return subOptionOutputs;
+        }
+
+        return subOptionOutputs;
     }
+
 }

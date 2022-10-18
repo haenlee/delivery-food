@@ -7,8 +7,8 @@
 
     <select id="findSubOptionById" parameterType="com.deliveryfood.dto.SubOptionDto" resultMap="SubOptionInfo">
         SELECT * FROM sub_options
-        WHERE option_id = #{optionId}
-        AND menu_id = #{menuId}
+        WHERE menu_id = #{menuId}
+        and option_id = #{optionId}
     </select>
 
     <resultMap id="SubOptionInfo" type="com.deliveryfood.model.SubOptionInput">

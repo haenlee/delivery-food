@@ -2,7 +2,9 @@ package com.deliveryfood.service;
 
 import com.deliveryfood.model.OptionInput;
 
+import java.util.List;
+
 public interface IOptionService {
 
-    OptionInput findOptionById(OptionInput optionInput);
+    List<OptionInput> findOptionById(OptionInput optionInput);
 }

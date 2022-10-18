@@ -26,14 +26,14 @@ public class MenuServiceImpl implements MenuService {
         menuMapper.createMenuById(menuDto);
     }
 
-    @Override
-    public MenuDto findMenus(MenuInput menuInput) {
-        MenuDto menuDto = MenuDto.builder()
-                .menuId(menuInput.getMenuId())
-                .restaurantId(menuInput.getRestaurantId())
-                .build();
-        return menuMapper.findMenus(menuDto);
-    }
+//    @Override
+//    public MenuDto findMenus(MenuInput menuInput) {
+//        MenuDto menuDto = MenuDto.builder()
+//                .menuId(menuInput.getMenuId())
+//                .restaurantId(menuInput.getRestaurantId())
+//                .build();
+//        return menuMapper.findMenus(menuDto);
+//    }
 
     @Override
     public List<MenuDto> findMenuById(MenuInput menuInput) {
