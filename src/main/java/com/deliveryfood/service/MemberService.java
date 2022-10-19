@@ -94,7 +94,7 @@ public class MemberService {
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         MemberDto memberDto = memberDao.findByEmail(username);
         if(memberDto == null) {
-            throw new NullPointerException("Member DB에 member가 존재하지 않음 : " + username);
+            throw new UsernameNotFoundException("Member DB에 member가 존재하지 않음 : " + username);
         }
 
         CustomUserDetails userDetails = CustomUserDetails.builder()
