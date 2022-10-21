@@ -25,7 +25,7 @@ public class RestaurantUserService extends MemberService implements IRestaurantU
     public boolean certification(String username, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
 
-        if(!super.certification(username, code, MemberDto.Role.ROLE_RESTAURANT)) {
+        if(!super.certification(username, code)) {
             // 멤버 이슈가 있음
             return false;
         }
@@ -42,7 +42,7 @@ public class RestaurantUserService extends MemberService implements IRestaurantU
     @Override
     public boolean register(RestaurantUserRegisterVO registerVO) {
         String uuid = UUID.randomUUID().toString();
-        if(!super.register(registerVO, uuid)) {
+        if(!super.register(registerVO, uuid, MemberDto.Role.ROLE_RESTAURANT)) {
             // 멤버 이슈가 있음
             return false;
         }
