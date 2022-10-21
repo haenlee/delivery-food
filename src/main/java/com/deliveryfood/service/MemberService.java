@@ -22,7 +22,7 @@ public class MemberService {
 
     public static final String REGISTER_CODE = "FLAB";
 
-    public boolean certification(String username, String code) {
+    public boolean certification(String userId, String code) {
         if(!code.equals(REGISTER_CODE)) {
             // 인증 코드가 다름
             return false;
