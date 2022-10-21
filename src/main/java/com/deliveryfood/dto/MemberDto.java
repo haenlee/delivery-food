@@ -57,7 +57,7 @@ public class MemberDto {
     }
 
     public void certificateRole() {
-        role.replace(Role.ROLE_NOT_AUTH.name(), Role.ROLE_AUTH.name());
+        role = role.replace(Role.ROLE_NOT_AUTH.name(), Role.ROLE_AUTH.name());
     }
 
     public void registerRole(Role registerRole) {
