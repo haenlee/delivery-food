@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deliveryfood.mapper.CartMapper">
+
+    <select id="findCart" resultType="com.deliveryfood.dto.CartMenuDto">
+        SELECT *
+        FROM CART
+        WHERE user_Id = #{userId}
+    </select>
+
+    <delete id="deleteCart">
+        DELETE
+        FROM CART
+        WHERE user_id = #{userId}
+    </delete>
+
+    <insert id="addMenu" parameterType="com.deliveryfood.dto.CartMenuDto">
+        INSERT INTO CART(user_id, index, menu_id, count, reg_dt)
+        VALUES(#{userId}, #{index}, #{menuId}, #{count}, #{regDt})
+    </insert>
+
+    <delete id="deleteMenu" parameterType="hashmap">
+        DELETE
+        FROM CART
+        WHERE user_Id = #{userId}
+        AND index = #{index}
+    </delete>
+
+</mapper>

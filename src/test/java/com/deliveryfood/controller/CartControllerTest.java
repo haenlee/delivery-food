@@ -1,6 +1,6 @@
 package com.deliveryfood.controller;
 
-import com.deliveryfood.model.CartInput;
+import com.deliveryfood.model.request.CartMenuRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -46,19 +46,19 @@ class CartControllerTest {
     }
 
     @Test
-    @DisplayName("menuId, optionId, subOptionId 를 사용해서 장바구니에 메뉴를 추가한다.")
+    @DisplayName("menuId를 사용해서 장바구니에 메뉴를 추가한다.")
     public void testAddMenu() throws Exception {
-        CartInput cartInput = CartInput.builder()
+        CartMenuRequest menuRequest = CartMenuRequest.builder()
+                .index(ArgumentMatchers.anyInt())
                 .menuId(ArgumentMatchers.anyInt())
-                .optionId(ArgumentMatchers.anyInt())
-                .subOptionid(ArgumentMatchers.anyInt())
+                .count(ArgumentMatchers.anyInt())
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
         mockMvc.perform(post("/carts/add")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(cartInput)))
+                .content(objectMapper.writeValueAsString(menuRequest)))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
