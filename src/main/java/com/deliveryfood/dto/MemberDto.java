@@ -65,14 +65,14 @@ public class MemberDto {
         // 인증이 되어있다면, registerRole만 추가
         if(!role.contains(Role.ROLE_AUTH.name()) && !role.contains(Role.ROLE_NOT_AUTH.name())) {
             if(!role.isEmpty())
-                role.concat(",");
-            role.concat(Role.ROLE_NOT_AUTH.name());
+                role = role.concat(",");
+            role = role.concat(Role.ROLE_NOT_AUTH.name());
         }
 
         if(!role.contains(registerRole.name())) {
             if(!role.isEmpty())
-                role.concat(",");
-            role.concat(registerRole.name());
+                role = role.concat(",");
+            role = role.concat(registerRole.name());
         }
     }
 }

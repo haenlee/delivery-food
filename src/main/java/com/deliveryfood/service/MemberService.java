@@ -39,29 +39,27 @@ public class MemberService {
     }
 
     public boolean register(MemberRegisterVO registerVO, String uuid, MemberDto.Role role) {
-        MemberDto memberDto = memberDao.findByEmail(registerVO.getEmail());
-        if(memberDto != null && memberDto.isExistRole(role)) {
+        MemberDto findMemberDto = memberDao.findByEmail(registerVO.getEmail());
+        if(findMemberDto != null && findMemberDto.isExistRole(role)) {
             // 중복 유저 존재
             return false;
         }
 
         // 비밀번호 암호화
         String hashPw = BCrypt.hashpw(registerVO.getPassword(), BCrypt.gensalt());
+        MemberDto registerMemberDto = MemberDto.builder()
+                .userId(uuid)
+                .name(registerVO.getName())
+                .email(registerVO.getEmail())
+                .password(hashPw)
+                .phone(registerVO.getPhone())
+                .status(MemberDto.Status.REGISTER)
+                .regDt(LocalDateTime.now())
+                .role(MemberDto.Role.ROLE_NOT_AUTH.name())
+                .build();
 
-        if(memberDto == null) {
-            memberDto = MemberDto.builder()
-                    .userId(uuid)
-                    .name(registerVO.getName())
-                    .email(registerVO.getEmail())
-                    .password(hashPw)
-                    .phone(registerVO.getPhone())
-                    .status(MemberDto.Status.REGISTER)
-                    .regDt(LocalDateTime.now())
-                    .build();
-        }
-
-        memberDto.registerRole(role);
-        memberDao.register(memberDto);
+        registerMemberDto.registerRole(role);
+        memberDao.register(registerMemberDto);
         return true;
     }
 
@@ -105,7 +103,7 @@ public class MemberService {
                 .email(memberDto.getEmail())
                 .password(memberDto.getPassword())
                 .status(memberDto.getStatus())
-                .authority(memberDto.getRole().name())
+                .authority(memberDto.getRole())
                 .build();
 
         return userDetails;
