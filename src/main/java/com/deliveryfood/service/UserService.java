@@ -83,16 +83,6 @@ public class UserService extends MemberService implements IUserService {
     }
 
     @Override
-    public UserDto findUser(String email) {
-        UserDto userDto = userDao.findByEmail(email);
-        if(userDto == null) {
-            throw new UsernameNotFoundException("User DB에 User가 존재하지 않음 : " + email);
-        }
-
-        return userDto;
-    }
-
-    @Override
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return super.loadUserByUsername(username);
     }

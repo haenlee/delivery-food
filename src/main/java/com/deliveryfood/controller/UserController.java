@@ -1,6 +1,5 @@
 package com.deliveryfood.controller;
 
-import com.deliveryfood.dto.UserDto;
 import com.deliveryfood.model.request.UserRegisterRequest;
 import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.service.IUserService;
@@ -46,12 +45,6 @@ public class UserController {
     @PostMapping("/logout")
     public void logout() {
         // 로그아웃
-    }
-
-    @GetMapping("/{email}")
-    public void findUser(@PathVariable String email) {
-        // 회원 조회
-        UserDto userDto = userService.findUser(email);
     }
 
     @PutMapping("/{userId}")

@@ -14,6 +14,4 @@ public interface IUserService extends UserDetailsService {
     boolean withdraw(UserRequest userRequest);
 
     boolean modifyUser(UserRegisterVO registerVO);
-
-    UserDto findUser(String email);
 }
