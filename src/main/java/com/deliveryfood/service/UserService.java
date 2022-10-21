@@ -1,6 +1,5 @@
 package com.deliveryfood.service;
 
-import com.deliveryfood.Util.MemberSession;
 import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dao.UserDao;
 import com.deliveryfood.dto.MemberDto;
