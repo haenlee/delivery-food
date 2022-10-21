@@ -40,7 +40,8 @@ public class MemberService {
     }
 
     public boolean register(MemberRegisterVO registerVO, String uuid, MemberDto.Role role) {
-        if(memberDao.findByEmail(registerVO.getEmail()) != null) {
+        MemberDto memberDto = memberDao.findByEmail(registerVO.getEmail());
+        if(memberDto != null && memberDto.isExistRole(role)) {
             // 중복 유저 존재
             return false;
         }
@@ -48,15 +49,17 @@ public class MemberService {
         // 비밀번호 암호화
         String hashPw = BCrypt.hashpw(registerVO.getPassword(), BCrypt.gensalt());
 
-        MemberDto memberDto = MemberDto.builder()
-                .userId(uuid)
-                .name(registerVO.getName())
-                .email(registerVO.getEmail())
-                .password(hashPw)
-                .phone(registerVO.getPhone())
-                .status(MemberDto.Status.REGISTER)
-                .regDt(LocalDateTime.now())
-                .build();
+        if(memberDto == null) {
+            memberDto = MemberDto.builder()
+                    .userId(uuid)
+                    .name(registerVO.getName())
+                    .email(registerVO.getEmail())
+                    .password(hashPw)
+                    .phone(registerVO.getPhone())
+                    .status(MemberDto.Status.REGISTER)
+                    .regDt(LocalDateTime.now())
+                    .build();
+        }
 
         memberDto.registerRole(role);
         memberDao.register(memberDto);

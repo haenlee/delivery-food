@@ -42,7 +42,7 @@ public class RiderService extends MemberService implements IRiderService {
     @Override
     public boolean register(RiderRegisterVO registerVO) {
         String uuid = UUID.randomUUID().toString();
-        if(!super.register(registerVO, uuid)) {
+        if(!super.register(registerVO, uuid, MemberDto.Role.ROLE_RIDER)) {
             // 멤버 이슈가 있음
             return false;
         }
