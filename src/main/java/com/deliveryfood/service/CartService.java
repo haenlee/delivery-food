@@ -52,7 +52,7 @@ public class CartService implements ICartService {
             throw new IndexOutOfBoundsException("장바구니 최대 개수 초과 : " + MAX_CART_MENU_COUNT);
         }
 
-        if(!checkEqualMenu(cartList, menuVO)) {
+        if(checkEqualMenu(cartList, menuVO)) {
             throw new RuntimeException("장바구니 메뉴 중복 : " + menuVO.getMenuId());
         }
 
