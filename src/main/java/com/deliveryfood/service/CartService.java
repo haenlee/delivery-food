@@ -69,7 +69,7 @@ public class CartService implements ICartService {
 
     private boolean checkEqualMenu(List<CartMenuDto> menuList, CartMenuVO menuVO) {
         if(menuList == null) {
-            log.info("cartList is null.");
+            log.debug("cartList is null.");
             return false;
         }
         //옵션 기능 추가 후, 옵션까지 비교하도록
