@@ -28,20 +28,4 @@
         AND index = #{index}
     </delete>
 
-    <insert id="insertPost">
-        <selectKey keyProperty="hierarchyId" order="BEFORE" resultType="String">
-            select to62(seq4post.nextval) from dual
-        </selectKey>
-        insert into t_post (hierarchy_id, bb_id, writer_id, post_type, title, content)
-        values(#{hierarchyId}, #{board.id}, #{writer.id}, 'POST', #{title}, #{content})
-    </insert>
-
-    <insert id="insertReply">
-        <selectKey keyProperty="hierarchyId" order="BEFORE" resultType="String">
-            select #{parent.hierarchyId} || #{hidDeli} || to62(seq4post.nextval) from dual
-        </selectKey>
-        insert into t_post(hierarchy_id, writer_id, content)
-        values(#{hierarchyId}, #{writer.id}, #{content})
-    </insert>
-
 </mapper>
