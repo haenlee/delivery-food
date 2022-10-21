@@ -1,10 +1,9 @@
 package com.deliveryfood.service;
 
-import com.deliveryfood.Util.MemberSession;
 import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dao.RiderDao;
+import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.dto.RiderDto;
-import com.deliveryfood.model.LoginResult;
 import com.deliveryfood.model.RiderInput;
 import com.deliveryfood.model.UserRequest;
 import org.springframework.stereotype.Service;
@@ -16,24 +15,22 @@ import java.util.UUID;
 public class RiderService extends MemberService implements IRiderService {
 
     private final RiderDao riderDao;
-    private final MemberSession session;
 
-    public RiderService(MemberDao memberDao, MemberSession session, RiderDao riderDao) {
-        super(memberDao, session);
+    public RiderService(MemberDao memberDao, RiderDao riderDao) {
+        super(memberDao);
         this.riderDao = riderDao;
-        this.session = session;
     }
 
     @Override
-    public boolean certification(String code) {
+    public boolean certification(String username, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
 
-        if(!super.certification(code)) {
+        if(!super.certification(username, code)) {
             // 멤버 이슈가 있음
             return false;
         }
 
-        RiderDto riderDto = riderDao.findByUserId(session.getLoginUserId());
+        RiderDto riderDto = riderDao.findByUserId(username);
         if(riderDto == null) {
             // 유저가 존재하지 않음
             return false;
@@ -45,7 +42,7 @@ public class RiderService extends MemberService implements IRiderService {
     @Override
     public boolean register(RiderInput riderInput) {
         String uuid = UUID.randomUUID().toString();
-        if(!super.register(riderInput, uuid)) {
+        if(!super.register(riderInput, uuid, MemberDto.Role.ROLE_RIDER)) {
             // 멤버 이슈가 있음
             return false;
         }
@@ -80,11 +77,6 @@ public class RiderService extends MemberService implements IRiderService {
         }
 
         return true;
-    }
-
-    @Override
-    public LoginResult login(UserRequest userRequest) {
-        return super.login(userRequest);
     }
 
     @Override

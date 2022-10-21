@@ -1,51 +1,47 @@
 package com.deliveryfood.service;
 
-import com.deliveryfood.Util.MemberSession;
 import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dto.MemberDto;
-import com.deliveryfood.model.LoginResult;
+import com.deliveryfood.model.CustomUserDetails;
 import com.deliveryfood.model.MemberInput;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 
 @RequiredArgsConstructor
 @Service
 public class MemberService {
 
     private final MemberDao memberDao;
-    private final MemberSession session;
 
     public static final String REGISTER_CODE = "FLAB";
 
-    public boolean certification(String code) {
+    public boolean certification(String username, String code) {
         if(!code.equals(REGISTER_CODE)) {
             // 인증 코드가 다름
             return false;
         }
 
-        String userId = (String) session.getLoginUserId();
-        MemberDto memberDto = memberDao.findByUserId(userId);
+        MemberDto memberDto = memberDao.findByUserId(username);
         if(memberDto == null) {
             // 유저가 존재하지 않음
             return false;
         }
 
-        memberDto.setStatus(MemberDto.Status.REGISTER);
-        memberDao.updateStatus(memberDto);
+        memberDto.certificateRole();
+        memberDao.updateRole(memberDto);
         return true;
     }
 
-    public boolean register(MemberInput memberInput, String uuid) {
-        if(memberDao.findByEmail(memberInput.getEmail()) != null) {
+    public boolean register(MemberInput memberInput, String uuid, MemberDto.Role role) {
+        MemberDto memberDto = memberDao.findByEmail(memberInput.getEmail());
+        if(memberDto != null && memberDto.isExistRole(role)) {
             // 중복 유저 존재
             return false;
         }
@@ -53,16 +49,19 @@ public class MemberService {
         // 비밀번호 암호화
         String hashPw = BCrypt.hashpw(memberInput.getPassword(), BCrypt.gensalt());
 
-        MemberDto memberDto = MemberDto.builder()
-                .userId(uuid)
-                .name(memberInput.getName())
-                .email(memberInput.getEmail())
-                .password(hashPw)
-                .phone(memberInput.getPhone())
-                .status(MemberDto.Status.REGISTER_AUTH)
-                .regDt(LocalDateTime.now())
-                .build();
+        if(memberDto == null) {
+            memberDto = MemberDto.builder()
+                    .userId(uuid)
+                    .name(memberInput.getName())
+                    .email(memberInput.getEmail())
+                    .password(hashPw)
+                    .phone(memberInput.getPhone())
+                    .status(MemberDto.Status.REGISTER)
+                    .regDt(LocalDateTime.now())
+                    .build();
+        }
 
+        memberDto.registerRole(role);
         memberDao.register(memberDto);
         return true;
     }
@@ -84,22 +83,6 @@ public class MemberService {
         return true;
     }
 
-    public LoginResult login(UserRequest userRequest) {
-        MemberDto memberDto = memberDao.findByEmail(userRequest.getEmail());
-        if(memberDto == null) {
-            // 유저가 존재하지 않음
-            return LoginResult.NOT_EXIST_USER;
-        }
-
-        if(memberDto.getStatus().equals(MemberDto.Status.REGISTER_AUTH)) {
-            // 본인 인증 완료 전
-            return LoginResult.NOT_REGISTER_AUTH;
-        }
-
-        session.setLoginUserId(memberDto.getUserId());
-        return LoginResult.SUCCESS;
-    }
-
     public boolean modifyUser(UserInput userInput) {
         MemberDto memberDto = memberDao.findByEmail(userInput.getEmail());
         if(memberDto == null) {
@@ -119,6 +102,11 @@ public class MemberService {
             return null;
         }
 
-        return new User(memberDto.getEmail(), memberDto.getPassword(), Collections.emptyList());
+        CustomUserDetails userDetails = new CustomUserDetails();
+        userDetails.setEmail(memberDto.getEmail());
+        userDetails.setPassword(memberDto.getPassword());
+        userDetails.setStatus(memberDto.getStatus());
+        userDetails.setAuthority(memberDto.getRole());
+        return userDetails;
     }
 }

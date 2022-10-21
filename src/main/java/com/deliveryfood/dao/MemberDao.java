@@ -28,6 +28,10 @@ public class MemberDao {
         sqlSessionTemplate.update("com.deliveryfood.mapper.MemberMapper.updateStatus", memberDto);
     }
 
+    public void updateRole(MemberDto memberDto) {
+        sqlSessionTemplate.update("com.deliveryfood.mapper.MemberMapper.updateRole", memberDto);
+    }
+
     public void updateUser(MemberDto memberDto) {
         sqlSessionTemplate.update("com.deliveryfood.mapper.MemberMapper.updateUser", memberDto);
     }

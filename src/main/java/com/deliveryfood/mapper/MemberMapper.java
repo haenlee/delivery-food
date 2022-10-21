@@ -12,5 +12,7 @@ public interface MemberMapper {
 
     void updateStatus(MemberDto userDto);
 
+    void updateRole(MemberDto userDto);
+
     void updateUser(MemberDto userDto);
 }

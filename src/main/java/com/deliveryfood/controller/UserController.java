@@ -1,15 +1,20 @@
 package com.deliveryfood.controller;
 
 import com.deliveryfood.dto.UserDto;
-import com.deliveryfood.model.LoginResult;
+import com.deliveryfood.model.CustomUserDetails;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
 import com.deliveryfood.service.IUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,15 +23,10 @@ public class UserController {
 
     private final IUserService userService;
 
-    @GetMapping("/certification")
-    public void certification()  {
-        // redirect 된 본인 인증 폼
-    }
-
     @PostMapping("/certification")
-    public void certification(@RequestParam String code)  {
+    public void certification(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam String code)  {
         // 입력한 코드로 본인 인증
-        userService.certification(code);
+        userService.certification(userDetails.getUsername(), code);
     }
 
     @PostMapping("/register")
@@ -39,18 +39,6 @@ public class UserController {
     public void withdraw(@RequestBody UserRequest userRequest) {
         // 회원 탈퇴 (session을 삭제할 뿐 정보의 변경은 없다.)
         userService.withdraw(userRequest);
-    }
-
-    @PostMapping("/login")
-    public HttpStatus login(HttpServletRequest request) {
-        // 로그인
-        UserRequest userRequest = new UserRequest(request.getParameter("username"), request.getParameter("password"));
-        LoginResult result = userService.login(userRequest);
-        if(result.equals(LoginResult.NOT_REGISTER_AUTH)) {
-            return HttpStatus.FOUND;
-        }
-
-        return HttpStatus.OK;
     }
 
     @PostMapping("/logout")

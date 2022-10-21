@@ -3,8 +3,8 @@ package com.deliveryfood.service;
 import com.deliveryfood.Util.MemberSession;
 import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dao.UserDao;
+import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.dto.UserDto;
-import com.deliveryfood.model.LoginResult;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.model.UserRequest;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,24 +18,22 @@ import java.util.UUID;
 public class UserService extends MemberService implements IUserService {
 
     private final UserDao userDao;
-    private final MemberSession session;
 
     public UserService(MemberDao memberDao, UserDao userDao, MemberSession session) {
-        super(memberDao, session);
+        super(memberDao);
         this.userDao = userDao;
-        this.session = session;
     }
 
     @Override
-    public boolean certification(String code) {
+    public boolean certification(String username, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
 
-        if(!super.certification(code)) {
+        if(!super.certification(username, code)) {
             // 멤버 이슈가 있음
             return false;
         }
 
-        UserDto userDto = userDao.findByUserId(session.getLoginUserId());
+        UserDto userDto = userDao.findByUserId(username);
         if(userDto == null) {
             // 유저가 존재하지 않음
             return false;
@@ -47,7 +45,7 @@ public class UserService extends MemberService implements IUserService {
     @Override
     public boolean register(UserInput userInput) {
         String uuid = UUID.randomUUID().toString();
-        if(!super.register(userInput, uuid)) {
+        if(!super.register(userInput, uuid, MemberDto.Role.ROLE_USER)) {
             // 멤버 이슈가 있음
             return false;
         }
@@ -84,11 +82,6 @@ public class UserService extends MemberService implements IUserService {
         }
 
         return true;
-    }
-
-    @Override
-    public LoginResult login(UserRequest userRequest) {
-        return super.login(userRequest);
     }
 
     @Override

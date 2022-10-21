@@ -1,19 +1,17 @@
 package com.deliveryfood.controller;
 
-import com.deliveryfood.model.LoginResult;
+import com.deliveryfood.model.CustomUserDetails;
 import com.deliveryfood.model.RiderInput;
 import com.deliveryfood.model.UserRequest;
 import com.deliveryfood.service.IRiderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,9 +21,9 @@ public class RiderController {
     private final IRiderService riderService;
 
     @PostMapping("/certification")
-    public void certification(@RequestParam String code) {
+    public void certification(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam String code) {
         // 입력한 코드로 본인 인증
-        riderService.certification(code);
+        riderService.certification(userDetails.getUsername(), code);
     }
 
     @PostMapping("/register")
@@ -38,18 +36,6 @@ public class RiderController {
     public void withdraw(@RequestBody UserRequest userRequest) {
         // 라이더 회원 탈퇴 (session을 삭제할 뿐 정보의 변경은 없다.)
         riderService.withdraw(userRequest);
-    }
-
-    @PostMapping("/login")
-    public HttpStatus login(HttpServletRequest request) {
-        // 로그인
-        UserRequest userRequest = new UserRequest(request.getParameter("username"), request.getParameter("password"));
-        LoginResult result = riderService.login(userRequest);
-        if(result.equals(LoginResult.NOT_REGISTER_AUTH)) {
-            return HttpStatus.FOUND;
-        }
-
-        return HttpStatus.OK;
     }
 
     @PostMapping("/logout")
