@@ -55,6 +55,7 @@ public class RestaurantUserService extends MemberService implements IRestaurantU
         RestaurantUserDto restaurantUserDto = RestaurantUserDto.builder()
                 .userId(uuid)
                 .regDt(LocalDateTime.now())
+                .udtDt(LocalDateTime.now())
                 .build();
 
         restaurantUserDao.register(restaurantUserDto);

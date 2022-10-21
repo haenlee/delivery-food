@@ -23,8 +23,8 @@
     </select>
 
     <insert id="register" parameterType="com.deliveryfood.dto.RestaurantUserDto">
-        INSERT INTO RESTAURANT_USER(user_id, reg_dt)
-        VALUES(#{userId}, #{regDt})
+        INSERT INTO RESTAURANT_USER(user_id, reg_dt, udt_dt)
+        VALUES(#{userId}, #{regDt}, #{udt_dt})
     </insert>
 
 </mapper>

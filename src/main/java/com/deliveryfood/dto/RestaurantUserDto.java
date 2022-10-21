@@ -18,5 +18,6 @@ public class RestaurantUserDto {
     private String userId;
     @NonNull
     private LocalDateTime regDt;
+    @NonNull
     private LocalDateTime udtDt;
 }
