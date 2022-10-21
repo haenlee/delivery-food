@@ -8,8 +8,6 @@ public interface RiderMapper {
 
     void register(RiderDto riderDto);
 
-    RiderDto findByEmail(String email);
-
     RiderDto findByUserId(String userId);
 
     void updateRider(RiderDto riderDto);

@@ -1,11 +1,13 @@
 package com.deliveryfood.controller;
 
-import com.deliveryfood.model.CustomUserDetails;
-import com.deliveryfood.vo.RiderRegisterVO;
+import com.deliveryfood.model.request.RiderRegisterRequest;
+import com.deliveryfood.model.request.RiderUpdateRequest;
 import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.service.IRiderService;
+import com.deliveryfood.util.SecurityPrincipal;
+import com.deliveryfood.vo.RiderRegisterVO;
+import com.deliveryfood.vo.RiderUpdateVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,31 +23,31 @@ public class RiderController {
     private final IRiderService riderService;
 
     @PostMapping("/certification")
-    public void certification(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam String code) {
+    public void certification(@RequestParam String code) {
         // 입력한 코드로 본인 인증
-        riderService.certification(userDetails.getUsername(), code);
+        String userId = SecurityPrincipal.getLoginUserId();
+        riderService.certification(userId, code);
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody RiderRegisterVO riderInput) {
+    public void register(@RequestBody RiderRegisterRequest registerRequest) {
         // 라이더 회원 가입
-        riderService.register(riderInput);
+        RiderRegisterVO registerVO = RiderRegisterVO.convert(registerRequest);
+        riderService.register(registerVO);
     }
 
     @PostMapping("/withdraw")
     public void withdraw(@RequestBody UserRequest userRequest) {
         // 라이더 회원 탈퇴 (session을 삭제할 뿐 정보의 변경은 없다.)
-        riderService.withdraw(userRequest);
+        String userId = SecurityPrincipal.getLoginUserId();
+        riderService.withdraw(userId, userRequest);
     }
 
-    @PostMapping("/logout")
-    public void logout() {
-        // 라이더 회원 로그아웃
-    }
-
-    @PutMapping("/{userId}")
-    public void modifyUser(@RequestBody RiderRegisterVO riderInput) {
+    @PutMapping("/modifyRider")
+    public void modifyRider(@RequestBody RiderUpdateRequest updateRequest) {
         // 라이더 회원 정보 수정 (현재는 커미션만 수정 가능)
-        riderService.modifyRider(riderInput);
+        String userId = SecurityPrincipal.getLoginUserId();
+        RiderUpdateVO updateVO = RiderUpdateVO.convert(updateRequest);
+        riderService.modifyRider(userId, updateVO);
     }
 }

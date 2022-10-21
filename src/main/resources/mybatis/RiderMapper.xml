@@ -4,15 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.deliveryfood.mapper.RiderMapper">
 
-    <select id="findByEmail" resultType="com.deliveryfood.dto.RiderDto">
-        SELECT *
-             , USER_ID as userId
-             , REG_DT as regDt
-             , UDT_DT as udtDt
-        FROM RIDER
-        WHERE email = #{email}
-    </select>
-
     <select id="findByUserId" resultType="com.deliveryfood.dto.RiderDto">
         SELECT *
             , USER_ID as userId
@@ -29,8 +20,7 @@
 
     <update id="updateRider" parameterType="com.deliveryfood.dto.RiderDto">
         UPDATE RIDER
-        SET phone = #{phone},
-            address = #{address},
+        SET commission = #{commission},
             udt_dt = NOW()
         WHERE user_id = #{userId}
     </update>
