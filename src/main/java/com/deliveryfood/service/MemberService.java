@@ -76,10 +76,10 @@ public class MemberService {
         return true;
     }
 
-    public MemberDto findMember(String userId) {
-        MemberDto memberDto = memberDao.findByUserId(userId);
+    public MemberDto findMemberByEmail(String email) {
+        MemberDto memberDto = memberDao.findByEmail(email);
         if(memberDto == null) {
-            throw new UsernameNotFoundException("Member DB에 member가 존재하지 않음 : " + userId);
+            throw new UsernameNotFoundException("Member DB에 member가 존재하지 않음 : " + email);
         }
         return memberDto;
     }
