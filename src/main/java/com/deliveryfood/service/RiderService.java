@@ -22,15 +22,14 @@ public class RiderService extends MemberService implements IRiderService {
     }
 
     @Override
-    public boolean certification(String username, String code) {
+    public boolean certification(String userId, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
-
-        if(!super.certification(username, code)) {
+        if(!super.certification(userId, code)) {
             // 멤버 이슈가 있음
             return false;
         }
 
-        RiderDto riderDto = riderDao.findByUserId(username);
+        RiderDto riderDto = riderDao.findByUserId(userId);
         if(riderDto == null) {
             // 유저가 존재하지 않음
             return false;

@@ -27,7 +27,7 @@ public class UserService extends MemberService implements IUserService {
     @Override
     public boolean certification(String userId, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
-        if(!super.certification(username, code)) {
+        if(!super.certification(userId, code)) {
             // 멤버 이슈가 있음
             return false;
         }
