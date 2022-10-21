@@ -22,7 +22,7 @@ public class MemberService {
 
     public static final String REGISTER_CODE = "FLAB";
 
-    public boolean certification(String username, String code, MemberDto.Role role) {
+    public boolean certification(String username, String code) {
         if(!code.equals(REGISTER_CODE)) {
             // 인증 코드가 다름
             return false;
@@ -34,13 +34,14 @@ public class MemberService {
             return false;
         }
 
-        memberDto.setRole(role);
+        memberDto.certificateRole();
         memberDao.updateRole(memberDto);
         return true;
     }
 
-    public boolean register(MemberRegisterVO registerVO, String uuid) {
-        if(memberDao.findByEmail(registerVO.getEmail()) != null) {
+    public boolean register(MemberInput memberInput, String uuid, MemberDto.Role role) {
+        MemberDto memberDto = memberDao.findByEmail(memberInput.getEmail());
+        if(memberDto != null && memberDto.isExistRole(role)) {
             // 중복 유저 존재
             return false;
         }
@@ -48,17 +49,19 @@ public class MemberService {
         // 비밀번호 암호화
         String hashPw = BCrypt.hashpw(registerVO.getPassword(), BCrypt.gensalt());
 
-        MemberDto memberDto = MemberDto.builder()
-                .userId(uuid)
-                .name(registerVO.getName())
-                .email(registerVO.getEmail())
-                .password(hashPw)
-                .phone(registerVO.getPhone())
-                .status(MemberDto.Status.REGISTER)
-                .role(MemberDto.Role.ROLE_NOT_AUTH)
-                .regDt(LocalDateTime.now())
-                .build();
+        if(memberDto == null) {
+            memberDto = MemberDto.builder()
+                    .userId(uuid)
+                    .name(memberInput.getName())
+                    .email(memberInput.getEmail())
+                    .password(hashPw)
+                    .phone(memberInput.getPhone())
+                    .status(MemberDto.Status.REGISTER)
+                    .regDt(LocalDateTime.now())
+                    .build();
+        }
 
+        memberDto.registerRole(role);
         memberDao.register(memberDto);
         return true;
     }
@@ -103,7 +106,7 @@ public class MemberService {
         userDetails.setEmail(memberDto.getEmail());
         userDetails.setPassword(memberDto.getPassword());
         userDetails.setStatus(memberDto.getStatus());
-        userDetails.setAuthority(memberDto.getRole().name());
+        userDetails.setAuthority(memberDto.getRole());
         return userDetails;
     }
 }

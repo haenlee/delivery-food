@@ -25,7 +25,7 @@ public class RiderService extends MemberService implements IRiderService {
     public boolean certification(String username, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
 
-        if(!super.certification(username, code, MemberDto.Role.ROLE_RIDER)) {
+        if(!super.certification(username, code)) {
             // 멤버 이슈가 있음
             return false;
         }
@@ -42,7 +42,7 @@ public class RiderService extends MemberService implements IRiderService {
     @Override
     public boolean register(RiderRegisterVO registerVO) {
         String uuid = UUID.randomUUID().toString();
-        if(!super.register(registerVO, uuid)) {
+        if(!super.register(riderInput, uuid, MemberDto.Role.ROLE_RIDER)) {
             // 멤버 이슈가 있음
             return false;
         }
