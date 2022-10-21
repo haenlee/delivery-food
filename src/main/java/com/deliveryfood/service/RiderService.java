@@ -24,7 +24,6 @@ public class RiderService extends MemberService implements IRiderService {
     @Override
     public boolean certification(String userId, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
-
         if(!super.certification(userId, code)) {
             // 멤버 이슈가 있음
             return false;
