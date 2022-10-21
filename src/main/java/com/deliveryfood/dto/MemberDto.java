@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @Builder
 @Data
@@ -26,6 +27,7 @@ public class MemberDto {
         ROLE_RESTAURANT,
         ROLE_RIDER,
         ROLE_NOT_AUTH,
+        ROLE_AUTH
     }
 
     @NonNull
@@ -41,9 +43,36 @@ public class MemberDto {
     @NonNull
     private Status status;
     @NonNull
-    private Role role;
+    private String role;
     @NonNull
     private LocalDateTime regDt;
     private LocalDateTime udtDt;
 
+    public boolean isAuth() {
+        return Arrays.stream(role.split(",")).anyMatch(e -> e.equals(Role.ROLE_AUTH.name()));
+    }
+
+    public boolean isExistRole(Role checkRole) {
+        return Arrays.stream(role.split(",")).anyMatch(e -> e.equals(checkRole));
+    }
+
+    public void certificateRole() {
+        role.replace(Role.ROLE_NOT_AUTH.name(), Role.ROLE_AUTH.name());
+    }
+
+    public void registerRole(Role registerRole) {
+        // 인증이 안되어 있는 멤버라면, ROLE_NOT_AUTH 추가
+        // 인증이 되어있다면, registerRole만 추가
+        if(!role.contains(Role.ROLE_AUTH.name()) && !role.contains(Role.ROLE_NOT_AUTH.name())) {
+            if(!role.isEmpty())
+                role.concat(",");
+            role.concat(Role.ROLE_NOT_AUTH.name());
+        }
+
+        if(!role.contains(registerRole.name())) {
+            if(!role.isEmpty())
+                role.concat(",");
+            role.concat(registerRole.name());
+        }
+    }
 }
