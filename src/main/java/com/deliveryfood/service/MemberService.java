@@ -52,8 +52,9 @@ public class MemberService {
                 .password(hashPw)
                 .phone(registerVO.getPhone())
                 .status(MemberDto.Status.REGISTER)
-                .regDt(LocalDateTime.now())
                 .role(MemberDto.Role.ROLE_NOT_AUTH.name())
+                .regDt(LocalDateTime.now())
+                .udtDt(LocalDateTime.now())
                 .build();
 
         registerMemberDto.registerRole(role);

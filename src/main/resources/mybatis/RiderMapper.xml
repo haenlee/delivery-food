@@ -14,8 +14,8 @@
     </select>
 
     <insert id="register" parameterType="com.deliveryfood.dto.RiderDto">
-        INSERT INTO RIDER(user_id, commission, status, reg_dt)
-        VALUES(#{userId}, #{commission}, #{status}, #{regDt})
+        INSERT INTO RIDER(user_id, commission, status, reg_dt, udt_dt)
+        VALUES(#{userId}, #{commission}, #{status}, #{regDt}, #{udtDt})
     </insert>
 
     <update id="updateRider" parameterType="com.deliveryfood.dto.RiderDto">

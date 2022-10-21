@@ -52,6 +52,7 @@ public class UserService extends MemberService implements IUserService {
                 .grade(UserDto.Grade.COMMON)
                 .imagePath(registerVO.getImagePath())
                 .regDt(LocalDateTime.now())
+                .udtDt(LocalDateTime.now())
                 .build();
 
         userDao.register(userDto);

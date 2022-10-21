@@ -46,6 +46,7 @@ public class MemberDto {
     private String role;
     @NonNull
     private LocalDateTime regDt;
+    @NonNull
     private LocalDateTime udtDt;
 
     public boolean isAuth() {

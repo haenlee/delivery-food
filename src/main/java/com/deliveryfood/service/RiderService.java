@@ -49,6 +49,7 @@ public class RiderService extends MemberService implements IRiderService {
                 .commission(registerVO.getCommission())
                 .status(RiderDto.Status.NONE)
                 .regDt(LocalDateTime.now())
+                .udtDt(LocalDateTime.now())
                 .build();
 
         riderDao.register(riderDto);

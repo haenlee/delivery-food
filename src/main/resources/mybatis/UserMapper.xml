@@ -15,8 +15,8 @@
     </select>
 
     <insert id="register" parameterType="com.deliveryfood.dto.UserDto">
-        INSERT INTO USER(user_id, address, nickname, grade, image_path, reg_dt)
-        VALUES(#{userId}, #{address}, #{nickname}, #{grade}, #{imagePath}, #{regDt})
+        INSERT INTO USER(user_id, address, nickname, grade, image_path, reg_dt, udt_dt)
+        VALUES(#{userId}, #{address}, #{nickname}, #{grade}, #{imagePath}, #{regDt}, #{udtDt})
     </insert>
 
     <update id="updateUser" parameterType="com.deliveryfood.dto.UserDto">
