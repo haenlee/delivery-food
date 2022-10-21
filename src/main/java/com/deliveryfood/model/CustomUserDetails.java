@@ -14,6 +14,7 @@ import java.util.Collection;
 @Setter
 public class CustomUserDetails implements UserDetails {
 
+    private String userId;
     private String email;
     private String password;
     private String authority;

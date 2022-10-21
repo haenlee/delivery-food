@@ -28,7 +28,7 @@ public class MemberService {
             return false;
         }
 
-        MemberDto memberDto = memberDao.findByUserId(username);
+        MemberDto memberDto = memberDao.findByUserId(userId);
         if(memberDto == null) {
             // 유저가 존재하지 않음
             return false;
@@ -103,6 +103,7 @@ public class MemberService {
         }
 
         CustomUserDetails userDetails = new CustomUserDetails();
+        userDetails.setUserId(memberDto.getUserId());
         userDetails.setEmail(memberDto.getEmail());
         userDetails.setPassword(memberDto.getPassword());
         userDetails.setStatus(memberDto.getStatus());
