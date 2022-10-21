@@ -34,10 +34,10 @@ public class SecurityConfig {
                         , "/riders/register"
                         , "/riders/certification"
                         , "/restaurants/register"
-                        , "restaurants/certification"
+                        , "/restaurants/certification"
                 )
                 .permitAll()
-                .antMatchers("/users/**")
+                .antMatchers("/users/**", "/carts/**")
                 .access("hasRole('ROLE_USER')")
                 .antMatchers("/restaurants/**")
                 .access("hasRole('ROLE_RESTAURANT')")
