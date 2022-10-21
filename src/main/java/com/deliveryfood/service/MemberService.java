@@ -39,8 +39,8 @@ public class MemberService {
         return true;
     }
 
-    public boolean register(MemberInput memberInput, String uuid, MemberDto.Role role) {
-        MemberDto memberDto = memberDao.findByEmail(memberInput.getEmail());
+    public boolean register(MemberRegisterVO registerVO, String uuid, MemberDto.Role role) {
+        MemberDto memberDto = memberDao.findByEmail(registerVO.getEmail());
         if(memberDto != null && memberDto.isExistRole(role)) {
             // 중복 유저 존재
             return false;
@@ -52,10 +52,10 @@ public class MemberService {
         if(memberDto == null) {
             memberDto = MemberDto.builder()
                     .userId(uuid)
-                    .name(memberInput.getName())
-                    .email(memberInput.getEmail())
+                    .name(registerVO.getName())
+                    .email(registerVO.getEmail())
                     .password(hashPw)
-                    .phone(memberInput.getPhone())
+                    .phone(registerVO.getPhone())
                     .status(MemberDto.Status.REGISTER)
                     .regDt(LocalDateTime.now())
                     .build();

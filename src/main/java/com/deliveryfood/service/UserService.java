@@ -45,7 +45,7 @@ public class UserService extends MemberService implements IUserService {
     @Override
     public boolean register(UserRegisterVO registerVO) {
         String uuid = UUID.randomUUID().toString();
-        if(!super.register(userInput, uuid, MemberDto.Role.ROLE_USER)) {
+        if(!super.register(registerVO, uuid, MemberDto.Role.ROLE_USER)) {
             // 멤버 이슈가 있음
             return false;
         }
