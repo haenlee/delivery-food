@@ -3,9 +3,9 @@ package com.deliveryfood.service;
 import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.model.CustomUserDetails;
-import com.deliveryfood.model.MemberInput;
-import com.deliveryfood.model.UserInput;
-import com.deliveryfood.model.UserRequest;
+import com.deliveryfood.model.request.UserRequest;
+import com.deliveryfood.vo.MemberRegisterVO;
+import com.deliveryfood.vo.UserRegisterVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -47,7 +47,7 @@ public class MemberService {
         }
 
         // 비밀번호 암호화
-        String hashPw = BCrypt.hashpw(memberInput.getPassword(), BCrypt.gensalt());
+        String hashPw = BCrypt.hashpw(registerVO.getPassword(), BCrypt.gensalt());
 
         if(memberDto == null) {
             memberDto = MemberDto.builder()
@@ -83,14 +83,14 @@ public class MemberService {
         return true;
     }
 
-    public boolean modifyUser(UserInput userInput) {
-        MemberDto memberDto = memberDao.findByEmail(userInput.getEmail());
+    public boolean modifyUser(UserRegisterVO registerVO) {
+        MemberDto memberDto = memberDao.findByEmail(registerVO.getEmail());
         if(memberDto == null) {
             // 유저가 존재하지 않음
             return false;
         }
 
-        memberDto.setPhone(userInput.getPhone());
+        memberDto.setPhone(registerVO.getPhone());
         memberDao.updateUser(memberDto);
         return true;
     }

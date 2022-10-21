@@ -1,4 +1,4 @@
-package com.deliveryfood.model;
+package com.deliveryfood.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -2,7 +2,7 @@ package com.deliveryfood.service;
 
 import com.deliveryfood.dto.RestaurantDto;
 import com.deliveryfood.mapper.RestaurantMapper;
-import com.deliveryfood.model.RestaurantInput;
+import com.deliveryfood.vo.RestaurantRegisterVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class RestaurantService implements IRestaurantService {
     private final RestaurantMapper restaurantMapper;
 
     @Override
-    public void signin(RestaurantInput restaurantInput) {
+    public void signin(RestaurantRegisterVO restaurantInput) {
         RestaurantDto restaurantDto = RestaurantDto.builder()
                 .restaurantId(restaurantInput.getRestaurantId())
                 .userId(restaurantInput.getUserId())
@@ -25,7 +25,7 @@ public class RestaurantService implements IRestaurantService {
     }
 
     @Override
-    public void signout(RestaurantInput restaurantInput) {
+    public void signout(RestaurantRegisterVO restaurantInput) {
         RestaurantDto restaurantDto = RestaurantDto.builder()
                 .restaurantId(restaurantInput.getRestaurantId())
                 .build();
@@ -38,19 +38,19 @@ public class RestaurantService implements IRestaurantService {
     }
 
     @Override
-    public RestaurantDto findUserById(RestaurantInput restaurantInput) {
+    public RestaurantDto findUserById(RestaurantRegisterVO registerVO) {
         RestaurantDto restaurantDto = RestaurantDto.builder()
-                .restaurantId(restaurantInput.getRestaurantId())
-                .userId(restaurantInput.getUserId())
+                .restaurantId(registerVO.getRestaurantId())
+                .userId(registerVO.getUserId())
                 .build();
         return restaurantMapper.findUserById(restaurantDto);
     }
 
     @Override
-    public void modifyUserById(RestaurantInput restaurantInput) {
+    public void modifyUserById(RestaurantRegisterVO registerVO) {
         RestaurantDto restaurantDto = RestaurantDto.builder()
-                .restaurantId(restaurantInput.getRestaurantId())
-                .name(restaurantInput.getName())
+                .restaurantId(registerVO.getRestaurantId())
+                .name(registerVO.getName())
                 .build();
         restaurantMapper.modifyUserById(restaurantDto);
     }

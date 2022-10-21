@@ -1,12 +1,12 @@
 package com.deliveryfood.service;
 
-import com.deliveryfood.util.MemberSession;
 import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dao.UserDao;
 import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.dto.UserDto;
-import com.deliveryfood.model.UserInput;
-import com.deliveryfood.model.UserRequest;
+import com.deliveryfood.model.request.UserRequest;
+import com.deliveryfood.util.MemberSession;
+import com.deliveryfood.vo.UserRegisterVO;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class UserService extends MemberService implements IUserService {
     }
 
     @Override
-    public boolean register(UserInput userInput) {
+    public boolean register(UserRegisterVO registerVO) {
         String uuid = UUID.randomUUID().toString();
         if(!super.register(userInput, uuid, MemberDto.Role.ROLE_USER)) {
             // 멤버 이슈가 있음
@@ -57,10 +57,10 @@ public class UserService extends MemberService implements IUserService {
 
         UserDto userDto = UserDto.builder()
                 .userId(uuid)
-                .address(userInput.getAddress())
-                .nickname(userInput.getNickname())
+                .address(registerVO.getAddress())
+                .nickname(registerVO.getNickname())
                 .grade(UserDto.Grade.COMMON)
-                .imagePath(userInput.getImagePath())
+                .imagePath(registerVO.getImagePath())
                 .regDt(LocalDateTime.now())
                 .build();
 
@@ -85,16 +85,16 @@ public class UserService extends MemberService implements IUserService {
     }
 
     @Override
-    public boolean modifyUser(UserInput userInput) {
-        UserDto userDto = userDao.findByEmail(userInput.getEmail());
+    public boolean modifyUser(UserRegisterVO registerVO) {
+        UserDto userDto = userDao.findByEmail(registerVO.getEmail());
         if(userDto == null) {
             // 유저가 존재하지 않음
             return false;
         }
 
-        userDto.setAddress(userInput.getAddress());
-        userDto.setNickname(userInput.getNickname());
-        userDto.setImagePath(userInput.getImagePath());
+        userDto.setAddress(registerVO.getAddress());
+        userDto.setNickname(registerVO.getNickname());
+        userDto.setImagePath(registerVO.getImagePath());
         userDao.updateUser(userDto);
         return true;
     }
