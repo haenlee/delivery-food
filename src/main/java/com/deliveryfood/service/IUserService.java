@@ -1,8 +1,8 @@
 package com.deliveryfood.service;
 
-import com.deliveryfood.dto.UserDto;
 import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.vo.UserRegisterVO;
+import com.deliveryfood.vo.UserUpdateVO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface IUserService extends UserDetailsService {
@@ -11,7 +11,7 @@ public interface IUserService extends UserDetailsService {
 
     boolean register(UserRegisterVO registerVO);
 
-    boolean withdraw(UserRequest userRequest);
+    boolean withdraw(String userId, UserRequest userRequest);
 
-    boolean modifyUser(UserRegisterVO registerVO);
+    boolean modifyUser(String userId, UserUpdateVO registerVO);
 }

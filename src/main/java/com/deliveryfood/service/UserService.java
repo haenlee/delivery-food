@@ -8,6 +8,7 @@ import com.deliveryfood.model.CustomUserDetails;
 import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.util.MemberSession;
 import com.deliveryfood.vo.UserRegisterVO;
+import com.deliveryfood.vo.UserUpdateVO;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -58,26 +59,26 @@ public class UserService extends MemberService implements IUserService {
     }
 
     @Override
-    public boolean withdraw(UserRequest userRequest) {
+    public boolean withdraw(String userId, UserRequest userRequest) {
         super.withdraw(userRequest);
-        UserDto userDto = userDao.findByEmail(userRequest.getEmail());
+        UserDto userDto = userDao.findByUserId(userId);
         if(userDto == null) {
-            throw new UsernameNotFoundException("User DB에 User가 존재하지 않음 : " + userRequest.getEmail());
+            throw new UsernameNotFoundException("User DB에 User가 존재하지 않음 : " + userId);
         }
 
         return true;
     }
 
     @Override
-    public boolean modifyUser(UserRegisterVO registerVO) {
-        UserDto userDto = userDao.findByEmail(registerVO.getEmail());
+    public boolean modifyUser(String userId, UserUpdateVO updateVO) {
+        UserDto userDto = userDao.findByUserId(userId);
         if(userDto == null) {
-            throw new UsernameNotFoundException("User DB에 User가 존재하지 않음 : " + registerVO.getEmail());
+            throw new UsernameNotFoundException("User DB에 User가 존재하지 않음 : " + userId);
         }
 
-        userDto.setAddress(registerVO.getAddress());
-        userDto.setNickname(registerVO.getNickname());
-        userDto.setImagePath(registerVO.getImagePath());
+        userDto.setAddress(updateVO.getAddress());
+        userDto.setNickname(updateVO.getNickname());
+        userDto.setImagePath(updateVO.getImagePath());
         userDao.updateUser(userDto);
         return true;
     }
