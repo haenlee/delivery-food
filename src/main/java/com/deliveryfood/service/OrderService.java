@@ -1,16 +1,51 @@
 package com.deliveryfood.service;
 
 import com.deliveryfood.dto.OrderDto;
-import com.deliveryfood.dto.RestaurantDto;
+import com.deliveryfood.mapper.OrderMapper;
 import com.deliveryfood.model.OrderInput;
-import com.deliveryfood.model.RestaurantInput;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface OrderService {
+@RequiredArgsConstructor
+@Service
+public class OrderService implements IOrderService {
 
-    void createOrder(OrderInput orderInput);
-    OrderDto findOrder(OrderInput orderInput);
-    List<OrderDto> findOrderById(OrderInput orderInput);
-    void modifyOrderById(OrderInput orderInput);
+    private final OrderMapper orderMapper;
+
+    @Override
+    public void createOrder(OrderInput orderInput) {
+        OrderDto orderDto = OrderDto.builder()
+                .orderId(orderInput.getOrderId())
+                .userId(orderInput.getUserId())
+                .state(orderInput.getState())
+                .build();
+        orderMapper.createOrder(orderDto);
+    }
+
+    @Override
+    public OrderDto findOrder(OrderInput orderInput) {
+        OrderDto orderDto = OrderDto.builder()
+                .orderId(orderInput.getOrderId())
+                .build();
+        return orderMapper.findOrder(orderDto);
+    }
+
+    @Override
+    public List<OrderDto> findOrderById(OrderInput orderInput) {
+        OrderDto orderDto = OrderDto.builder()
+                .userId(orderInput.getUserId())
+                .build();
+        return orderMapper.findOrderById(orderDto);
+    }
+
+    @Override
+    public void modifyOrderById(OrderInput orderInput) {
+        OrderDto orderDto = OrderDto.builder()
+                .orderId(orderInput.getOrderId())
+                .state(orderInput.getState())
+                .build();
+        orderMapper.modifyOrderById(orderDto);
+    }
 }
