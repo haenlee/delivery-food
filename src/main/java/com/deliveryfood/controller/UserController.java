@@ -49,8 +49,8 @@ public class UserController {
     public void modifyUser(@RequestBody UserUpdateRequest updateRequest) {
         // 회원 정보 수정 (주소, 닉네임, 프로필사진만 수정 가능)
         String userId = SecurityPrincipal.getLoginUserId();
-        UserUpdateVO registerVO = UserUpdateVO.convert(updateRequest);
-        userService.modifyUser(userId, registerVO);
+        UserUpdateVO updateVO = UserUpdateVO.convert(updateRequest);
+        userService.modifyUser(userId, updateVO);
    }
 
     @GetMapping("/{userId}/orders")
