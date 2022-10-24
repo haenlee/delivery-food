@@ -3,33 +3,39 @@ package com.deliveryfood.controller;
 import com.deliveryfood.model.MenuInput;
 import com.deliveryfood.model.OptionInput;
 import com.deliveryfood.model.RestaurantInput;
-import com.deliveryfood.model.SubOptionInput;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.request.RestaurantMenuOptionRequest;
+import com.deliveryfood.service.IOptionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@PropertySource("application-dev.properties")
 public class RestaurantControllerTest {
 
     private MockMvc mockMvc;
@@ -37,9 +43,23 @@ public class RestaurantControllerTest {
     @Autowired
     private RestaurantController restaurantController;
 
+    @Autowired
+    IOptionService optionService;
+
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(restaurantController).build();
+    }
+
+    @BeforeEach
+    void before_test_options() throws SQLException, ClassNotFoundException {
+        OptionInput optionInput = OptionInput.builder()
+                .optionId("1001")
+                .menuId("2001")
+                .name("test name 15")
+                .build();
+
+        optionService.createOptionById(optionInput);
     }
 
     @Test
@@ -255,7 +275,6 @@ public class RestaurantControllerTest {
                 .andDo(print());
 
     }
-
 
     @Test
     void findSubOptionById() throws Exception {

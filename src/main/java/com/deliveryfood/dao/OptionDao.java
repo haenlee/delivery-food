@@ -1,5 +1,6 @@
 package com.deliveryfood.dao;
 
+import com.deliveryfood.dto.MenuDto;
 import com.deliveryfood.dto.OptionDto;
 import com.deliveryfood.model.OptionInput;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,10 @@ import java.util.List;
 public class OptionDao {
 
     private final SqlSessionTemplate sqlSessionTemplate;
+
+    public void createOptionById(OptionDto optionDto) {
+        sqlSessionTemplate.insert("com.deliveryfood.mapper.OptionMapper.createOptionById", optionDto);
+    }
 
     public List<OptionInput> findOptionById(OptionDto optionDto) {
         log.info("findOptionById DAO 호출");

@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -129,36 +131,32 @@ public class RestaurantController {
 
 
     @GetMapping("/{restaurantId}/menus/{menuId}")
-    public List<SubOptionInput> findSubOptionById(@PathVariable String menuId) throws Exception{
+    public List<SubOptionInput> findSubOptionById(@PathVariable String menuId) {
         // 해당 메뉴의 하위옵션들을 조회한다.
-        log.info("findSubOptionById 컨트롤러 호출");
+        log.debug("findSubOptionById 컨트롤러 호출");
         OptionInput optionInput = OptionInput.builder()
                 .menuId(menuId)
                 .build();
 
         List<OptionInput> optionOutputs = optionService.findOptionById(optionInput);
-        List<SubOptionInput> subOptionOutputs = null;
+        List<SubOptionInput> subOptionOutputs = new ArrayList<>();
 
-        if (ObjectUtils.isEmpty(optionOutputs)) {
-            //TODO : ExceptionHandler 개발 예정
-            log.warn("options 테이블 조회결과 없음");
-            throw new RuntimeException("SELECT options NOT EXISTS");
-        }
         for (OptionInput option : optionOutputs) {
             SubOptionInput subOptionInput = SubOptionInput.builder()
                     .menuId(option.getMenuId())
                     .optionId(option.getOptionId())
                     .build();
 
-            subOptionOutputs = subOptionService.findSubOptionById(subOptionInput);
+            List<SubOptionInput> subOptionResults = subOptionService.findSubOptionById(subOptionInput);
 
-            if (ObjectUtils.isEmpty(subOptionOutputs)) {
-                //TODO : ExceptionHandler 개발 예정
-                log.warn("subOptions 테이블 조회결과 없음");
-                throw new RuntimeException("SELECT subOptions NOT EXISTS");
+            for (int i = 0; i < subOptionResults.size(); i++) {
+                subOptionOutputs.add(subOptionResults.get(i));
             }
+        }
 
-            return subOptionOutputs;
+        if (ObjectUtils.isEmpty(subOptionOutputs)) {
+            log.warn("subOptions 테이블 조회결과 없음");
+            return Collections.emptyList();
         }
 
         return subOptionOutputs;

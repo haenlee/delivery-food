@@ -18,7 +18,7 @@ public class SubOptionService implements ISubOptionService{
 
     @Override
     public List<SubOptionInput> findSubOptionById(SubOptionInput subOptionInput) {
-        log.info("findSubOptionById 서비스 호출");
+        log.debug("findSubOptionById 서비스 호출");
         SubOptionDto subOptionDto = SubOptionDto.builder()
                 .optionId(subOptionInput.getOptionId())
                 .menuId(subOptionInput.getMenuId())
