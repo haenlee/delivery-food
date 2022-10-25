@@ -1,4 +1,4 @@
-drop table sub_options;
+DROP TABLE sub_options;
 
 CREATE TABLE sub_options (
 	menu_id	VARCHAR(255)	NOT NULL,
@@ -14,13 +14,3 @@ ALTER TABLE sub_options ADD CONSTRAVARCHAR(255) PK_SUB_OPTIONS PRIMARY KEY (
 	menu_id,
 	option_id
 );
-
-insert into sub_options(option_id, menu_id, sub_option_id)
-VALUES('1001', '2001', '3001');
-insert into sub_options(option_id, menu_id, sub_option_id)
-VALUES('1001', '2001', '3002');
-insert into sub_options(option_id, menu_id, sub_option_id)
-VALUES('1002', '2001', '3003');
-insert into sub_options(option_id, menu_id, sub_option_id)
-VALUES('1003', '2002', '3004');
-commit;

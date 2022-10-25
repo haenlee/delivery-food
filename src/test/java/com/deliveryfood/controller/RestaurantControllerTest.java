@@ -3,11 +3,13 @@ package com.deliveryfood.controller;
 import com.deliveryfood.model.MenuInput;
 import com.deliveryfood.model.OptionInput;
 import com.deliveryfood.model.RestaurantInput;
+import com.deliveryfood.model.SubOptionInput;
 import com.deliveryfood.model.UserInput;
 import com.deliveryfood.request.RestaurantMenuOptionRequest;
 import com.deliveryfood.service.IOptionService;
+import com.deliveryfood.service.ISubOptionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,17 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,6 +40,8 @@ public class RestaurantControllerTest {
 
     @Autowired
     IOptionService optionService;
+    @Autowired
+    ISubOptionService subOptionService;
 
     @BeforeEach
     public void init() {
@@ -52,14 +49,43 @@ public class RestaurantControllerTest {
     }
 
     @BeforeEach
-    void before_test_options() throws SQLException, ClassNotFoundException {
-        OptionInput optionInput = OptionInput.builder()
-                .optionId("1001")
-                .menuId("2001")
-                .name("test name 15")
-                .build();
+    void before_test_options_createSql() {
+        String[] optionIdArr = {"1001", "1002", "1003", "1004"};
+        String[] menuIdArr = {"2001", "2001", "2002", "2001"};
+        String[] nameArr = {"test name 1", "test name 2", "test name 3", "test name 4"};
+        for (int i = 0; i < optionIdArr.length; i++) {
+            OptionInput optionInput = OptionInput.builder()
+                    .optionId(optionIdArr[i])
+                    .menuId(menuIdArr[i])
+                    .name(nameArr[i])
+                    .build();
+            optionService.createOption(optionInput);
+        }
+    }
 
-        optionService.createOptionById(optionInput);
+    @BeforeEach
+    void before_test_subOptions_createSql() {
+        String[] optionIdArr = {"1001", "1001", "1002", "1003"};
+        String[] menuIdArr = {"2001", "2001", "2001", "2002"};
+        String[] subOptionIdArr = {"3001", "3002", "3003", "3004"};
+        for (int i = 0; i < optionIdArr.length; i++) {
+            SubOptionInput subOptionInput = SubOptionInput.builder()
+                    .optionId(optionIdArr[i])
+                    .menuId(menuIdArr[i])
+                    .subOptionId(subOptionIdArr[i])
+                    .build();
+            subOptionService.createSubOption(subOptionInput);
+        }
+    }
+
+    @AfterEach
+    void after_test_options_deleteSql() {
+        optionService.deleteOptions();
+    }
+
+    @AfterEach
+    void after_test_subOptions_deleteSql() {
+        subOptionService.deleteSubOptions();
     }
 
     @Test
@@ -215,25 +241,6 @@ public class RestaurantControllerTest {
                 .andDo(print());
 
     }
-
-//    @Test
-//    void findMenus() throws Exception {
-//        //given and when
-//        MenuInput menuInput = MenuInput.builder()
-//                .restaurantId("9419ab0c-9353-491a-aaee-fe0b8d175d5d")
-//                .menuId("39902574-3b9a-4f3f-9b8c-785c130dd10a")
-//                .build();
-//
-//        //then
-//        mockMvc.perform(get("/restaurants/"
-//                        + menuInput.getRestaurantId()
-//                        + "/menus/"
-//                        + menuInput.getMenuId())
-//                        .characterEncoding("utf-8")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andDo(print());
-//    }
 
     @Test
     void findMenuById() throws Exception {

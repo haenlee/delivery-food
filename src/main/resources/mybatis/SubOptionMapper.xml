@@ -5,6 +5,15 @@
 
 <mapper namespace="com.deliveryfood.mapper.SubOptionMapper">
 
+    <insert id="createSubOption" parameterType="com.deliveryfood.dto.SubOptionDto">
+        INSERT INTO sub_options(option_id, menu_id, sub_option_id)
+        VALUES(#{optionId}, #{menuId}, #{subOptionId})
+    </insert>
+
+    <delete id="deleteSubOptions">
+        DELETE FROM sub_options
+    </delete>
+
     <select id="findSubOptionById" parameterType="com.deliveryfood.dto.SubOptionDto" resultMap="SubOptionInfo">
         SELECT * FROM sub_options
         WHERE menu_id = #{menuId}

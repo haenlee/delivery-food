@@ -5,10 +5,14 @@
 
 <mapper namespace="com.deliveryfood.mapper.OptionMapper">
 
-    <insert id="createOptionById" parameterType="com.deliveryfood.dto.OptionDto">
+    <insert id="createOption" parameterType="com.deliveryfood.dto.OptionDto">
         INSERT INTO options(option_id, menu_id, name)
         VALUES(#{optionId}, #{menuId}, #{name})
     </insert>
+
+    <delete id="deleteOptions">
+        DELETE FROM options
+    </delete>
 
     <select id="findOptionById" parameterType="com.deliveryfood.dto.OptionDto" resultMap="OptionInfo">
         SELECT * FROM options

@@ -133,7 +133,7 @@ public class RestaurantController {
     @GetMapping("/{restaurantId}/menus/{menuId}")
     public List<SubOptionInput> findSubOptionById(@PathVariable String menuId) {
         // 해당 메뉴의 하위옵션들을 조회한다.
-        log.debug("findSubOptionById 컨트롤러 호출");
+        log.trace("findSubOptionById 컨트롤러 호출");
         OptionInput optionInput = OptionInput.builder()
                 .menuId(menuId)
                 .build();
@@ -158,6 +158,8 @@ public class RestaurantController {
             log.warn("subOptions 테이블 조회결과 없음");
             return Collections.emptyList();
         }
+
+        log.info(String.format("subOptions 테이블 조회성공. 조회결과 count=[{%s}]", subOptionOutputs.size()));
 
         return subOptionOutputs;
     }

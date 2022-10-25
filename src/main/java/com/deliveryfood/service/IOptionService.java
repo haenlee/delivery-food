@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface IOptionService {
 
-    void createOptionById(OptionInput optionInput);
+    void createOption(OptionInput optionInput);
+    void deleteOptions();
     List<OptionInput> findOptionById(OptionInput optionInput);
 }

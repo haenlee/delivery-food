@@ -17,12 +17,17 @@ public class OptionDao {
 
     private final SqlSessionTemplate sqlSessionTemplate;
 
-    public void createOptionById(OptionDto optionDto) {
-        sqlSessionTemplate.insert("com.deliveryfood.mapper.OptionMapper.createOptionById", optionDto);
+    public void createOption(OptionDto optionDto) {
+        log.trace("createOption DAO 호출");
+        sqlSessionTemplate.insert("com.deliveryfood.mapper.OptionMapper.createOption", optionDto);
+    }
+    public void deleteOptions() {
+        log.trace("deleteOptions DAO 호출");
+        sqlSessionTemplate.delete("com.deliveryfood.mapper.OptionMapper.deleteOptions");
     }
 
     public List<OptionInput> findOptionById(OptionDto optionDto) {
-        log.info("findOptionById DAO 호출");
+        log.trace("findOptionById DAO 호출");
         return sqlSessionTemplate.selectList("com.deliveryfood.mapper.OptionMapper.findOptionById", optionDto);
     }
 }

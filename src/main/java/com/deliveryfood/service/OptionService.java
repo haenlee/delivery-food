@@ -17,18 +17,25 @@ public class OptionService implements IOptionService{
     private final OptionMapper optionMapper;
 
     @Override
-    public void createOptionById(OptionInput optionInput) {
+    public void createOption(OptionInput optionInput) {
+        log.trace("createOption 서비스 호출");
         OptionDto optionDto = OptionDto.builder()
                 .optionId(optionInput.getOptionId())
                 .menuId(optionInput.getMenuId())
                 .name(optionInput.getName())
                 .build();
-        optionMapper.createOptionById(optionDto);
+        optionMapper.createOption(optionDto);
+    }
+
+    @Override
+    public void deleteOptions() {
+        log.trace("deleteOptions 서비스 호출");
+        optionMapper.deleteOptions();
     }
 
     @Override
     public List<OptionInput> findOptionById(OptionInput optionInput) {
-        log.debug("findOptionById 서비스 호출");
+        log.trace("findOptionById 서비스 호출");
         OptionDto optionDto = OptionDto.builder()
                 .menuId(optionInput.getMenuId())
                 .build();
