@@ -1,9 +1,7 @@
 package com.deliveryfood.service;
 
-import com.deliveryfood.dto.OptionDto;
 import com.deliveryfood.dto.SubOptionDto;
 import com.deliveryfood.mapper.SubOptionMapper;
-import com.deliveryfood.model.OptionInput;
 import com.deliveryfood.model.SubOptionInput;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

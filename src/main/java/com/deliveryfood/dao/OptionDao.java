@@ -1,6 +1,5 @@
 package com.deliveryfood.dao;
 
-import com.deliveryfood.dto.MenuDto;
 import com.deliveryfood.dto.OptionDto;
 import com.deliveryfood.model.OptionInput;
 import lombok.RequiredArgsConstructor;
