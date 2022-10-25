@@ -10,8 +10,9 @@
         VALUES(#{optionId}, #{menuId}, #{name})
     </insert>
 
-    <delete id="deleteOptions">
+    <delete id="deleteOptionById" parameterType="com.deliveryfood.dto.OptionDto">
         DELETE FROM options
+        WHERE option_id = #{optionId}
     </delete>
 
     <select id="findOptionById" parameterType="com.deliveryfood.dto.OptionDto" resultMap="OptionInfo">

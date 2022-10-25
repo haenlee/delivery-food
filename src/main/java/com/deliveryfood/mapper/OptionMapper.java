@@ -10,6 +10,6 @@ import java.util.List;
 public interface OptionMapper {
 
     void createOption(OptionDto optionDto);
-    void deleteOptions();
+    void deleteOptionById(OptionDto optionDto);
     List<OptionInput> findOptionById(OptionDto optionDto);
 }

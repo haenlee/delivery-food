@@ -28,9 +28,12 @@ public class SubOptionService implements ISubOptionService{
     }
 
     @Override
-    public void deleteSubOptions() {
-        log.trace("deleteSubOptions 서비스 호출");
-        subOptionMapper.deleteSubOptions();
+    public void deleteSubOptionById(SubOptionInput subOptionInput) {
+        log.trace("deleteSubOptionById 서비스 호출");
+        SubOptionDto subOptionDto = SubOptionDto.builder()
+                .subOptionId(subOptionInput.getSubOptionId())
+                .build();
+        subOptionMapper.deleteSubOptionById(subOptionDto);
     }
 
     @Override

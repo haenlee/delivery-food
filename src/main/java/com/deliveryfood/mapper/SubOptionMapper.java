@@ -10,6 +10,6 @@ import java.util.List;
 public interface SubOptionMapper {
 
     void createSubOption(SubOptionDto subOptionDto);
-    void deleteSubOptions();
+    void deleteSubOptionById(SubOptionDto subOptionDto);
     List<SubOptionInput> findSubOptionById(SubOptionDto subOptionDto);
 }

@@ -20,9 +20,9 @@ public class OptionDao {
         log.trace("createOption DAO 호출");
         sqlSessionTemplate.insert("com.deliveryfood.mapper.OptionMapper.createOption", optionDto);
     }
-    public void deleteOptions() {
-        log.trace("deleteOptions DAO 호출");
-        sqlSessionTemplate.delete("com.deliveryfood.mapper.OptionMapper.deleteOptions");
+    public void deleteOptionById(OptionDto optionDto) {
+        log.trace("deleteOptionById DAO 호출");
+        sqlSessionTemplate.delete("com.deliveryfood.mapper.OptionMapper.deleteOptionById", optionDto);
     }
 
     public List<OptionInput> findOptionById(OptionDto optionDto) {

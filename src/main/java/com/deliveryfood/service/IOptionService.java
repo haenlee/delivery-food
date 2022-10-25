@@ -1,5 +1,6 @@
 package com.deliveryfood.service;
 
+import com.deliveryfood.dto.OptionDto;
 import com.deliveryfood.model.OptionInput;
 
 import java.util.List;
@@ -7,6 +8,6 @@ import java.util.List;
 public interface IOptionService {
 
     void createOption(OptionInput optionInput);
-    void deleteOptions();
+    void deleteOptionById(OptionInput optionInput);
     List<OptionInput> findOptionById(OptionInput optionInput);
 }

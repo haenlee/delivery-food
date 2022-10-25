@@ -147,11 +147,7 @@ public class RestaurantController {
                     .optionId(option.getOptionId())
                     .build();
 
-            List<SubOptionInput> subOptionResults = subOptionService.findSubOptionById(subOptionInput);
-
-            for (int i = 0; i < subOptionResults.size(); i++) {
-                subOptionOutputs.add(subOptionResults.get(i));
-            }
+            subOptionOutputs.addAll(subOptionService.findSubOptionById(subOptionInput));
         }
 
         if (ObjectUtils.isEmpty(subOptionOutputs)) {

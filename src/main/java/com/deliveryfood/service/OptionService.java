@@ -28,9 +28,12 @@ public class OptionService implements IOptionService{
     }
 
     @Override
-    public void deleteOptions() {
-        log.trace("deleteOptions 서비스 호출");
-        optionMapper.deleteOptions();
+    public void deleteOptionById(OptionInput optionInput) {
+        log.trace("deleteOptionById 서비스 호출");
+        OptionDto optionDto = OptionDto.builder()
+                .optionId(optionInput.getOptionId())
+                .build();
+        optionMapper.deleteOptionById(optionDto);
     }
 
     @Override

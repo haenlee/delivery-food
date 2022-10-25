@@ -20,9 +20,9 @@ public class SubOptionDao {
         log.trace("createSubOption DAO 호출");
         sqlSessionTemplate.insert("com.deliveryfood.mapper.SubOptionMapper.createSubOption", subOptionDto);
     }
-    public void deleteSubOptions() {
-        log.trace("deleteSubOptions DAO 호출");
-        sqlSessionTemplate.delete("com.deliveryfood.mapper.SubOptionMapper.deleteSubOptions");
+    public void deleteSubOptionById(SubOptionDto subOptionDto) {
+        log.trace("deleteSubOptionById DAO 호출");
+        sqlSessionTemplate.delete("com.deliveryfood.mapper.SubOptionMapper.deleteSubOptionById", subOptionDto);
     }
 
     public List<SubOptionInput> findSubOptionById(SubOptionDto subOptionDto) {

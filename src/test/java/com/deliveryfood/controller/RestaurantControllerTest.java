@@ -42,17 +42,36 @@ public class RestaurantControllerTest {
     IOptionService optionService;
     @Autowired
     ISubOptionService subOptionService;
+    private String[] optionIdArr;
+    private String[] menuIdArr;
+    private String[] nameArr;
+    private String[] subOptionIdArr;
 
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(restaurantController).build();
+
+        createDummyData();
     }
 
-    @BeforeEach
-    void before_test_options_createSql() {
-        String[] optionIdArr = {"1001", "1002", "1003", "1004"};
-        String[] menuIdArr = {"2001", "2001", "2002", "2001"};
-        String[] nameArr = {"test name 1", "test name 2", "test name 3", "test name 4"};
+    @AfterEach
+    public void tearDown() {
+        deleteDummyData();
+    }
+
+    private void createDummyData() {
+        optionIdArr = new String[]{"1001", "1002", "1003", "1004"};
+        menuIdArr = new String[]{"2001", "2001", "2002", "2001"};
+        nameArr = new String[]{"test name 1", "test name 2", "test name 3", "test name 4"};
+        createOptionDummyData();
+
+        optionIdArr = new String[]{"1001", "1001", "1002", "1003"};
+        menuIdArr = new String[]{"2001", "2001", "2001", "2002"};
+        subOptionIdArr = new String[]{"3001", "3002", "3003", "3004"};
+        createSubOptionDummyData();
+    }
+
+    private void createOptionDummyData() {
         for (int i = 0; i < optionIdArr.length; i++) {
             OptionInput optionInput = OptionInput.builder()
                     .optionId(optionIdArr[i])
@@ -63,11 +82,7 @@ public class RestaurantControllerTest {
         }
     }
 
-    @BeforeEach
-    void before_test_subOptions_createSql() {
-        String[] optionIdArr = {"1001", "1001", "1002", "1003"};
-        String[] menuIdArr = {"2001", "2001", "2001", "2002"};
-        String[] subOptionIdArr = {"3001", "3002", "3003", "3004"};
+    private void createSubOptionDummyData() {
         for (int i = 0; i < optionIdArr.length; i++) {
             SubOptionInput subOptionInput = SubOptionInput.builder()
                     .optionId(optionIdArr[i])
@@ -78,15 +93,32 @@ public class RestaurantControllerTest {
         }
     }
 
-    @AfterEach
-    void after_test_options_deleteSql() {
-        optionService.deleteOptions();
+    private void deleteDummyData() {
+        optionIdArr = new String[]{"1001", "1002", "1003", "1004"};
+        deleteOptionDummyData();
+
+        subOptionIdArr = new String[]{"3001", "3002", "3003", "3004"};
+        deleteSubOptionDummyData();
     }
 
-    @AfterEach
-    void after_test_subOptions_deleteSql() {
-        subOptionService.deleteSubOptions();
+    private void deleteOptionDummyData() {
+        for (int i = 0; i < optionIdArr.length; i++) {
+            OptionInput optionInput = OptionInput.builder()
+                    .optionId(optionIdArr[i])
+                    .build();
+            optionService.deleteOptionById(optionInput);
+        }
     }
+
+    private void deleteSubOptionDummyData() {
+        for (int i = 0; i < optionIdArr.length; i++) {
+            SubOptionInput subOptionInput = SubOptionInput.builder()
+                    .subOptionId(subOptionIdArr[i])
+                    .build();
+            subOptionService.deleteSubOptionById(subOptionInput);
+        }
+    }
+
 
     @Test
     @DisplayName("가게 회원가입시 본인 인증을 처리한다.")
@@ -284,7 +316,7 @@ public class RestaurantControllerTest {
     }
 
     @Test
-    void findSubOptionById() throws Exception {
+    void findSubOptions() throws Exception {
         //given and when
         RestaurantMenuOptionRequest restaurantMenuOptionRequest = RestaurantMenuOptionRequest.builder()
                 .restaurantId("9419ab0c-9353-491a-aaee-fe0b8d175d5d")
