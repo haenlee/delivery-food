@@ -131,7 +131,7 @@ public class RestaurantController {
 
 
     @GetMapping("/{restaurantId}/menus/{menuId}")
-    public List<SubOptionInput> findSubOptionById(@PathVariable String menuId) {
+    public List<SubOptionInput> findSubOptions(@PathVariable String menuId) {
         // 해당 메뉴의 하위옵션들을 조회한다.
         log.trace("findSubOptionById 컨트롤러 호출");
         OptionInput optionInput = OptionInput.builder()
