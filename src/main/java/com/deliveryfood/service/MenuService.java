@@ -5,6 +5,7 @@ import com.deliveryfood.mapper.MenuMapper;
 import com.deliveryfood.model.MenuInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class MenuService implements IMenuService {
     private final MenuMapper menuMapper;
 
     @Override
+    @Transactional
     public void createMenuById(MenuInput menuInput) {
         MenuDto menuDto = MenuDto.builder()
                 .menuId(menuInput.getMenuId())
@@ -22,9 +24,12 @@ public class MenuService implements IMenuService {
                 .name(menuInput.getName())
                 .build();
         menuMapper.createMenuById(menuDto);
+
+        throw new RuntimeException();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public MenuDto findMenus(MenuInput menuInput) {
         MenuDto menuDto = MenuDto.builder()
                 .menuId(menuInput.getMenuId())
@@ -34,6 +39,7 @@ public class MenuService implements IMenuService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MenuDto> findMenuById(MenuInput menuInput) {
         MenuDto menuDto = MenuDto.builder()
                 .restaurantId(menuInput.getRestaurantId())
