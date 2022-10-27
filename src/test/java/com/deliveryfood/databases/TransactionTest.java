@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,6 +35,7 @@ public class TransactionTest {
 
     @Test
     @DisplayName("Transaction_롤백_테스트")
+    @Transactional
     void txRollbackTest() {
         // given
         MenuInput menuInput = MenuInput.builder()
@@ -53,6 +55,8 @@ public class TransactionTest {
                             .content(objectMapper.writeValueAsString(menuInput)))
                     .andDo(print())
                     .andReturn();
+
+            throw new RuntimeException();
         } catch (Exception e) {
             log.warn("INSERT runtime exception to txRollbackTest");
         }

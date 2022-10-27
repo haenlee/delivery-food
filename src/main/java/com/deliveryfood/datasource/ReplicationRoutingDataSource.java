@@ -1,4 +1,4 @@
-package com.deliveryfood.config;
+package com.deliveryfood.datasource;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
@@ -11,8 +11,6 @@ public class ReplicationRoutingDataSource extends AbstractRoutingDataSource {
 
     @Override
     protected Object determineCurrentLookupKey() {
-        log.info("###### TESTLOG determineCurrentLookupKey");
-        log.info("###### TESTLOG conn DB name=" + (TransactionSynchronizationManager.isCurrentTransactionReadOnly()  ? "slave" : "master"));
         return TransactionSynchronizationManager.isCurrentTransactionReadOnly() ? "slave" : "master";
     }
 

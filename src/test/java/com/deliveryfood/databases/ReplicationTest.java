@@ -1,11 +1,10 @@
 package com.deliveryfood.databases;
 
-import com.deliveryfood.config.ReplicationRoutingDataSource;
+import com.deliveryfood.datasource.ReplicationRoutingDataSource;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
