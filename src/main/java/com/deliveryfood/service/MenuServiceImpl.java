@@ -27,15 +27,6 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public MenuDto findMenus(MenuInput menuInput) {
-        MenuDto menuDto = MenuDto.builder()
-                .menuId(menuInput.getMenuId())
-                .restaurantId(menuInput.getRestaurantId())
-                .build();
-        return menuMapper.findMenus(menuDto);
-    }
-
-    @Override
     public List<MenuDto> findMenuById(MenuInput menuInput) {
         MenuDto menuDto = MenuDto.builder()
                 .restaurantId(menuInput.getRestaurantId())

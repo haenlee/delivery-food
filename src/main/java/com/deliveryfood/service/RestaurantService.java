@@ -2,7 +2,6 @@ package com.deliveryfood.service;
 
 import com.deliveryfood.dto.RestaurantDto;
 import com.deliveryfood.model.RestaurantInput;
-import com.deliveryfood.model.UserInput;
 
 import java.util.List;
 

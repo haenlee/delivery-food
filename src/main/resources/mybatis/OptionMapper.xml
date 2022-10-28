@@ -5,17 +5,25 @@
 
 <mapper namespace="com.deliveryfood.mapper.OptionMapper">
 
+    <insert id="createOption" parameterType="com.deliveryfood.dto.OptionDto">
+        INSERT INTO options(option_id, menu_id, name)
+        VALUES(#{optionId}, #{menuId}, #{name})
+    </insert>
+
+    <delete id="deleteOptionById" parameterType="com.deliveryfood.dto.OptionDto">
+        DELETE FROM options
+        WHERE option_id = #{optionId}
+    </delete>
+
     <select id="findOptionById" parameterType="com.deliveryfood.dto.OptionDto" resultMap="OptionInfo">
         SELECT * FROM options
-        WHERE option_id = #{optionId}
-        AND menu_id = #{menuId}
+        WHERE menu_id = #{menuId}
     </select>
 
     <resultMap id="OptionInfo" type="com.deliveryfood.model.OptionInput">
         <result column="option_id" property="optionId"/>
         <result column="menu_id" property="menuId"/>
         <result column="name" property="name"/>
-        <result column="state" property="state"/>
     </resultMap>
 
 </mapper>

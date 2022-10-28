@@ -2,7 +2,12 @@ package com.deliveryfood.controller;
 
 import com.deliveryfood.dto.MenuDto;
 import com.deliveryfood.dto.RestaurantDto;
-import com.deliveryfood.model.*;
+import com.deliveryfood.model.MenuInput;
+import com.deliveryfood.model.OptionInput;
+import com.deliveryfood.model.RestaurantInput;
+import com.deliveryfood.model.SubOptionInput;
+import com.deliveryfood.model.UserInput;
+import com.deliveryfood.model.UserRequest;
 import com.deliveryfood.service.IOptionService;
 import com.deliveryfood.service.ISubOptionService;
 import com.deliveryfood.service.MenuService;
@@ -10,8 +15,17 @@ import com.deliveryfood.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -81,7 +95,6 @@ public class RestaurantController {
 
 
 
-
     @PostMapping("/{restaurantId}/menus")
     public void createMenuById(@PathVariable String restaurantId
             , @RequestBody MenuInput menuInput) {
@@ -92,17 +105,6 @@ public class RestaurantController {
                 .name(menuInput.getName())
                 .build();
         menuService.createMenuById(menu);
-    }
-
-    @GetMapping("/{restaurantId}/menus/{menuId}")
-    public MenuDto findMenus(@PathVariable String restaurantId
-            , @PathVariable String menuId) {
-        // 메뉴를 조회한다.
-        MenuInput menu = MenuInput.builder()
-                .restaurantId(restaurantId)
-                .menuId(menuId)
-                .build();
-        return menuService.findMenus(menu);
     }
 
     @GetMapping("/{restaurantId}/menus")
@@ -128,26 +130,34 @@ public class RestaurantController {
     }
 
 
-    @GetMapping("/menus/options")
-    public OptionInput findOptionById(@RequestBody OptionInput optionInput) {
-        // 해당 레스토랑의 메뉴옵션들을 조회한다.
-        log.info("findOptionById 컨트롤러 호출");
-        OptionInput option = OptionInput.builder()
-                .optionId(optionInput.getOptionId())
-                .menuId(optionInput.getMenuId())
+    @GetMapping("/{restaurantId}/menus/{menuId}")
+    public List<SubOptionInput> findSubOptions(@PathVariable String menuId) {
+        // 해당 메뉴의 하위옵션들을 조회한다.
+        log.trace("findSubOptionById 컨트롤러 호출");
+        OptionInput optionInput = OptionInput.builder()
+                .menuId(menuId)
                 .build();
-        return optionService.findOptionById(option);
+
+        List<OptionInput> optionOutputs = optionService.findOptionById(optionInput);
+        List<SubOptionInput> subOptionOutputs = new ArrayList<>();
+
+        for (OptionInput option : optionOutputs) {
+            SubOptionInput subOptionInput = SubOptionInput.builder()
+                    .menuId(option.getMenuId())
+                    .optionId(option.getOptionId())
+                    .build();
+
+            subOptionOutputs.addAll(subOptionService.findSubOptionById(subOptionInput));
+        }
+
+        if (ObjectUtils.isEmpty(subOptionOutputs)) {
+            log.warn("subOptions 테이블 조회결과 없음");
+            return Collections.emptyList();
+        }
+
+        log.info(String.format("subOptions 테이블 조회성공. 조회결과 count=[{%s}]", subOptionOutputs.size()));
+
+        return subOptionOutputs;
     }
 
-
-    @GetMapping("/menus/subOptions")
-    public SubOptionInput findSubOptionById(@RequestBody SubOptionInput subOptionInput) {
-        // 해당 레스토랑의 메뉴하위옵션들을 조회한다.
-        log.info("findSubOptionById 컨트롤러 호출");
-        SubOptionInput subOption = SubOptionInput.builder()
-                .optionId(subOptionInput.getOptionId())
-                .menuId(subOptionInput.getMenuId())
-                .build();
-        return subOptionService.findSubOptionById(subOption);
-    }
 }
