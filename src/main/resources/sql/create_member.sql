@@ -1,0 +1,15 @@
+DROP TABLE MEMBER;
+
+create table MEMBER
+(
+    USER_ID  VARCHAR(255) not null,
+    NAME     VARCHAR(255),
+    EMAIL    VARCHAR(255),
+    PASSWORD VARCHAR(255),
+    PHONE    VARCHAR(255),
+    STATUS   VARCHAR(255),
+    ROLE     VARCHAR(255),
+    REG_DT   TIMESTAMP,
+    UDT_DT   TIMESTAMP,
+    primary key (USER_ID)
+);

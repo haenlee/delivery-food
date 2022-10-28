@@ -10,12 +10,6 @@
         VALUES(#{menuId}, #{restaurantId}, #{name})
     </insert>
 
-    <select id="findMenus" resultType="com.deliveryfood.dto.MenuDto">
-        SELECT * FROM menu
-        WHERE menu_Id = #{menuId}
-        AND restaurant_id = #{restaurantId}
-    </select>
-
     <select id="findMenuById" parameterType="com.deliveryfood.dto.MenuDto" resultType="com.deliveryfood.dto.MenuDto">
         SELECT * FROM menu
         WHERE restaurant_id = #{restaurantId}
