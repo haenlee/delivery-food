@@ -1,8 +1,14 @@
 package com.deliveryfood.controller;
 
 import com.deliveryfood.model.MenuInput;
+import com.deliveryfood.model.OptionInput;
+import com.deliveryfood.model.SubOptionInput;
 import com.deliveryfood.model.request.RestaurantRegisterRequest;
+import com.deliveryfood.request.RestaurantMenuOptionRequest;
+import com.deliveryfood.service.IOptionService;
+import com.deliveryfood.service.ISubOptionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +21,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,10 +35,55 @@ public class RestaurantControllerTest {
     @Autowired
     private RestaurantController restaurantController;
 
+    @Autowired
+    IOptionService optionService;
+    @Autowired
+    ISubOptionService subOptionService;
+    private String[] optionIdArr;
+    private String[] menuIdArr;
+    private String[] nameArr;
+    private String[] subOptionIdArr;
+
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders.standaloneSetup(restaurantController).build();
+
+        createDummyData();
     }
+
+    @AfterEach
+    public void tearDown() {
+        deleteDummyData();
+    }
+
+    private void createDummyData() {
+        //create Option Dummy Data
+        optionService.createOption(OptionInput.builder().optionId("1001").menuId("2001").name("test name 1").build());
+        optionService.createOption(OptionInput.builder().optionId("1002").menuId("2001").name("test name 2").build());
+        optionService.createOption(OptionInput.builder().optionId("1003").menuId("2002").name("test name 3").build());
+        optionService.createOption(OptionInput.builder().optionId("1004").menuId("2001").name("test name 4").build());
+
+        //create SubOption Dummy Data;
+        subOptionService.createSubOption(SubOptionInput.builder().optionId("1001").menuId("2001").subOptionId("3001").build());
+        subOptionService.createSubOption(SubOptionInput.builder().optionId("1001").menuId("2001").subOptionId("3002").build());
+        subOptionService.createSubOption(SubOptionInput.builder().optionId("1002").menuId("2001").subOptionId("3003").build());
+        subOptionService.createSubOption(SubOptionInput.builder().optionId("1003").menuId("2002").subOptionId("3004").build());
+    }
+
+    private void deleteDummyData() {
+        //delete Option Dummy Data
+        optionService.deleteOptionById(OptionInput.builder().optionId("1001").build());
+        optionService.deleteOptionById(OptionInput.builder().optionId("1002").build());
+        optionService.deleteOptionById(OptionInput.builder().optionId("1003").build());
+        optionService.deleteOptionById(OptionInput.builder().optionId("1004").build());
+
+        //delete SubOption Dummy Data
+        subOptionService.deleteSubOptionById(SubOptionInput.builder().subOptionId("3001").build());
+        subOptionService.deleteSubOptionById(SubOptionInput.builder().subOptionId("3002").build());
+        subOptionService.deleteSubOptionById(SubOptionInput.builder().subOptionId("3003").build());
+        subOptionService.deleteSubOptionById(SubOptionInput.builder().subOptionId("3004").build());
+    }
+
 
     @Test
     @DisplayName("가게 회원가입시 본인 인증을 처리한다.")
@@ -243,6 +296,25 @@ public class RestaurantControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
 
+    }
+
+    @Test
+    void findSubOptions() throws Exception {
+        //given and when
+        RestaurantMenuOptionRequest restaurantMenuOptionRequest = RestaurantMenuOptionRequest.builder()
+                .restaurantId("9419ab0c-9353-491a-aaee-fe0b8d175d5d")
+                .menuId("2001")
+                .build();
+
+        //then
+        mockMvc.perform(get("/restaurants/"
+                        + restaurantMenuOptionRequest.getRestaurantId()
+                        + "/menus/"
+                        + restaurantMenuOptionRequest.getMenuId())
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
 }

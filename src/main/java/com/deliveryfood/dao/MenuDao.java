@@ -17,10 +17,6 @@ public class MenuDao {
         sqlSessionTemplate.insert("com.deliveryfood.mapper.MenuMapper.createMenuById", menuDto);
     }
 
-    public MenuDto findMenus(MenuDto menuDto) {
-        return sqlSessionTemplate.selectOne("com.deliveryfood.mapper.MenuMapper.findMenus");
-    }
-
     public List<MenuDto> findMenuById(MenuDto menuDto) {
         return sqlSessionTemplate.selectList("com.deliveryfood.mapper.MenuMapper.findMenuById", menuDto.getRestaurantId());
     }
