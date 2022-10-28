@@ -17,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final MemberService memberService;
+    private final CustomLogoutSuccessHandler logoutSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -33,10 +34,10 @@ public class SecurityConfig {
                         , "/riders/register"
                         , "/riders/certification"
                         , "/restaurants/register"
-                        , "restaurants/certification"
+                        , "/restaurants/certification"
                 )
                 .permitAll()
-                .antMatchers("/users/**")
+                .antMatchers("/users/**", "/carts/**")
                 .access("hasRole('ROLE_USER')")
                 .antMatchers("/restaurants/**")
                 .access("hasRole('ROLE_RESTAURANT')")
@@ -44,6 +45,7 @@ public class SecurityConfig {
                 .access("hasRole('ROLE_RIDER')");
 
         http.formLogin().disable();
+        http.logout().logoutSuccessHandler(logoutSuccessHandler);
 
         return http.build();
     }

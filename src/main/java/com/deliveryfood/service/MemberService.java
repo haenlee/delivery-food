@@ -7,7 +7,7 @@ import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.vo.MemberRegisterVO;
 import com.deliveryfood.vo.UserRegisterVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -24,14 +24,12 @@ public class MemberService {
 
     public boolean certification(String userId, String code) {
         if(!code.equals(REGISTER_CODE)) {
-            // 인증 코드가 다름
-            return false;
+            throw new RuntimeException("인증 코드 값이 다름 : " + code);
         }
 
         MemberDto memberDto = memberDao.findByUserId(userId);
         if(memberDto == null) {
-            // 유저가 존재하지 않음
-            return false;
+            throw new UsernameNotFoundException("Member DB에 member가 존재하지 않음 : " + userId);
         }
 
         memberDto.certificateRole();
@@ -40,42 +38,38 @@ public class MemberService {
     }
 
     public boolean register(MemberRegisterVO registerVO, String uuid, MemberDto.Role role) {
-        MemberDto memberDto = memberDao.findByEmail(registerVO.getEmail());
-        if(memberDto != null && memberDto.isExistRole(role)) {
-            // 중복 유저 존재
-            return false;
+        MemberDto findMemberDto = memberDao.findByEmail(registerVO.getEmail());
+        if(findMemberDto != null && findMemberDto.isExistRole(role)) {
+            throw new RuntimeException("Member DB에 중복 유저가 존재함");
         }
 
         // 비밀번호 암호화
         String hashPw = BCrypt.hashpw(registerVO.getPassword(), BCrypt.gensalt());
+        MemberDto registerMemberDto = MemberDto.builder()
+                .userId(uuid)
+                .name(registerVO.getName())
+                .email(registerVO.getEmail())
+                .password(hashPw)
+                .phone(registerVO.getPhone())
+                .status(MemberDto.Status.REGISTER)
+                .role(MemberDto.Role.ROLE_NOT_AUTH.name())
+                .regDt(LocalDateTime.now())
+                .udtDt(LocalDateTime.now())
+                .build();
 
-        if(memberDto == null) {
-            memberDto = MemberDto.builder()
-                    .userId(uuid)
-                    .name(registerVO.getName())
-                    .email(registerVO.getEmail())
-                    .password(hashPw)
-                    .phone(registerVO.getPhone())
-                    .status(MemberDto.Status.REGISTER)
-                    .regDt(LocalDateTime.now())
-                    .build();
-        }
-
-        memberDto.registerRole(role);
-        memberDao.register(memberDto);
+        registerMemberDto.registerRole(role);
+        memberDao.register(registerMemberDto);
         return true;
     }
 
     public boolean withdraw(UserRequest userRequest) {
         MemberDto memberDto = memberDao.findByEmail(userRequest.getEmail());
         if(memberDto == null) {
-            // 유저가 존재하지 않음
-            return false;
+            throw new UsernameNotFoundException("Member DB에 member가 존재하지 않음 : " + userRequest.getEmail());
         }
 
         if(!BCrypt.checkpw(userRequest.getPassword(), memberDto.getPassword())) {
-            // 비밀번호가 다름
-            return false;
+            throw new BadCredentialsException("비밀번호가 일치하지 않음");
         }
 
         memberDto.setStatus(MemberDto.Status.WITHDRAW);
@@ -83,11 +77,18 @@ public class MemberService {
         return true;
     }
 
+    public MemberDto findMemberByEmail(String email) {
+        MemberDto memberDto = memberDao.findByEmail(email);
+        if(memberDto == null) {
+            throw new UsernameNotFoundException("Member DB에 member가 존재하지 않음 : " + email);
+        }
+        return memberDto;
+    }
+
     public boolean modifyUser(UserRegisterVO registerVO) {
         MemberDto memberDto = memberDao.findByEmail(registerVO.getEmail());
         if(memberDto == null) {
-            // 유저가 존재하지 않음
-            return false;
+            throw new UsernameNotFoundException("Member DB에 member가 존재하지 않음 : " + registerVO.getEmail());
         }
 
         memberDto.setPhone(registerVO.getPhone());
@@ -95,19 +96,20 @@ public class MemberService {
         return true;
     }
 
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         MemberDto memberDto = memberDao.findByEmail(username);
         if(memberDto == null) {
-            // 유저가 존재하지 않음
-            return null;
+            throw new UsernameNotFoundException("Member DB에 member가 존재하지 않음 : " + username);
         }
 
-        CustomUserDetails userDetails = new CustomUserDetails();
-        userDetails.setUserId(memberDto.getUserId());
-        userDetails.setEmail(memberDto.getEmail());
-        userDetails.setPassword(memberDto.getPassword());
-        userDetails.setStatus(memberDto.getStatus());
-        userDetails.setAuthority(memberDto.getRole());
+        CustomUserDetails userDetails = CustomUserDetails.builder()
+                .userId(memberDto.getUserId())
+                .email(memberDto.getEmail())
+                .password(memberDto.getPassword())
+                .status(memberDto.getStatus())
+                .authority(memberDto.getRole())
+                .build();
+
         return userDetails;
     }
 }

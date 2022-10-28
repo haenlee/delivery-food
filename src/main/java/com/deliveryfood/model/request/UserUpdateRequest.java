@@ -9,12 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class UserRegisterRequest {
+public class UserUpdateRequest {
 
-    private String name;
-    private String email;
-    private String password;
-    private String phone;
     private String address;
     private String nickname;
     private String imagePath;

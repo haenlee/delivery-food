@@ -16,10 +16,6 @@ public class UserDao {
         return true;
     }
 
-    public UserDto findByEmail(String email) {
-        return sqlSessionTemplate.selectOne("com.deliveryfood.mapper.UserMapper.findByEmail", email);
-    }
-
     public UserDto findByUserId(String userId) {
         return sqlSessionTemplate.selectOne("com.deliveryfood.mapper.UserMapper.findByUserId", userId);
     }

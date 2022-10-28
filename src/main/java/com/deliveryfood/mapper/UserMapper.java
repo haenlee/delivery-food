@@ -8,8 +8,6 @@ public interface UserMapper {
 
     void register(UserDto userDto);
 
-    UserDto findByEmail(String email);
-
     UserDto findByUserId(String email);
 
     void updateUser(UserDto userDto);

@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class RiderRegisterRequest {
+public class RiderUpdateRequest {
 
-    private String name;
-    private String email;
-    private String password;
-    private String phone;
     private int commission;
 }

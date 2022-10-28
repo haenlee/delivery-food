@@ -25,6 +25,7 @@ public class RiderDto {
     private Status status;
     @NonNull
     private LocalDateTime regDt;
+    @NonNull
     private LocalDateTime udtDt;
 
 }

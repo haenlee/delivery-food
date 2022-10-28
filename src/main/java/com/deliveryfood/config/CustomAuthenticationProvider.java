@@ -20,7 +20,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
-        CustomUserDetails user = (CustomUserDetails) memberService.loadUserByUsername(username);
+        CustomUserDetails user = memberService.loadUserByUsername(username);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException(user.getUsername() + " Invalid password");

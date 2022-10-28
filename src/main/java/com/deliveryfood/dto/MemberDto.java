@@ -46,6 +46,7 @@ public class MemberDto {
     private String role;
     @NonNull
     private LocalDateTime regDt;
+    @NonNull
     private LocalDateTime udtDt;
 
     public boolean isAuth() {
@@ -57,7 +58,7 @@ public class MemberDto {
     }
 
     public void certificateRole() {
-        role.replace(Role.ROLE_NOT_AUTH.name(), Role.ROLE_AUTH.name());
+        role = role.replace(Role.ROLE_NOT_AUTH.name(), Role.ROLE_AUTH.name());
     }
 
     public void registerRole(Role registerRole) {
@@ -65,14 +66,14 @@ public class MemberDto {
         // 인증이 되어있다면, registerRole만 추가
         if(!role.contains(Role.ROLE_AUTH.name()) && !role.contains(Role.ROLE_NOT_AUTH.name())) {
             if(!role.isEmpty())
-                role.concat(",");
-            role.concat(Role.ROLE_NOT_AUTH.name());
+                role = role.concat(",");
+            role = role.concat(Role.ROLE_NOT_AUTH.name());
         }
 
         if(!role.contains(registerRole.name())) {
             if(!role.isEmpty())
-                role.concat(",");
-            role.concat(registerRole.name());
+                role = role.concat(",");
+            role = role.concat(registerRole.name());
         }
     }
 }

@@ -23,8 +23,8 @@
     </select>
 
     <insert id="register" parameterType="com.deliveryfood.dto.MemberDto">
-        INSERT INTO MEMBER(user_id, name , email, password, phone, status, role, reg_dt)
-        VALUES(#{userId}, #{name}, #{email}, #{password}, #{phone}, #{status}, #{role}, #{regDt})
+        INSERT INTO MEMBER(user_id, name , email, password, phone, status, role, reg_dt, udt_dt)
+        VALUES(#{userId}, #{name}, #{email}, #{password}, #{phone}, #{status}, #{role}, #{regDt}, #{udtDt})
     </insert>
 
     <update id="updateStatus" parameterType="com.deliveryfood.dto.MemberDto">

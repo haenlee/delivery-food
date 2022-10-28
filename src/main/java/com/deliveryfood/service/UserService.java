@@ -4,10 +4,11 @@ import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dao.UserDao;
 import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.dto.UserDto;
+import com.deliveryfood.model.CustomUserDetails;
 import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.util.MemberSession;
 import com.deliveryfood.vo.UserRegisterVO;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.deliveryfood.vo.UserUpdateVO;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +28,10 @@ public class UserService extends MemberService implements IUserService {
     @Override
     public boolean certification(String userId, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
-        if(!super.certification(userId, code)) {
-            // 멤버 이슈가 있음
-            return false;
-        }
-
+        super.certification(userId, code);
         UserDto userDto = userDao.findByUserId(userId);
         if(userDto == null) {
-            // 유저가 존재하지 않음
-            return false;
+            throw new UsernameNotFoundException("User DB에 User가 존재하지 않음 : " + userId);
         }
 
         return true;
@@ -44,14 +40,9 @@ public class UserService extends MemberService implements IUserService {
     @Override
     public boolean register(UserRegisterVO registerVO) {
         String uuid = UUID.randomUUID().toString();
-        if(!super.register(registerVO, uuid, MemberDto.Role.ROLE_USER)) {
-            // 멤버 이슈가 있음
-            return false;
-        }
-
+        super.register(registerVO, uuid, MemberDto.Role.ROLE_USER);
         if(userDao.findByUserId(uuid) != null) {
-            // 중복 유저 존재
-            return false;
+            throw new RuntimeException("User DB에 중복 유저가 존재함");
         }
 
         UserDto userDto = UserDto.builder()
@@ -61,6 +52,7 @@ public class UserService extends MemberService implements IUserService {
                 .grade(UserDto.Grade.COMMON)
                 .imagePath(registerVO.getImagePath())
                 .regDt(LocalDateTime.now())
+                .udtDt(LocalDateTime.now())
                 .build();
 
         userDao.register(userDto);
@@ -68,49 +60,32 @@ public class UserService extends MemberService implements IUserService {
     }
 
     @Override
-    public boolean withdraw(UserRequest userRequest) {
-        if(!super.withdraw(userRequest)) {
-            // 멤버 이슈가 있음
-            return false;
-        }
-
-        UserDto userDto = userDao.findByEmail(userRequest.getEmail());
+    public boolean withdraw(String userId, UserRequest userRequest) {
+        super.withdraw(userRequest);
+        UserDto userDto = userDao.findByUserId(userId);
         if(userDto == null) {
-            // 유저가 존재하지 않음
-            return false;
+            throw new UsernameNotFoundException("User DB에 User가 존재하지 않음 : " + userId);
         }
 
         return true;
     }
 
     @Override
-    public boolean modifyUser(UserRegisterVO registerVO) {
-        UserDto userDto = userDao.findByEmail(registerVO.getEmail());
+    public boolean modifyUser(String userId, UserUpdateVO updateVO) {
+        UserDto userDto = userDao.findByUserId(userId);
         if(userDto == null) {
-            // 유저가 존재하지 않음
-            return false;
+            throw new UsernameNotFoundException("User DB에 User가 존재하지 않음 : " + userId);
         }
 
-        userDto.setAddress(registerVO.getAddress());
-        userDto.setNickname(registerVO.getNickname());
-        userDto.setImagePath(registerVO.getImagePath());
+        userDto.setAddress(updateVO.getAddress());
+        userDto.setNickname(updateVO.getNickname());
+        userDto.setImagePath(updateVO.getImagePath());
         userDao.updateUser(userDto);
         return true;
     }
 
     @Override
-    public UserDto findUser(String email) {
-        UserDto userDto = userDao.findByEmail(email);
-        if(userDto == null) {
-            // 유저가 존재하지 않음
-            return null;
-        }
-
-        return userDto;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return super.loadUserByUsername(username);
     }
 }

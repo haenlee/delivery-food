@@ -6,9 +6,11 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MemberMapper {
 
+    void register(MemberDto userDto);
+
     MemberDto findByEmail(String email);
 
-    void register(MemberDto userDto);
+    MemberDto findByUserId(String userId);
 
     void updateStatus(MemberDto userDto);
 

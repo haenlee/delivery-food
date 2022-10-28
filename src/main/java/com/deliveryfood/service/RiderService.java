@@ -4,8 +4,11 @@ import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dao.RiderDao;
 import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.dto.RiderDto;
+import com.deliveryfood.model.CustomUserDetails;
 import com.deliveryfood.vo.RiderRegisterVO;
 import com.deliveryfood.model.request.UserRequest;
+import com.deliveryfood.vo.RiderUpdateVO;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,15 +27,10 @@ public class RiderService extends MemberService implements IRiderService {
     @Override
     public boolean certification(String userId, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
-        if(!super.certification(userId, code)) {
-            // 멤버 이슈가 있음
-            return false;
-        }
-
+        super.certification(userId, code);
         RiderDto riderDto = riderDao.findByUserId(userId);
         if(riderDto == null) {
-            // 유저가 존재하지 않음
-            return false;
+            throw new UsernameNotFoundException("Rider DB에 User가 존재하지 않음 : " + userId);
         }
 
         return true;
@@ -41,14 +39,9 @@ public class RiderService extends MemberService implements IRiderService {
     @Override
     public boolean register(RiderRegisterVO registerVO) {
         String uuid = UUID.randomUUID().toString();
-        if(!super.register(registerVO, uuid, MemberDto.Role.ROLE_RIDER)) {
-            // 멤버 이슈가 있음
-            return false;
-        }
-
+        super.register(registerVO, uuid, MemberDto.Role.ROLE_RIDER);
         if(riderDao.findByUserId(uuid) != null) {
-            // 중복 유저 존재
-            return false;
+            throw new RuntimeException("Rider DB에 중복 유저가 존재함");
         }
 
         RiderDto riderDto = RiderDto.builder()
@@ -56,6 +49,7 @@ public class RiderService extends MemberService implements IRiderService {
                 .commission(registerVO.getCommission())
                 .status(RiderDto.Status.NONE)
                 .regDt(LocalDateTime.now())
+                .udtDt(LocalDateTime.now())
                 .build();
 
         riderDao.register(riderDto);
@@ -63,31 +57,30 @@ public class RiderService extends MemberService implements IRiderService {
     }
 
     @Override
-    public boolean withdraw(UserRequest userRequest) {
-        if(!super.withdraw(userRequest)) {
-            // 멤버 이슈가 있음
-            return false;
-        }
-
-        RiderDto riderDto = riderDao.findByEmail(userRequest.getEmail());
+    public boolean withdraw(String userId, UserRequest userRequest) {
+        super.withdraw(userRequest);
+        RiderDto riderDto = riderDao.findByUserId(userId);
         if(riderDto == null) {
-            // 유저가 존재하지 않음
-            return false;
+            throw new UsernameNotFoundException("Rider DB에 User가 존재하지 않음 : " + userId);
         }
 
         return true;
     }
 
     @Override
-    public boolean modifyRider(RiderRegisterVO registerVO) {
-        RiderDto riderDto = riderDao.findByEmail(registerVO.getEmail());
+    public boolean modifyRider(String userId, RiderUpdateVO updateVO) {
+        RiderDto riderDto = riderDao.findByUserId(userId);
         if(riderDto == null) {
-            // 유저가 존재하지 않음
-            return false;
+            throw new UsernameNotFoundException("Rider DB에 User가 존재하지 않음 : " + userId);
         }
 
-        riderDto.setCommission(registerVO.getCommission());
+        riderDto.setCommission(updateVO.getCommission());
         riderDao.updateRider(riderDto);
         return true;
+    }
+
+    @Override
+    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return super.loadUserByUsername(username);
     }
 }

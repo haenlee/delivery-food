@@ -25,5 +25,6 @@ public class UserDto {
     private String imagePath;
     @NonNull
     private LocalDateTime regDt;
+    @NonNull
     private LocalDateTime udtDt;
 }

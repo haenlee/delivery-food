@@ -16,10 +16,6 @@ public class RiderDao {
         return true;
     }
 
-    public RiderDto findByEmail(String email) {
-        return sqlSessionTemplate.selectOne("com.deliveryfood.mapper.RiderMapper.findByEmail", email);
-    }
-
     public RiderDto findByUserId(String userId) {
         return sqlSessionTemplate.selectOne("com.deliveryfood.mapper.RiderMapper.findByUserId", userId);
     }
