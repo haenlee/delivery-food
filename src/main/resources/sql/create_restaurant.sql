@@ -19,7 +19,3 @@ ALTER TABLE RESTAURANT ADD CONSTRAINT PK_RESTAURANT PRIMARY KEY (
 	restaurant_id,
 	user_id
 );
-
-INSERT INTO RESTAURANT(restaurant_id, user_id, name)
-VALUES('9419ab0c-9353-491a-aaee-fe0b8d175d5d', '222', '333')
-;

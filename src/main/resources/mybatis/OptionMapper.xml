@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.deliveryfood.mapper.OptionMapper">
+
+    <insert id="createOption" parameterType="com.deliveryfood.dto.OptionDto">
+        INSERT INTO options(option_id, menu_id, name)
+        VALUES(#{optionId}, #{menuId}, #{name})
+    </insert>
+
+    <delete id="deleteOptionById" parameterType="com.deliveryfood.dto.OptionDto">
+        DELETE FROM options
+        WHERE option_id = #{optionId}
+    </delete>
+
+    <select id="findOptionById" parameterType="com.deliveryfood.dto.OptionDto" resultMap="OptionInfo">
+        SELECT * FROM options
+        WHERE menu_id = #{menuId}
+    </select>
+
+    <resultMap id="OptionInfo" type="com.deliveryfood.model.OptionInput">
+        <result column="option_id" property="optionId"/>
+        <result column="menu_id" property="menuId"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+</mapper>
