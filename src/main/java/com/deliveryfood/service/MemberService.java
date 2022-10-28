@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
-public class MemberService {
+public class MemberService implements IMemberService {
 
     private final MemberDao memberDao;
 
@@ -96,6 +96,7 @@ public class MemberService {
         return true;
     }
 
+    @Override
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         MemberDto memberDto = memberDao.findByEmail(username);
         if(memberDto == null) {

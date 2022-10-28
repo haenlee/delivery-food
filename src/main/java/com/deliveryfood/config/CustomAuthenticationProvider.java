@@ -1,7 +1,7 @@
 package com.deliveryfood.config;
 
 import com.deliveryfood.model.CustomUserDetails;
-import com.deliveryfood.service.MemberService;
+import com.deliveryfood.service.IMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,14 +13,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    private final MemberService memberService;
+    private final IMemberService memberService;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
-        CustomUserDetails user = memberService.loadUserByUsername(username);
+        CustomUserDetails user = (CustomUserDetails) memberService.loadUserByUsername(username);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException(user.getUsername() + " Invalid password");

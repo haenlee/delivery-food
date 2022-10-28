@@ -1,12 +1,9 @@
 package com.deliveryfood.service;
 
-import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dao.UserDao;
 import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.dto.UserDto;
-import com.deliveryfood.model.CustomUserDetails;
 import com.deliveryfood.model.request.UserRequest;
-import com.deliveryfood.util.MemberSession;
 import com.deliveryfood.vo.UserRegisterVO;
 import com.deliveryfood.vo.UserUpdateVO;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,19 +13,20 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-public class UserService extends MemberService implements IUserService {
+public class UserService implements IUserService {
 
+    private final IMemberService memberService;
     private final UserDao userDao;
 
-    public UserService(MemberDao memberDao, UserDao userDao, MemberSession session) {
-        super(memberDao);
+    public UserService(IMemberService memberService, UserDao userDao) {
+        this.memberService = memberService;
         this.userDao = userDao;
     }
 
     @Override
     public boolean certification(String userId, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
-        super.certification(userId, code);
+        memberService.certification(userId, code);
         UserDto userDto = userDao.findByUserId(userId);
         if(userDto == null) {
             throw new UsernameNotFoundException("User DB에 User가 존재하지 않음 : " + userId);
@@ -40,7 +38,7 @@ public class UserService extends MemberService implements IUserService {
     @Override
     public boolean register(UserRegisterVO registerVO) {
         String uuid = UUID.randomUUID().toString();
-        super.register(registerVO, uuid, MemberDto.Role.ROLE_USER);
+        memberService.register(registerVO, uuid, MemberDto.Role.ROLE_USER);
         if(userDao.findByUserId(uuid) != null) {
             throw new RuntimeException("User DB에 중복 유저가 존재함");
         }
@@ -61,7 +59,7 @@ public class UserService extends MemberService implements IUserService {
 
     @Override
     public boolean withdraw(String userId, UserRequest userRequest) {
-        super.withdraw(userRequest);
+        memberService.withdraw(userRequest);
         UserDto userDto = userDao.findByUserId(userId);
         if(userDto == null) {
             throw new UsernameNotFoundException("User DB에 User가 존재하지 않음 : " + userId);
@@ -82,10 +80,5 @@ public class UserService extends MemberService implements IUserService {
         userDto.setImagePath(updateVO.getImagePath());
         userDao.updateUser(userDto);
         return true;
-    }
-
-    @Override
-    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return super.loadUserByUsername(username);
     }
 }
