@@ -3,9 +3,8 @@ package com.deliveryfood.service;
 import com.deliveryfood.model.request.UserRequest;
 import com.deliveryfood.vo.UserRegisterVO;
 import com.deliveryfood.vo.UserUpdateVO;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface IUserService extends UserDetailsService {
+public interface IUserService {
 
     boolean certification(String userId, String code);
 

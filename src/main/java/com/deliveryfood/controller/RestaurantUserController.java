@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/restaurants")
+@RequestMapping("/restaurants/user")
 public class RestaurantUserController {
 
     private final IRestaurantUserService restaurantUserService;

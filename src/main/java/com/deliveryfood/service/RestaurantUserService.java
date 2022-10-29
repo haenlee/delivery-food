@@ -1,6 +1,5 @@
 package com.deliveryfood.service;
 
-import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dao.RestaurantUserDao;
 import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.dto.RestaurantUserDto;
@@ -12,12 +11,13 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-public class RestaurantUserService extends MemberService implements IRestaurantUserService {
+public class RestaurantUserService implements IRestaurantUserService {
 
+    private final IMemberService memberService;
     private final RestaurantUserDao restaurantUserDao;
 
-    public RestaurantUserService(MemberDao memberDao, RestaurantUserDao restaurantUserDao) {
-        super(memberDao);
+    public RestaurantUserService(IMemberService memberService, RestaurantUserDao restaurantUserDao) {
+        this.memberService = memberService;
         this.restaurantUserDao = restaurantUserDao;
     }
 
@@ -25,7 +25,7 @@ public class RestaurantUserService extends MemberService implements IRestaurantU
     public boolean certification(String username, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
 
-        if(!super.certification(username, code)) {
+        if(!memberService.certification(username, code)) {
             // 멤버 이슈가 있음
             return false;
         }
@@ -42,7 +42,7 @@ public class RestaurantUserService extends MemberService implements IRestaurantU
     @Override
     public boolean register(RestaurantUserRegisterVO registerVO) {
         String uuid = UUID.randomUUID().toString();
-        if(!super.register(registerVO, uuid, MemberDto.Role.ROLE_RESTAURANT)) {
+        if(!memberService.register(registerVO, uuid, MemberDto.Role.ROLE_RESTAURANT)) {
             // 멤버 이슈가 있음
             return false;
         }
@@ -64,7 +64,7 @@ public class RestaurantUserService extends MemberService implements IRestaurantU
 
     @Override
     public boolean withdraw(UserRequest userRequest) {
-        if(!super.withdraw(userRequest)) {
+        if(!memberService.withdraw(userRequest)) {
             // 멤버 이슈가 있음
             return false;
         }
