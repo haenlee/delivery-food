@@ -92,7 +92,7 @@ public class MemberService implements IMemberService {
         }
 
         memberDto.setPhone(registerVO.getPhone());
-        memberDao.updateUser(memberDto);
+        memberDao.updateMember(memberDto);
         return true;
     }
 
