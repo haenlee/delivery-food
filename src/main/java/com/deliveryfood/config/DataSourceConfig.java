@@ -2,9 +2,10 @@ package com.deliveryfood.config;
 
 import com.deliveryfood.datasource.ReplicationRoutingDataSource;
 import com.zaxxer.hikari.HikariDataSource;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 @Slf4j
 @Configuration
-@RequiredArgsConstructor
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @EnableTransactionManagement
 public class DataSourceConfig {
 
@@ -56,8 +57,8 @@ public class DataSourceConfig {
         return routingDataSource;
     }
 
-    @Bean(name = "proxyDataSource")
-    public DataSource proxyDataSource(@Qualifier("routingDataSource") DataSource routingDataSource) {
+    @Bean(name = "dataSource")
+    public DataSource dataSource(@Qualifier("routingDataSource") DataSource routingDataSource) {
         return new LazyConnectionDataSourceProxy(routingDataSource);
     }
 
