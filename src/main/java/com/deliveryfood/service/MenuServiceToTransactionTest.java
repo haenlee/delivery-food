@@ -6,6 +6,7 @@ import com.deliveryfood.model.MenuInput;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class MenuServiceToTransactionTest {
 
     private final MenuMapper menuMapper;
 
-    @Transactional
+    @Transactional(rollbackFor = ClassNotFoundException.class)
     public void createMenuByIdToTxTest(MenuInput menuInput, MenuInput menuInput2) throws Exception {
         MenuDto menuDto = MenuDto.builder()
                 .menuId(menuInput.getMenuId())
@@ -35,12 +36,10 @@ public class MenuServiceToTransactionTest {
 
         if ("menuIdToRollbackTest RuntimeException".equals(menuDto_2nd.getMenuId())) {
             log.info("createMenuById 에러발생");
-            // 에러발생
             throw new RuntimeException("Unchecked Exception rollback test");
         }
         if ("menuIdToRollbackTest ClassNotFoundException".equals(menuDto_2nd.getMenuId())) {
             log.info("createMenuById 에러발생");
-            // 에러발생
             throw new ClassNotFoundException("Checked Exception rollback test");
         }
     }
@@ -53,7 +52,7 @@ public class MenuServiceToTransactionTest {
     }
 
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<MenuDto> findMenuByIdToTxTestReadOnly(MenuInput menuInput) {
         MenuDto menuDto = MenuDto.builder()
                 .restaurantId(menuInput.getRestaurantId())

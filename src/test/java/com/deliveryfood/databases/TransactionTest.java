@@ -1,16 +1,12 @@
 package com.deliveryfood.databases;
 
-import com.deliveryfood.service.MenuServiceToTransactionTest;
 import com.deliveryfood.model.MenuInput;
+import com.deliveryfood.service.MenuServiceToTransactionTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.sql.DataSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,6 +26,11 @@ public class TransactionTest {
     @Test
     @DisplayName("2번째 insert에서 Unchecked이 발생 할 경우 롤백됨을 확인")
     void txRollbackTest() {
+        //테스트 조건
+        // 1 : 테스트를 실행하는 클래스 및 메서드에서 @Transactional이 선언되어 있지 않음
+        // 2 : 호출하는 서비스가 @Transactional이 선언되어 있음
+        // 3 : 1st insert 성공, 2nd insert 성공 후 Unchecked Exception(RuntimeException) 발생
+        // 4 : 트랜잭션 매니저에 의하여 rollback되어 count가 0으로 확인
 
         // given and when
         menuInput = MenuInput.builder()
@@ -56,8 +57,13 @@ public class TransactionTest {
 
 
     @Test
-    @DisplayName("2번째 insert에서 Checked이 발생 할 경우 롤백되지 아니함을 확인")
+    @DisplayName("2번째 insert에서 Checked이 발생 할 경우 롤백되므로 지 아니함을 확인")
     void txRollbackTest2() {
+        //테스트 조건
+        // 1 : 테스트를 실행하는 클래스 및 메서드에서 @Transactional이 선언되어 있지 않음
+        // 2 : 호출하는 서비스가 @Transactional(rollbackFor = ClassNotFoundException.class)이 선언되어 있음
+        // 3 : 1st insert 성공, 2nd insert 성공 후 Checked Exception(ClassNotFoundException) 발생
+        // 4 : Checked Exception이면 롤백되지 않아서 count가 2여야 하지만, 명시된 옵션대로 트랜잭션 매니저에 의하여 rollback되어 count가 0로 확인
 
         // given and when
         menuInput = MenuInput.builder()
@@ -79,6 +85,6 @@ public class TransactionTest {
             menuServiceToTxTest.createMenuByIdToTxTest(menuInput, menuInput2);
         });
         assertThat(e.getMessage()).isEqualTo("Checked Exception rollback test");
-        assertEquals(2, menuServiceToTxTest.findMenuByIdToTxTest(menuInput3).size());
+        assertEquals(0, menuServiceToTxTest.findMenuByIdToTxTest(menuInput3).size());
     }
 }
