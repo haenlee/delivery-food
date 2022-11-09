@@ -9,7 +9,7 @@ public class ReplicationRoutingDataSource extends AbstractRoutingDataSource {
 
     @Override
     protected Object determineCurrentLookupKey() {
-        log.info("[ReplicationRoutingDataSource] determineCurrentLookupKey=" + (TransactionSynchronizationManager.isCurrentTransactionReadOnly() ? "slave" : "master"));
+        log.trace("[ReplicationRoutingDataSource] determineCurrentLookupKey=" + (TransactionSynchronizationManager.isCurrentTransactionReadOnly() ? "slave" : "master"));
         return TransactionSynchronizationManager.isCurrentTransactionReadOnly() ? "slave" : "master";
     }
 

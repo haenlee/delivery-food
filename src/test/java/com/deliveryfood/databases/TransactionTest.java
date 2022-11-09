@@ -1,7 +1,7 @@
 package com.deliveryfood.databases;
 
 import com.deliveryfood.model.MenuInput;
-import com.deliveryfood.service.MenuServiceToTransactionTest;
+import com.deliveryfood.service.test.MenuServiceToTransactionTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

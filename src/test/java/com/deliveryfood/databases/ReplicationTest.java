@@ -2,7 +2,7 @@ package com.deliveryfood.databases;
 
 import com.deliveryfood.datasource.ReplicationRoutingDataSource;
 import com.deliveryfood.model.MenuInput;
-import com.deliveryfood.service.MenuServiceToTransactionTest;
+import com.deliveryfood.service.test.MenuServiceToTransactionTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 @SpringBootTest

@@ -1,4 +1,4 @@
-package com.deliveryfood.service;
+package com.deliveryfood.service.test;
 
 import com.deliveryfood.dto.MenuDto;
 import com.deliveryfood.mapper.MenuMapper;
@@ -35,11 +35,11 @@ public class MenuServiceToTransactionTest {
         menuMapper.createMenuById(menuDto_2nd);
 
         if ("menuIdToRollbackTest RuntimeException".equals(menuDto_2nd.getMenuId())) {
-            log.info("createMenuById 에러발생");
+            log.trace("createMenuById 에러발생");
             throw new RuntimeException("Unchecked Exception rollback test");
         }
         if ("menuIdToRollbackTest ClassNotFoundException".equals(menuDto_2nd.getMenuId())) {
-            log.info("createMenuById 에러발생");
+            log.trace("createMenuById 에러발생");
             throw new ClassNotFoundException("Checked Exception rollback test");
         }
     }
