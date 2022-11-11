@@ -5,9 +5,11 @@ import com.deliveryfood.vo.RestaurantUserRegisterVO;
 
 public interface IRestaurantUserService {
 
-    boolean certification(String username, String code);
+    boolean certification(String userId, String code);
 
     boolean register(RestaurantUserRegisterVO registerVO);
 
-    boolean withdraw(UserRequest userRequest);
+    boolean withdraw(String userId, UserRequest userRequest);
+
+    void deleteRestaurantUserByEmail(String email);
 }
