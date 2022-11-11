@@ -86,7 +86,7 @@ public class UserService implements IUserService {
 
     @Override
     public String deleteUserByEmail(String email) {
-        String userId = memberService.getUserId(email);
+        String userId = memberService.getUserIdByEmail(email);
 
         memberService.deleteMemberByUserId(userId);
         userDao.deleteUserByUserId(userId);

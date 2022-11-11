@@ -67,7 +67,7 @@ public class RestaurantUserService implements IRestaurantUserService {
 
     @Override
     public void deleteRestaurantUserByEmail(String email) {
-        String userId = memberService.getUserId(email);
+        String userId = memberService.getUserIdByEmail(email);
 
         memberService.deleteMemberByUserId(userId);
         restaurantUserDao.deleteRestaurantUserByUserId(userId);

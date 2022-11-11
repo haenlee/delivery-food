@@ -82,7 +82,7 @@ public class RiderService implements IRiderService {
 
     @Override
     public void deleteRiderByEmail(String email) {
-        String userId = memberService.getUserId(email);
+        String userId = memberService.getUserIdByEmail(email);
 
         memberService.deleteMemberByUserId(userId);
         riderDao.deleteRiderByUserId(userId);
