@@ -9,9 +9,9 @@ public interface ICartService {
 
     List<CartMenuDto> findCart(String userId);
 
-    void deleteCart(String userId);
+    boolean deleteCart(String userId);
 
-    void addMenu(CartMenuVO menuVO);
+    boolean addMenu(CartMenuVO menuVO);
 
-    void deleteMenu(String userId, int index);
+    boolean deleteMenu(String userId, int index);
 }
