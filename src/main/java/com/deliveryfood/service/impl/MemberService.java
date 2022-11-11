@@ -1,13 +1,14 @@
 package com.deliveryfood.service.impl;
 
+import com.deliveryfood.controller.model.request.UserRequest;
 import com.deliveryfood.dao.MemberDao;
 import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.security.CustomUserDetails;
-import com.deliveryfood.controller.model.request.UserRequest;
 import com.deliveryfood.service.IMemberService;
 import com.deliveryfood.service.model.MemberRegisterVO;
-import com.deliveryfood.service.model.UserRegisterVO;
+import com.deliveryfood.service.model.MemberUpdateVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MemberService implements IMemberService {
@@ -25,13 +27,18 @@ public class MemberService implements IMemberService {
 
     @Override
     public boolean certification(String userId, String code) {
-        if(!code.equals(REGISTER_CODE)) {
-            throw new RuntimeException("인증 코드 값이 다름 : " + code);
-        }
-
         MemberDto memberDto = memberDao.findByUserId(userId);
         if(memberDto == null) {
             throw new UsernameNotFoundException("Member DB에 member가 존재하지 않음 : " + userId);
+        }
+
+        if(memberDto.isExistRole(MemberDto.Role.ROLE_AUTH)) {
+            throw new RuntimeException("이미 인증된 유저 : " + userId);
+        }
+
+        if(!code.equals(REGISTER_CODE)) {
+            log.info("인증 코드 값이 다름 : " + code);
+            return false;
         }
 
         memberDto.certificateRole();
@@ -88,15 +95,19 @@ public class MemberService implements IMemberService {
     }
 
     @Override
-    public String getUserId(String email) {
+    public String getUserIdByEmail(String email) {
         MemberDto memberDto = findMemberByEmail(email);
         return memberDto.getUserId();
     }
 
     @Override
-    public boolean modifyUser(UserRegisterVO registerVO) {
-        MemberDto memberDto = findMemberByEmail(registerVO.getEmail());
-        memberDto.setPhone(registerVO.getPhone());
+    public boolean modifyMember(String userId, MemberUpdateVO updateVO) {
+        MemberDto memberDto = memberDao.findByUserId(userId);
+        if(memberDto == null) {
+            throw new UsernameNotFoundException("Member DB에 member가 존재하지 않음 : " + userId);
+        }
+
+        memberDto.setPhone(updateVO.getPhone());
         memberDao.updateMember(memberDto);
         return true;
     }
