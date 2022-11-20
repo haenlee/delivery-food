@@ -85,9 +85,10 @@ public class MemberServiceTest {
     @DisplayName("회원 가입시 같은 이메일, 다른 롤을 가진 경우 가입에 성공한다.")
     public void testRegisterDuplicatedEmailThenSuccess() {
         // given
-        when(memberDao.findByEmail(any())).thenReturn(notAuthMemberDto);
+        when(memberDao.findByEmail(EMAIL)).thenReturn(notAuthMemberDto);
 
         // when & then
+        assertTrue(memberService.checkDuplicatedEmail(EMAIL, MemberDto.Role.ROLE_RIDER));
         assertTrue(memberService.register(memberVO, UUID.randomUUID().toString(), MemberDto.Role.ROLE_RIDER));
     }
 

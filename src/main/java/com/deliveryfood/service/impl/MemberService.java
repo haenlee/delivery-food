@@ -54,8 +54,8 @@ public class MemberService implements IMemberService {
 
     @Override
     public boolean register(MemberRegisterVO registerVO, String uuid, MemberDto.Role role) {
-        MemberDto findMemberDto = memberDao.findByEmail(registerVO.getEmail());
-        if(findMemberDto != null && findMemberDto.isExistRole(role)) {
+        boolean isDuplicatedEmail = checkDuplicatedEmail(registerVO.getEmail(), role);
+        if(!isDuplicatedEmail) {
             throw new RuntimeException("Member DB에 중복 유저가 존재함");
         }
 
@@ -75,6 +75,14 @@ public class MemberService implements IMemberService {
 
         registerMemberDto.registerRole(role);
         memberDao.register(registerMemberDto);
+        return true;
+    }
+
+    public boolean checkDuplicatedEmail(String email, MemberDto.Role role) {
+        MemberDto findMemberDto = memberDao.findByEmail(email);
+        if(findMemberDto != null && findMemberDto.isExistRole(role)) {
+            return false;
+        }
         return true;
     }
 
