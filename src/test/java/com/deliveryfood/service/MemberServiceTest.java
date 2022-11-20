@@ -125,7 +125,7 @@ public class MemberServiceTest {
         when(memberDao.findByUserId(any())).thenReturn(notAuthMemberDto);
 
         // when & then
-        assertTrue(memberService.certification(any(), "FLAB"));
+        assertEquals(MemberService.CertificationResult.SUCEESS, memberService.certification(any(), "FLAB"));
     }
 
     @Test
@@ -147,9 +147,7 @@ public class MemberServiceTest {
         when(memberDao.findByUserId(any())).thenReturn(authMemberDto);
 
         // when & then
-        assertThrows(RuntimeException.class, () -> {
-            memberService.certification(any(), "FLAB");
-        });
+        assertEquals(MemberService.CertificationResult.PREV_AUTH, memberService.certification(any(), "FLAB"));
     }
 
     @Test
@@ -159,7 +157,7 @@ public class MemberServiceTest {
         when(memberDao.findByUserId(any())).thenReturn(notAuthMemberDto);
 
         // when & then
-        assertFalse(memberService.certification(any(), "FLAC"));
+        assertEquals(MemberService.CertificationResult.NOT_MATCH, memberService.certification(any(), "FLAC"));
     }
 
     @Test
