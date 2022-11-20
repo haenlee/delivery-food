@@ -21,29 +21,35 @@ import java.time.LocalDateTime;
 @Service
 public class MemberService implements IMemberService {
 
+    public enum CertificationResult {
+        SUCEESS,
+        PREV_AUTH,
+        NOT_MATCH
+    }
+
     private final MemberDao memberDao;
 
     public static final String REGISTER_CODE = "FLAB";
 
     @Override
-    public boolean certification(String userId, String code) {
+    public CertificationResult certification(String userId, String code) {
         MemberDto memberDto = memberDao.findByUserId(userId);
         if(memberDto == null) {
             throw new UsernameNotFoundException("Member DB에 member가 존재하지 않음 : " + userId);
         }
 
         if(memberDto.isExistRole(MemberDto.Role.ROLE_AUTH)) {
-            throw new RuntimeException("이미 인증된 유저 : " + userId);
+            return CertificationResult.PREV_AUTH;
         }
 
         if(!code.equals(REGISTER_CODE)) {
             log.info("인증 코드 값이 다름 : " + code);
-            return false;
+            return CertificationResult.NOT_MATCH;
         }
 
         memberDto.certificateRole();
         memberDao.updateRole(memberDto);
-        return true;
+        return CertificationResult.SUCEESS;
     }
 
     @Override

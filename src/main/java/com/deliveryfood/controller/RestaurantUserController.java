@@ -3,9 +3,12 @@ package com.deliveryfood.controller;
 import com.deliveryfood.controller.model.request.RestaurantUserRegisterRequest;
 import com.deliveryfood.controller.model.request.UserRequest;
 import com.deliveryfood.service.IRestaurantUserService;
-import com.deliveryfood.util.SecurityPrincipal;
+import com.deliveryfood.service.impl.MemberService.CertificationResult;
 import com.deliveryfood.service.model.RestaurantUserRegisterVO;
+import com.deliveryfood.util.SecurityPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +23,16 @@ public class RestaurantUserController {
     private final IRestaurantUserService restaurantUserService;
 
     @PostMapping("/certification")
-    public void certification(@RequestParam String code) {
+    public ResponseEntity<CertificationResult> certification(@RequestParam String code) {
         // 입력한 코드로 본인 인증
         String userId = SecurityPrincipal.getLoginUserId();
-        restaurantUserService.certification(userId, code);
+        CertificationResult result = restaurantUserService.certification(userId, code);
+
+        HttpStatus status = HttpStatus.OK;
+        if(result != CertificationResult.SUCEESS) {
+            status = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(result, status);
     }
 
     @PostMapping("/register")

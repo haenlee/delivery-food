@@ -1,11 +1,12 @@
 package com.deliveryfood.service.impl;
 
+import com.deliveryfood.controller.model.request.UserRequest;
 import com.deliveryfood.dao.RiderDao;
 import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.dto.RiderDto;
-import com.deliveryfood.controller.model.request.UserRequest;
 import com.deliveryfood.service.IMemberService;
 import com.deliveryfood.service.IRiderService;
+import com.deliveryfood.service.impl.MemberService.CertificationResult;
 import com.deliveryfood.service.model.RiderRegisterVO;
 import com.deliveryfood.service.model.RiderUpdateVO;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,15 +27,15 @@ public class RiderService implements IRiderService {
     }
 
     @Override
-    public boolean certification(String userId, String code) {
+    public CertificationResult certification(String userId, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
-        memberService.certification(userId, code);
+        CertificationResult result = memberService.certification(userId, code);
         RiderDto riderDto = riderDao.findByUserId(userId);
         if(riderDto == null) {
             throw new UsernameNotFoundException("Rider DB에 User가 존재하지 않음 : " + userId);
         }
 
-        return true;
+        return result;
     }
 
     @Override
