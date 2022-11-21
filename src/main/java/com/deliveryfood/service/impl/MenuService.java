@@ -1,16 +1,14 @@
 package com.deliveryfood.service.impl;
 
+import com.deliveryfood.controller.model.request.MenuRequest;
 import com.deliveryfood.dto.MenuDto;
 import com.deliveryfood.mapper.MenuMapper;
-import com.deliveryfood.controller.model.request.MenuRequest;
 import com.deliveryfood.service.IMenuService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MenuService implements IMenuService {
