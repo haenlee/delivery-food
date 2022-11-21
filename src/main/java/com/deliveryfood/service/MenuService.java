@@ -4,10 +4,12 @@ import com.deliveryfood.dto.MenuDto;
 import com.deliveryfood.mapper.MenuMapper;
 import com.deliveryfood.model.MenuInput;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MenuService implements IMenuService {
@@ -50,6 +52,4 @@ public class MenuService implements IMenuService {
                 .build();
         menuMapper.modifyMenuById(menuDto);
     }
-
-
 }

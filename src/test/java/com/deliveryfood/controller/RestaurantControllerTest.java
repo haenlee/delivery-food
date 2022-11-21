@@ -243,7 +243,7 @@ public class RestaurantControllerTest {
         //given and when
         MenuInput menuInput = MenuInput.builder()
                 .restaurantId("9419ab0c-9353-491a-aaee-fe0b8d175d5d")
-                .menuId("39902574-3b9a-4f3f-9b8c-785c130dd10a")
+                .menuId("22ef7e6c-c5c2-4b24-ba2c-d7fd2bb615f2")
                 .build();
 
         //then
