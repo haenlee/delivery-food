@@ -1,9 +1,9 @@
 package com.deliveryfood.service;
 
 import com.deliveryfood.dto.MemberDto;
-import com.deliveryfood.model.request.UserRequest;
-import com.deliveryfood.vo.MemberRegisterVO;
-import com.deliveryfood.vo.UserRegisterVO;
+import com.deliveryfood.controller.model.request.UserRequest;
+import com.deliveryfood.service.model.MemberRegisterVO;
+import com.deliveryfood.service.model.UserRegisterVO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface IMemberService extends UserDetailsService {
@@ -16,5 +16,9 @@ public interface IMemberService extends UserDetailsService {
 
     MemberDto findMemberByEmail(String email);
 
+    String getUserId(String email);
+
     boolean modifyUser(UserRegisterVO registerVO);
+
+    void deleteMemberByUserId(String email);
 }

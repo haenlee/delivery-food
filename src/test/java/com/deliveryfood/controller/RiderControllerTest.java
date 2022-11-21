@@ -1,11 +1,13 @@
 package com.deliveryfood.controller;
 
 import com.deliveryfood.common.mock.auth.WithAuthMember;
-import com.deliveryfood.model.request.RiderRegisterRequest;
-import com.deliveryfood.model.request.RiderUpdateRequest;
-import com.deliveryfood.model.request.UserRequest;
-import com.deliveryfood.service.MemberService;
+import com.deliveryfood.controller.model.request.RiderRegisterRequest;
+import com.deliveryfood.controller.model.request.RiderUpdateRequest;
+import com.deliveryfood.controller.model.request.UserRequest;
+import com.deliveryfood.service.impl.MemberService;
+import com.deliveryfood.service.impl.RiderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +37,9 @@ public class RiderControllerTest {
     @Autowired
     private RiderController riderController;
 
+    @Autowired
+    private RiderService riderService;
+
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders
@@ -44,9 +49,14 @@ public class RiderControllerTest {
                 .build();
     }
 
+    @AfterEach
+    public void clear() {
+        riderService.deleteRiderByEmail("rider@gmail.com");
+    }
+
     @Test
     @DisplayName("라이더 회원가입시 본인 인증을 처리한다.")
-    @WithAuthMember(username = "rider@gmail.com", authority = "ROLE_RIDER,ROLE_NOT_AUTH")
+    @WithAuthMember(username = "rider@gmail.com", password = "test1234", authority = "ROLE_RIDER,ROLE_NOT_AUTH")
     public void testCertification() throws Exception {
         mockMvc.perform(post("/riders/certification")
                 .characterEncoding("utf-8")
@@ -59,7 +69,7 @@ public class RiderControllerTest {
     @DisplayName("라이더 회원 가입을 한다")
     public void testRegister() throws Exception {
         RiderRegisterRequest registerRequest = RiderRegisterRequest.builder()
-                .name("라이더")
+                .name("라이더123")
                 .email("rider@gmail.com")
                 .password("riderpassword")
                 .phone("010-1234-5678")
@@ -77,11 +87,11 @@ public class RiderControllerTest {
 
     @Test
     @DisplayName("라이더 회원 탈퇴를 한다.")
-    @WithAuthMember(username = "rider@gmail.com", authority = "ROLE_RIDER,ROLE_AUTH")
+    @WithAuthMember(username = "rider@gmail.com", password = "test1234", authority = "ROLE_RIDER,ROLE_AUTH")
     public void testWithdraw() throws Exception {
         UserRequest userRequest = UserRequest.builder()
                 .email("rider@gmail.com")
-                .password("riderpassword")
+                .password("test1234")
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -95,11 +105,11 @@ public class RiderControllerTest {
 
     @Test
     @DisplayName("라이더 회원 로그인을 한다.")
-    @WithAuthMember(username = "rider@gmail.com", authority = "ROLE_RIDER,ROLE_AUTH")
+    @WithAuthMember(username = "rider@gmail.com", password = "test1234", authority = "ROLE_RIDER,ROLE_AUTH")
     public void testLogin() throws Exception {
         UserRequest userRequest = UserRequest.builder()
                 .email("rider@gmail.com")
-                .password("riderpassword")
+                .password("test1234")
                 .build();
 
         mockMvc.perform(formLogin()
@@ -111,7 +121,7 @@ public class RiderControllerTest {
 
     @Test
     @DisplayName("라이더 회원 로그아웃을 한다.")
-    @WithAuthMember(username = "rider@gmail.com", authority = "ROLE_RIDER,ROLE_AUTH")
+    @WithAuthMember(username = "rider@gmail.com", password = "test1234", authority = "ROLE_RIDER,ROLE_AUTH")
     public void testLogout() throws Exception {
         mockMvc.perform(logout())
                 .andExpect(status().isOk())
@@ -120,7 +130,7 @@ public class RiderControllerTest {
 
     @Test
     @DisplayName("userId 로부터 라이더 회원 정보를 수정한다.")
-    @WithAuthMember(username = "rider@gmail.com", authority = "ROLE_RIDER,ROLE_AUTH")
+    @WithAuthMember(username = "rider@gmail.com", password = "test1234", authority = "ROLE_RIDER,ROLE_AUTH")
     public void testModifyUser() throws Exception {
         RiderUpdateRequest updateRequest = RiderUpdateRequest.builder()
                 .commission(5000)

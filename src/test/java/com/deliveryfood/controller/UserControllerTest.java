@@ -1,15 +1,16 @@
 package com.deliveryfood.controller;
 
 import com.deliveryfood.common.mock.auth.WithAuthMember;
-import com.deliveryfood.model.request.UserRegisterRequest;
-import com.deliveryfood.model.request.UserRequest;
-import com.deliveryfood.model.request.UserUpdateRequest;
-import com.deliveryfood.service.MemberService;
+import com.deliveryfood.controller.model.request.UserRegisterRequest;
+import com.deliveryfood.controller.model.request.UserRequest;
+import com.deliveryfood.controller.model.request.UserUpdateRequest;
+import com.deliveryfood.service.impl.MemberService;
+import com.deliveryfood.service.impl.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -36,6 +37,9 @@ class UserControllerTest {
     @Autowired
     private UserController userController;
 
+    @Autowired
+    private UserService userService;
+
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders
@@ -45,9 +49,14 @@ class UserControllerTest {
                 .build();
     }
 
+    @AfterEach
+    public void clear() {
+        userService.deleteUserByEmail("test@gmail.com");
+    }
+
     @Test
     @DisplayName("회원가입시 본인 인증을 처리한다.")
-    @WithAuthMember(username = "test@gmail.com", authority = "ROLE_USER,ROLE_NOT_AUTH")
+    @WithAuthMember(username = "test@gmail.com", password = "test1234", authority = "ROLE_USER,ROLE_NOT_AUTH")
     public void testCertification() throws Exception {
         mockMvc.perform(post("/users/certification")
                 .characterEncoding("utf-8")
@@ -62,7 +71,7 @@ class UserControllerTest {
         UserRegisterRequest registerRequest = UserRegisterRequest.builder()
                 .name("테스트")
                 .email("test@gmail.com")
-                .password("testpassword")
+                .password("test1234")
                 .phone("010-1234-5678")
                 .address("서울시 구로구 디지털로")
                 .build();
@@ -77,12 +86,12 @@ class UserControllerTest {
     }
 
     @Test
-    @WithAuthMember(username = "test@gmail.com", authority = "ROLE_USER,ROLE_AUTH")
+    @WithAuthMember(username = "test@gmail.com", password = "test1234", authority = "ROLE_USER,ROLE_AUTH")
     @DisplayName("회원 탈퇴를 한다.")
     public void testWithdraw() throws Exception {
         UserRequest userRequest = UserRequest.builder()
                 .email("test@gmail.com")
-                .password("testpassword")
+                .password("test1234")
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -96,11 +105,11 @@ class UserControllerTest {
 
     @Test
     @DisplayName("회원 로그인을 한다.")
-    @WithAuthMember(username = "test@gmail.com", authority = "ROLE_USER,ROLE_AUTH")
+    @WithAuthMember(username = "test@gmail.com", password = "test1234", authority = "ROLE_USER,ROLE_AUTH")
     public void testLogin() throws Exception {
         UserRequest userRequest = UserRequest.builder()
                 .email("test@gmail.com")
-                .password("testpassword")
+                .password("test1234")
                 .build();
 
         mockMvc.perform(formLogin()
@@ -112,7 +121,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("회원 로그아웃을 한다.")
-    @WithAuthMember(username = "test@gmail.com", authority = "ROLE_USER,ROLE_AUTH")
+    @WithAuthMember(username = "test@gmail.com", password = "test1234", authority = "ROLE_USER,ROLE_AUTH")
     public void testLogout() throws Exception {
         mockMvc.perform(logout())
                 .andExpect(status().isOk())
@@ -121,7 +130,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("userId 로부터 회원 정보를 수정한다.")
-    @WithAuthMember(username = "test@gmail.com", authority = "ROLE_USER,ROLE_AUTH")
+    @WithAuthMember(username = "test@gmail.com", password = "test1234", authority = "ROLE_USER,ROLE_AUTH")
     public void testModifyUser() throws Exception {
         UserUpdateRequest updateRequest = UserUpdateRequest.builder()
                 .address("서울시 강남구 학동로")
@@ -136,14 +145,5 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isOk())
                 .andDo(print());
-    }
-
-    @Test
-    @DisplayName("유저의 모든 주문을 조회한다.")
-    void findOrderByUserId() throws Exception {
-        int userId = ArgumentMatchers.anyInt();
-        mockMvc.perform(get("/users/" + userId + "/orders")
-                        .param("userId", String.valueOf(userId)))
-                .andExpect(status().isOk());
     }
 }
