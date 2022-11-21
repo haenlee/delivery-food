@@ -39,10 +39,6 @@ public class RestaurantControllerTest {
     IOptionService optionService;
     @Autowired
     ISubOptionService subOptionService;
-    private String[] optionIdArr;
-    private String[] menuIdArr;
-    private String[] nameArr;
-    private String[] subOptionIdArr;
 
     @BeforeEach
     public void init() {
