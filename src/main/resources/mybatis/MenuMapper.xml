@@ -21,4 +21,10 @@
         AND restaurant_id = #{restaurantId}
     </update>
 
+    <delete id="deleteByMenuId" parameterType="com.deliveryfood.dto.MenuDto">
+        DELETE
+        FROM menu
+        WHERE menu_id = #{menuId}
+    </delete>
+
 </mapper>

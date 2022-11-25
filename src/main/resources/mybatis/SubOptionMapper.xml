@@ -21,7 +21,7 @@
         and option_id = #{optionId}
     </select>
 
-    <resultMap id="SubOptionInfo" type="com.deliveryfood.controller.model.request.SubOptionRequest">
+    <resultMap id="SubOptionInfo" type="com.deliveryfood.dto.SubOptionDto">
         <result column="option_id" property="optionId"/>
         <result column="menu_id" property="menuId"/>
         <result column="sub_option_id" property="subOptionId"/>

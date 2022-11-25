@@ -1,9 +1,9 @@
 package com.deliveryfood.service.impl;
 
+import com.deliveryfood.dao.SubOptionDao;
 import com.deliveryfood.dto.SubOptionDto;
-import com.deliveryfood.mapper.SubOptionMapper;
-import com.deliveryfood.controller.model.request.SubOptionRequest;
 import com.deliveryfood.service.ISubOptionService;
+import com.deliveryfood.service.model.SubOptionVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,36 +15,36 @@ import java.util.List;
 @Service
 public class SubOptionService implements ISubOptionService {
 
-    private final SubOptionMapper subOptionMapper;
+    private final SubOptionDao subOptionDao;
 
     @Override
-    public void createSubOption(SubOptionRequest subOptionRequest) {
+    public void createSubOption(SubOptionVO subOptionVO) {
         log.trace("createSubOption 서비스 호출");
         SubOptionDto subOptionDto = SubOptionDto.builder()
-                .optionId(subOptionRequest.getOptionId())
-                .menuId(subOptionRequest.getMenuId())
-                .subOptionId(subOptionRequest.getSubOptionId())
+                .optionId(subOptionVO.getOptionId())
+                .menuId(subOptionVO.getMenuId())
+                .subOptionId(subOptionVO.getSubOptionId())
                 .build();
-        subOptionMapper.createSubOption(subOptionDto);
+        subOptionDao.createSubOption(subOptionDto);
     }
 
     @Override
-    public void deleteSubOptionById(SubOptionRequest subOptionRequest) {
+    public void deleteSubOptionById(SubOptionVO subOptionVO) {
         log.trace("deleteSubOptionById 서비스 호출");
         SubOptionDto subOptionDto = SubOptionDto.builder()
-                .subOptionId(subOptionRequest.getSubOptionId())
+                .subOptionId(subOptionVO.getSubOptionId())
                 .build();
-        subOptionMapper.deleteSubOptionById(subOptionDto);
+        subOptionDao.deleteSubOptionById(subOptionDto);
     }
 
     @Override
-    public List<SubOptionRequest> findSubOptionById(SubOptionRequest subOptionRequest) {
+    public List<SubOptionDto> findSubOptionById(SubOptionVO subOptionVO) {
         log.debug("findSubOptionById 서비스 호출");
         SubOptionDto subOptionDto = SubOptionDto.builder()
-                .optionId(subOptionRequest.getOptionId())
-                .menuId(subOptionRequest.getMenuId())
+                .optionId(subOptionVO.getOptionId())
+                .menuId(subOptionVO.getMenuId())
                 .build();
-        return subOptionMapper.findSubOptionById(subOptionDto);
+        return subOptionDao.findSubOptionById(subOptionDto);
     }
 
 }

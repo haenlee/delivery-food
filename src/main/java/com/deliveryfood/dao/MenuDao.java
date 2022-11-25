@@ -24,4 +24,8 @@ public class MenuDao {
     public void modifyMenuById(MenuDto menuDto) {
         sqlSessionTemplate.update("com.deliveryfood.mapper.MenuMapper.modifyMenuById", menuDto);
     }
+
+    public void deleteByMenuId(String menuId) {
+        sqlSessionTemplate.delete("com.deliveryfood.mapper.MenuMapper.deleteByMenuId", menuId);
+    }
 }

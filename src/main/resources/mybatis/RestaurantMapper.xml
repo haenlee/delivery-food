@@ -5,15 +5,16 @@
 
 <mapper namespace="com.deliveryfood.mapper.RestaurantMapper">
 
-    <insert id="signin" parameterType="com.deliveryfood.dto.RestaurantDto">
+    <insert id="register" parameterType="com.deliveryfood.dto.RestaurantDto">
         INSERT INTO restaurant(restaurant_id, user_id, name)
         VALUES(#{restaurantId}, #{userId}, #{name})
     </insert>
 
-    <update id="signout" parameterType="com.deliveryfood.dto.RestaurantDto">
-        UPDATE restaurant SET state = '1'
+    <delete id="deleteByRestaurantId" parameterType="com.deliveryfood.dto.RestaurantDto">
+        DELETE
+        FROM restaurant
         WHERE restaurant_id = #{restaurantId}
-    </update>
+    </delete>
 
     <select id="findUsers" resultType="com.deliveryfood.dto.RestaurantDto">
         SELECT * FROM restaurant
