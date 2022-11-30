@@ -10,7 +10,7 @@ import java.util.List;
 public interface MenuMapper {
 
     void createMenuById(MenuDto menuDto);
-    MenuDto findMenus(MenuDto menuDto);
     List<MenuDto> findMenuById(MenuDto menuDto);
     void modifyMenuById(MenuDto menuDto);
+    void deleteByMenuId(String menuId);
 }

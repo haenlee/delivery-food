@@ -1,9 +1,9 @@
 package com.deliveryfood.service.impl;
 
+import com.deliveryfood.dao.OptionDao;
 import com.deliveryfood.dto.OptionDto;
-import com.deliveryfood.mapper.OptionMapper;
-import com.deliveryfood.controller.model.request.OptionRequest;
 import com.deliveryfood.service.IOptionService;
+import com.deliveryfood.service.model.OptionVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,34 +15,34 @@ import java.util.List;
 @Service
 public class OptionService implements IOptionService {
 
-    private final OptionMapper optionMapper;
+    private final OptionDao optionDao;
 
     @Override
-    public void createOption(OptionRequest optionRequest) {
+    public void createOption(OptionVO optionVO) {
         log.trace("createOption 서비스 호출");
         OptionDto optionDto = OptionDto.builder()
-                .optionId(optionRequest.getOptionId())
-                .menuId(optionRequest.getMenuId())
-                .name(optionRequest.getName())
+                .optionId(optionVO.getOptionId())
+                .menuId(optionVO.getMenuId())
+                .name(optionVO.getName())
                 .build();
-        optionMapper.createOption(optionDto);
+        optionDao.createOption(optionDto);
     }
 
     @Override
-    public void deleteOptionById(OptionRequest optionRequest) {
+    public void deleteOptionById(OptionVO optionVO) {
         log.trace("deleteOptionById 서비스 호출");
         OptionDto optionDto = OptionDto.builder()
-                .optionId(optionRequest.getOptionId())
+                .optionId(optionVO.getOptionId())
                 .build();
-        optionMapper.deleteOptionById(optionDto);
+        optionDao.deleteOptionById(optionDto);
     }
 
     @Override
-    public List<OptionRequest> findOptionById(OptionRequest optionRequest) {
+    public List<OptionDto> findOptionById(OptionVO optionVO) {
         log.trace("findOptionById 서비스 호출");
         OptionDto optionDto = OptionDto.builder()
-                .menuId(optionRequest.getMenuId())
+                .menuId(optionVO.getMenuId())
                 .build();
-        return optionMapper.findOptionById(optionDto);
+        return optionDao.findOptionById(optionDto);
     }
 }

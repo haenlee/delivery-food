@@ -1,7 +1,6 @@
 package com.deliveryfood.dao;
 
 import com.deliveryfood.dto.OptionDto;
-import com.deliveryfood.controller.model.request.OptionRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -25,7 +24,7 @@ public class OptionDao {
         sqlSessionTemplate.delete("com.deliveryfood.mapper.OptionMapper.deleteOptionById", optionDto);
     }
 
-    public List<OptionRequest> findOptionById(OptionDto optionDto) {
+    public List<OptionDto> findOptionById(OptionDto optionDto) {
         log.trace("findOptionById DAO 호출");
         return sqlSessionTemplate.selectList("com.deliveryfood.mapper.OptionMapper.findOptionById", optionDto);
     }

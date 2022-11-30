@@ -1,59 +1,51 @@
 package com.deliveryfood.service.impl;
 
+import com.deliveryfood.dao.RestaurantDao;
 import com.deliveryfood.dto.RestaurantDto;
-import com.deliveryfood.mapper.RestaurantMapper;
 import com.deliveryfood.service.IRestaurantService;
 import com.deliveryfood.service.model.RestaurantRegisterVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
-import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class RestaurantService implements IRestaurantService {
 
-    private final RestaurantMapper restaurantMapper;
+    private final RestaurantDao restaurantDao;
 
     @Override
-    public void signin(RestaurantRegisterVO restaurantInput) {
+    public boolean register(RestaurantRegisterVO restaurantRegisterVO) {
+        String restaurantId = ObjectUtils.isEmpty(restaurantRegisterVO.getRestaurantId()) ? UUID.randomUUID().toString() : restaurantRegisterVO.getRestaurantId();
         RestaurantDto restaurantDto = RestaurantDto.builder()
-                .restaurantId(restaurantInput.getRestaurantId())
-                .userId(restaurantInput.getUserId())
-                .name(restaurantInput.getName())
+                .restaurantId(restaurantId)
+                .userId(restaurantRegisterVO.getUserId())
+                .name(restaurantRegisterVO.getName())
                 .build();
-        restaurantMapper.signin(restaurantDto);
+        restaurantDao.register(restaurantDto);
+        return true;
     }
 
     @Override
-    public void signout(RestaurantRegisterVO restaurantInput) {
-        RestaurantDto restaurantDto = RestaurantDto.builder()
-                .restaurantId(restaurantInput.getRestaurantId())
-                .build();
-        restaurantMapper.signout(restaurantDto);
+    public void deleteByRestaurantId(String restaurantId) {
+        restaurantDao.deleteByRestaurantId(restaurantId);
     }
 
     @Override
-    public List<RestaurantDto> findUsers() {
-        return restaurantMapper.findUsers();
-    }
-
-    @Override
-    public RestaurantDto findUserById(RestaurantRegisterVO registerVO) {
+    public RestaurantDto findUserById(RestaurantRegisterVO restaurantRegisterVO) {
         RestaurantDto restaurantDto = RestaurantDto.builder()
-                .restaurantId(registerVO.getRestaurantId())
-                .userId(registerVO.getUserId())
+                .restaurantId(restaurantRegisterVO.getRestaurantId())
+                .userId(restaurantRegisterVO.getUserId())
                 .build();
-        return restaurantMapper.findUserById(restaurantDto);
-    }
+        RestaurantDto restaurant = restaurantDao.findUserById(restaurantDto);
 
-    @Override
-    public void modifyUserById(RestaurantRegisterVO registerVO) {
-        RestaurantDto restaurantDto = RestaurantDto.builder()
-                .restaurantId(registerVO.getRestaurantId())
-                .name(registerVO.getName())
-                .build();
-        restaurantMapper.modifyUserById(restaurantDto);
+        if(ObjectUtils.isEmpty(restaurant)) {
+            throw new NullPointerException("가게가 존재하지 않음 : " + restaurantDto.getRestaurantId());
+        }
+
+        return restaurant;
     }
 
 

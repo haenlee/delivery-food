@@ -1,9 +1,10 @@
 package com.deliveryfood.service.impl;
 
-import com.deliveryfood.controller.model.request.MenuRequest;
+import com.deliveryfood.dao.MenuDao;
 import com.deliveryfood.dto.MenuDto;
-import com.deliveryfood.mapper.MenuMapper;
 import com.deliveryfood.service.IMenuService;
+import com.deliveryfood.service.model.MenuRegisterVO;
+import com.deliveryfood.service.model.MenuVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,42 +14,38 @@ import java.util.List;
 @Service
 public class MenuService implements IMenuService {
 
-    private final MenuMapper menuMapper;
+    private final MenuDao menuDao;
 
     @Override
-    public void createMenuById(MenuRequest menuRequest) {
+    public void createMenuById(MenuRegisterVO menuRegisterVO) {
         MenuDto menuDto = MenuDto.builder()
-                .menuId(menuRequest.getMenuId())
-                .restaurantId(menuRequest.getRestaurantId())
-                .name(menuRequest.getName())
+                .menuId(menuRegisterVO.getMenuId())
+                .restaurantId(menuRegisterVO.getRestaurantId())
+                .name(menuRegisterVO.getName())
                 .build();
-        menuMapper.createMenuById(menuDto);
+        menuDao.createMenuById(menuDto);
     }
 
     @Override
-    public MenuDto findMenus(MenuRequest menuRequest) {
+    public List<MenuDto> findMenuById(MenuVO menuVO) {
         MenuDto menuDto = MenuDto.builder()
-                .menuId(menuRequest.getMenuId())
-                .restaurantId(menuRequest.getRestaurantId())
+                .restaurantId(menuVO.getRestaurantId())
                 .build();
-        return menuMapper.findMenus(menuDto);
+        return menuDao.findMenuById(menuDto);
     }
 
     @Override
-    public List<MenuDto> findMenuById(MenuRequest menuRequest) {
+    public void modifyMenuById(MenuVO menuVO) {
         MenuDto menuDto = MenuDto.builder()
-                .restaurantId(menuRequest.getRestaurantId())
+                .restaurantId(menuVO.getRestaurantId())
+                .menuId(menuVO.getMenuId())
+                .name(menuVO.getName())
                 .build();
-        return menuMapper.findMenuById(menuDto);
+        menuDao.modifyMenuById(menuDto);
     }
 
     @Override
-    public void modifyMenuById(MenuRequest menuRequest) {
-        MenuDto menuDto = MenuDto.builder()
-                .restaurantId(menuRequest.getRestaurantId())
-                .menuId(menuRequest.getMenuId())
-                .name(menuRequest.getName())
-                .build();
-        menuMapper.modifyMenuById(menuDto);
+    public void deleteByMenuId(String menuId) {
+        menuDao.deleteByMenuId(menuId);
     }
 }
