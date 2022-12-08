@@ -1,14 +1,15 @@
 package com.deliveryfood.service;
 
-import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.controller.model.request.UserRequest;
+import com.deliveryfood.dto.MemberDto;
+import com.deliveryfood.service.impl.MemberService.CertificationResult;
 import com.deliveryfood.service.model.MemberRegisterVO;
-import com.deliveryfood.service.model.UserRegisterVO;
+import com.deliveryfood.service.model.MemberUpdateVO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface IMemberService extends UserDetailsService {
 
-    boolean certification(String userId, String code);
+    CertificationResult certification(String userId, String code);
 
     boolean register(MemberRegisterVO registerVO, String uuid, MemberDto.Role role);
 
@@ -16,9 +17,9 @@ public interface IMemberService extends UserDetailsService {
 
     MemberDto findMemberByEmail(String email);
 
-    String getUserId(String email);
+    String getUserIdByEmail(String email);
 
-    boolean modifyUser(UserRegisterVO registerVO);
+    boolean modifyMember(String userId, MemberUpdateVO updateVO);
 
     void deleteMemberByUserId(String email);
 }

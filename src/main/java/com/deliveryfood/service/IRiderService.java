@@ -1,12 +1,13 @@
 package com.deliveryfood.service;
 
 import com.deliveryfood.controller.model.request.UserRequest;
+import com.deliveryfood.service.impl.MemberService.CertificationResult;
 import com.deliveryfood.service.model.RiderRegisterVO;
 import com.deliveryfood.service.model.RiderUpdateVO;
 
 public interface IRiderService {
 
-    boolean certification(String userId, String code);
+    CertificationResult certification(String userId, String code);
 
     boolean register(RiderRegisterVO registerVO);
 

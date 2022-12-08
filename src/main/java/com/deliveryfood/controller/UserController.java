@@ -4,10 +4,13 @@ import com.deliveryfood.controller.model.request.UserRegisterRequest;
 import com.deliveryfood.controller.model.request.UserRequest;
 import com.deliveryfood.controller.model.request.UserUpdateRequest;
 import com.deliveryfood.service.IUserService;
-import com.deliveryfood.util.SecurityPrincipal;
+import com.deliveryfood.service.impl.MemberService.CertificationResult;
 import com.deliveryfood.service.model.UserRegisterVO;
 import com.deliveryfood.service.model.UserUpdateVO;
+import com.deliveryfood.util.SecurityPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,10 +26,16 @@ public class UserController {
     private final IUserService userService;
 
     @PostMapping("/certification")
-    public void certification(@RequestParam String code)  {
+    public ResponseEntity<CertificationResult> certification(@RequestParam String code)  {
         // 입력한 코드로 본인 인증
         String userId = SecurityPrincipal.getLoginUserId();
-        userService.certification(userId, code);
+        CertificationResult result = userService.certification(userId, code);
+
+        HttpStatus status = HttpStatus.OK;
+        if(result != CertificationResult.SUCEESS) {
+            status = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(result, status);
     }
 
     @PostMapping("/register")

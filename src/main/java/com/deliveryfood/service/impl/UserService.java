@@ -6,6 +6,7 @@ import com.deliveryfood.dto.UserDto;
 import com.deliveryfood.controller.model.request.UserRequest;
 import com.deliveryfood.service.IMemberService;
 import com.deliveryfood.service.IUserService;
+import com.deliveryfood.service.impl.MemberService.CertificationResult;
 import com.deliveryfood.service.model.UserRegisterVO;
 import com.deliveryfood.service.model.UserUpdateVO;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,15 +27,15 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public boolean certification(String userId, String code) {
+    public CertificationResult certification(String userId, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
-        memberService.certification(userId, code);
+        CertificationResult result = memberService.certification(userId, code);
         UserDto userDto = userDao.findByUserId(userId);
         if(userDto == null) {
             throw new UsernameNotFoundException("User DB에 User가 존재하지 않음 : " + userId);
         }
 
-        return true;
+        return result;
     }
 
     @Override
@@ -86,7 +87,7 @@ public class UserService implements IUserService {
 
     @Override
     public String deleteUserByEmail(String email) {
-        String userId = memberService.getUserId(email);
+        String userId = memberService.getUserIdByEmail(email);
 
         memberService.deleteMemberByUserId(userId);
         userDao.deleteUserByUserId(userId);

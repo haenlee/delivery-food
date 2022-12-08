@@ -1,11 +1,12 @@
 package com.deliveryfood.service.impl;
 
+import com.deliveryfood.controller.model.request.UserRequest;
 import com.deliveryfood.dao.RestaurantUserDao;
 import com.deliveryfood.dto.MemberDto;
 import com.deliveryfood.dto.RestaurantUserDto;
-import com.deliveryfood.controller.model.request.UserRequest;
 import com.deliveryfood.service.IMemberService;
 import com.deliveryfood.service.IRestaurantUserService;
+import com.deliveryfood.service.impl.MemberService.CertificationResult;
 import com.deliveryfood.service.model.RestaurantUserRegisterVO;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -25,15 +26,15 @@ public class RestaurantUserService implements IRestaurantUserService {
     }
 
     @Override
-    public boolean certification(String userId, String code) {
+    public CertificationResult certification(String userId, String code) {
         // REGISTER_CODE 와 일치하면 인증 완료
-        memberService.certification(userId, code);
+        CertificationResult result = memberService.certification(userId, code);
         RestaurantUserDto restaurantUserDto = restaurantUserDao.findByUserId(userId);
         if(restaurantUserDto == null) {
             throw new UsernameNotFoundException("restaurantUser DB에 User가 존재하지 않음 : " + userId);
         }
 
-        return true;
+        return result;
     }
 
     @Override
@@ -67,7 +68,7 @@ public class RestaurantUserService implements IRestaurantUserService {
 
     @Override
     public void deleteRestaurantUserByEmail(String email) {
-        String userId = memberService.getUserId(email);
+        String userId = memberService.getUserIdByEmail(email);
 
         memberService.deleteMemberByUserId(userId);
         restaurantUserDao.deleteRestaurantUserByUserId(userId);

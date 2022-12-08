@@ -19,7 +19,7 @@ public class CartService implements ICartService {
 
     private final CartDao cartDao;
 
-    private static final int MAX_CART_MENU_COUNT = 10;
+    public static final int MAX_CART_MENU_COUNT = 10;
 
     @Override
     public List<CartMenuDto> findCart(String userId) {
@@ -32,17 +32,18 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public void deleteCart(String userId) {
+    public boolean deleteCart(String userId) {
         List<CartMenuDto> cartList = cartDao.findCart(userId);
         if(cartList == null) {
             throw new NullPointerException("삭제할 장바구니가 존재하지 않음 : " + userId);
         }
 
         cartDao.deleteCart(userId);
+        return true;
     }
 
     @Override
-    public void addMenu(CartMenuVO menuVO) {
+    public boolean addMenu(CartMenuVO menuVO) {
         int totalCount = 0;
         List<CartMenuDto> cartList = cartDao.findCart(menuVO.getUserId());
         if(cartList != null) {
@@ -66,6 +67,7 @@ public class CartService implements ICartService {
                 .build();
 
         cartDao.addMenu(cartMenuDto);
+        return true;
     }
 
     private boolean checkEqualMenu(List<CartMenuDto> menuList, CartMenuVO menuVO) {
@@ -78,7 +80,7 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public void deleteMenu(String userId, int index) {
+    public boolean deleteMenu(String userId, int index) {
         int totalCount = 0;
         List<CartMenuDto> cartList = cartDao.findCart(userId);
         if(cartList != null) {
@@ -98,5 +100,6 @@ public class CartService implements ICartService {
         }
 
         cartDao.deleteMenu(userId, index);
+        return true;
     }
 }
