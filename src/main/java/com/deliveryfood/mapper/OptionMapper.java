@@ -1,6 +1,6 @@
 package com.deliveryfood.mapper;
 
-import com.deliveryfood.dto.OptionDto;
+import com.deliveryfood.dao.model.OptionDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

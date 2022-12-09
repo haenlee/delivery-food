@@ -1,6 +1,6 @@
 package com.deliveryfood.service;
 
-import com.deliveryfood.dto.CartMenuDto;
+import com.deliveryfood.dao.model.CartMenuDto;
 import com.deliveryfood.service.model.CartMenuVO;
 
 import java.util.List;

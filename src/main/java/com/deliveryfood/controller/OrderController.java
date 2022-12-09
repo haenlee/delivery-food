@@ -1,6 +1,6 @@
 package com.deliveryfood.controller;
 
-import com.deliveryfood.dto.OrderDto;
+import com.deliveryfood.dao.model.OrderDto;
 import com.deliveryfood.controller.model.request.OrderRequest;
 import com.deliveryfood.service.IOrderService;
 import lombok.RequiredArgsConstructor;

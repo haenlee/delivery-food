@@ -1,7 +1,7 @@
 package com.deliveryfood.service.impl;
 
 import com.deliveryfood.dao.CartDao;
-import com.deliveryfood.dto.CartMenuDto;
+import com.deliveryfood.dao.model.CartMenuDto;
 import com.deliveryfood.service.ICartService;
 import com.deliveryfood.service.model.CartMenuVO;
 import lombok.RequiredArgsConstructor;

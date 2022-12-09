@@ -1,6 +1,6 @@
 package com.deliveryfood.service;
 
-import com.deliveryfood.dto.OrderDto;
+import com.deliveryfood.dao.model.OrderDto;
 import com.deliveryfood.controller.model.request.OrderRequest;
 
 import java.util.List;

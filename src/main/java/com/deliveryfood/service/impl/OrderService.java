@@ -1,6 +1,6 @@
 package com.deliveryfood.service.impl;
 
-import com.deliveryfood.dto.OrderDto;
+import com.deliveryfood.dao.model.OrderDto;
 import com.deliveryfood.mapper.OrderMapper;
 import com.deliveryfood.controller.model.request.OrderRequest;
 import com.deliveryfood.service.IOrderService;

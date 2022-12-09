@@ -1,6 +1,6 @@
 package com.deliveryfood.dao;
 
-import com.deliveryfood.dto.OptionDto;
+import com.deliveryfood.dao.model.OptionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;

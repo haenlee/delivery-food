@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.deliveryfood.mapper.RiderMapper">
 
-    <select id="findByUserId" resultType="com.deliveryfood.dto.RiderDto">
+    <select id="findByUserId" resultType="com.deliveryfood.dao.model.RiderDto">
         SELECT *
             , USER_ID as userId
             , REG_DT as regDt
@@ -13,19 +13,19 @@
         WHERE user_id = #{userId}
     </select>
 
-    <insert id="register" parameterType="com.deliveryfood.dto.RiderDto">
+    <insert id="register" parameterType="com.deliveryfood.dao.model.RiderDto">
         INSERT INTO RIDER(user_id, commission, status, reg_dt, udt_dt)
         VALUES(#{userId}, #{commission}, #{status}, #{regDt}, #{udtDt})
     </insert>
 
-    <update id="updateRider" parameterType="com.deliveryfood.dto.RiderDto">
+    <update id="updateRider" parameterType="com.deliveryfood.dao.model.RiderDto">
         UPDATE RIDER
         SET commission = #{commission},
             udt_dt = NOW()
         WHERE user_id = #{userId}
     </update>
 
-    <update id="updateStatus" parameterType="com.deliveryfood.dto.RiderDto">
+    <update id="updateStatus" parameterType="com.deliveryfood.dao.model.RiderDto">
         UPDATE RIDER
         SET status = #{status},
             udt_dt = NOW()

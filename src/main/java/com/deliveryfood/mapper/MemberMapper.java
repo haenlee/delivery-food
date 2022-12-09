@@ -1,6 +1,6 @@
 package com.deliveryfood.mapper;
 
-import com.deliveryfood.dto.MemberDto;
+import com.deliveryfood.dao.model.MemberDto;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

@@ -1,6 +1,6 @@
 package com.deliveryfood.dao;
 
-import com.deliveryfood.dto.RestaurantDto;
+import com.deliveryfood.dao.model.RestaurantDto;
 import lombok.RequiredArgsConstructor;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;

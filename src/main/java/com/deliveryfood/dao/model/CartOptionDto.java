@@ -1,4 +1,4 @@
-package com.deliveryfood.dto;
+package com.deliveryfood.dao.model;
 
 import com.deliveryfood.service.model.CartOptionVO;
 import lombok.AllArgsConstructor;

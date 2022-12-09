@@ -2,7 +2,7 @@ package com.deliveryfood.service.impl;
 
 import com.deliveryfood.controller.model.request.UserRequest;
 import com.deliveryfood.dao.MemberDao;
-import com.deliveryfood.dto.MemberDto;
+import com.deliveryfood.dao.model.MemberDto;
 import com.deliveryfood.security.CustomUserDetails;
 import com.deliveryfood.service.IMemberService;
 import com.deliveryfood.service.model.MemberRegisterVO;

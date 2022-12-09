@@ -5,23 +5,23 @@
 
 <mapper namespace="com.deliveryfood.mapper.SubOptionMapper">
 
-    <insert id="createSubOption" parameterType="com.deliveryfood.dto.SubOptionDto">
+    <insert id="createSubOption" parameterType="com.deliveryfood.dao.model.SubOptionDto">
         INSERT INTO sub_options(option_id, menu_id, sub_option_id)
         VALUES(#{optionId}, #{menuId}, #{subOptionId})
     </insert>
 
-    <delete id="deleteSubOptionById" parameterType="com.deliveryfood.dto.SubOptionDto">
+    <delete id="deleteSubOptionById" parameterType="com.deliveryfood.dao.model.SubOptionDto">
         DELETE FROM sub_options
         WHERE sub_option_id = #{subOptionId}
     </delete>
 
-    <select id="findSubOptionById" parameterType="com.deliveryfood.dto.SubOptionDto" resultMap="SubOptionInfo">
+    <select id="findSubOptionById" parameterType="com.deliveryfood.dao.model.SubOptionDto" resultMap="SubOptionInfo">
         SELECT * FROM sub_options
         WHERE menu_id = #{menuId}
         and option_id = #{optionId}
     </select>
 
-    <resultMap id="SubOptionInfo" type="com.deliveryfood.dto.SubOptionDto">
+    <resultMap id="SubOptionInfo" type="com.deliveryfood.dao.model.SubOptionDto">
         <result column="option_id" property="optionId"/>
         <result column="menu_id" property="menuId"/>
         <result column="sub_option_id" property="subOptionId"/>

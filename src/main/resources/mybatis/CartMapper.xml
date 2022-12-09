@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.deliveryfood.mapper.CartMapper">
 
-    <select id="findCart" resultType="com.deliveryfood.dto.CartMenuDto">
+    <select id="findCart" resultType="com.deliveryfood.dao.model.CartMenuDto">
         SELECT *
         FROM CART
         WHERE user_Id = #{userId}
@@ -16,7 +16,7 @@
         WHERE user_id = #{userId}
     </delete>
 
-    <insert id="addMenu" parameterType="com.deliveryfood.dto.CartMenuDto">
+    <insert id="addMenu" parameterType="com.deliveryfood.dao.model.CartMenuDto">
         INSERT INTO CART(user_id, idx, menu_id, count, reg_dt)
         VALUES(#{userId}, #{idx}, #{menuId}, #{count}, #{regDt})
     </insert>

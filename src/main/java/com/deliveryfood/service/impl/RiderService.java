@@ -2,8 +2,8 @@ package com.deliveryfood.service.impl;
 
 import com.deliveryfood.controller.model.request.UserRequest;
 import com.deliveryfood.dao.RiderDao;
-import com.deliveryfood.dto.MemberDto;
-import com.deliveryfood.dto.RiderDto;
+import com.deliveryfood.dao.model.MemberDto;
+import com.deliveryfood.dao.model.RiderDto;
 import com.deliveryfood.service.IMemberService;
 import com.deliveryfood.service.IRiderService;
 import com.deliveryfood.service.impl.MemberService.CertificationResult;

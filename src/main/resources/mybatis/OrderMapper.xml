@@ -5,22 +5,22 @@
 
 <mapper namespace="com.deliveryfood.mapper.OrderMapper">
 
-    <insert id="createOrder" parameterType="com.deliveryfood.dto.OrderDto">
+    <insert id="createOrder" parameterType="com.deliveryfood.dao.model.OrderDto">
         INSERT INTO orders(order_id, user_id, state)
         VALUES(#{orderId}, #{userId}, #{state})
     </insert>
 
-    <select id="findOrder" parameterType="com.deliveryfood.dto.OrderDto" resultType="com.deliveryfood.dto.OrderDto">
+    <select id="findOrder" parameterType="com.deliveryfood.dao.model.OrderDto" resultType="com.deliveryfood.dao.model.OrderDto">
         SELECT * FROM orders
         WHERE order_id = #{orderId}
     </select>
 
-    <select id="findOrderById" parameterType="com.deliveryfood.dto.OrderDto" resultType="com.deliveryfood.dto.OrderDto">
+    <select id="findOrderById" parameterType="com.deliveryfood.dao.model.OrderDto" resultType="com.deliveryfood.dao.model.OrderDto">
         SELECT * FROM orders
         WHERE user_id = #{userId}
     </select>
 
-    <update id="modifyOrderById" parameterType="com.deliveryfood.dto.OrderDto">
+    <update id="modifyOrderById" parameterType="com.deliveryfood.dao.model.OrderDto">
         UPDATE orders SET state = #{state}
         WHERE order_id = #{orderId}
     </update>

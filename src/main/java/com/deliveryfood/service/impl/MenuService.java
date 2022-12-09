@@ -1,7 +1,7 @@
 package com.deliveryfood.service.impl;
 
 import com.deliveryfood.dao.MenuDao;
-import com.deliveryfood.dto.MenuDto;
+import com.deliveryfood.dao.model.MenuDto;
 import com.deliveryfood.service.IMenuService;
 import com.deliveryfood.service.model.MenuRegisterVO;
 import com.deliveryfood.service.model.MenuVO;

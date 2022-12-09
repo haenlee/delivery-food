@@ -1,6 +1,6 @@
 package com.deliveryfood.controller;
 
-import com.deliveryfood.dto.CartMenuDto;
+import com.deliveryfood.dao.model.CartMenuDto;
 import com.deliveryfood.controller.model.request.CartMenuRequest;
 import com.deliveryfood.controller.model.response.CartMenuResponse;
 import com.deliveryfood.service.impl.CartService;

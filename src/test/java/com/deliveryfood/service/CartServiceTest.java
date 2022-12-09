@@ -1,7 +1,7 @@
 package com.deliveryfood.service;
 
 import com.deliveryfood.dao.CartDao;
-import com.deliveryfood.dto.CartMenuDto;
+import com.deliveryfood.dao.model.CartMenuDto;
 import com.deliveryfood.service.impl.CartService;
 import com.deliveryfood.service.model.CartMenuVO;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,7 +1,7 @@
 package com.deliveryfood.service.impl;
 
 import com.deliveryfood.dao.SubOptionDao;
-import com.deliveryfood.dto.SubOptionDto;
+import com.deliveryfood.dao.model.SubOptionDto;
 import com.deliveryfood.service.ISubOptionService;
 import com.deliveryfood.service.model.SubOptionVO;
 import lombok.RequiredArgsConstructor;

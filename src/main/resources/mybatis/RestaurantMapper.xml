@@ -5,27 +5,27 @@
 
 <mapper namespace="com.deliveryfood.mapper.RestaurantMapper">
 
-    <insert id="register" parameterType="com.deliveryfood.dto.RestaurantDto">
+    <insert id="register" parameterType="com.deliveryfood.dao.model.RestaurantDto">
         INSERT INTO restaurant(restaurant_id, user_id, name)
         VALUES(#{restaurantId}, #{userId}, #{name})
     </insert>
 
-    <delete id="deleteByRestaurantId" parameterType="com.deliveryfood.dto.RestaurantDto">
+    <delete id="deleteByRestaurantId" parameterType="com.deliveryfood.dao.model.RestaurantDto">
         DELETE
         FROM restaurant
         WHERE restaurant_id = #{restaurantId}
     </delete>
 
-    <select id="findUsers" resultType="com.deliveryfood.dto.RestaurantDto">
+    <select id="findUsers" resultType="com.deliveryfood.dao.model.RestaurantDto">
         SELECT * FROM restaurant
     </select>
 
-    <select id="findUserById" parameterType="com.deliveryfood.dto.RestaurantDto" resultType="com.deliveryfood.dto.RestaurantDto">
+    <select id="findUserById" parameterType="com.deliveryfood.dao.model.RestaurantDto" resultType="com.deliveryfood.dao.model.RestaurantDto">
         SELECT * FROM restaurant
         WHERE restaurant_id = #{restaurantId}
     </select>
 
-    <update id="modifyUserById" parameterType="com.deliveryfood.dto.RestaurantDto">
+    <update id="modifyUserById" parameterType="com.deliveryfood.dao.model.RestaurantDto">
         UPDATE restaurant SET name = #{name}
         WHERE restaurant_id = #{restaurantId}
     </update>

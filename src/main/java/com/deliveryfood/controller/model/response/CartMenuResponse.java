@@ -1,6 +1,6 @@
 package com.deliveryfood.controller.model.response;
 
-import com.deliveryfood.dto.CartMenuDto;
+import com.deliveryfood.dao.model.CartMenuDto;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.deliveryfood.mapper.MemberMapper">
 
-    <select id="findByEmail" resultType="com.deliveryfood.dto.MemberDto">
+    <select id="findByEmail" resultType="com.deliveryfood.dao.model.MemberDto">
         SELECT *
             , USER_ID as userId
             , REG_DT as regDt
@@ -13,7 +13,7 @@
         WHERE email = #{email}
     </select>
 
-    <select id="findByUserId" resultType="com.deliveryfood.dto.MemberDto">
+    <select id="findByUserId" resultType="com.deliveryfood.dao.model.MemberDto">
         SELECT *
              , USER_ID as userId
              , REG_DT as regDt
@@ -22,26 +22,26 @@
         WHERE user_id = #{userId}
     </select>
 
-    <insert id="register" parameterType="com.deliveryfood.dto.MemberDto">
+    <insert id="register" parameterType="com.deliveryfood.dao.model.MemberDto">
         INSERT INTO MEMBER(user_id, name , email, password, phone, status, role, reg_dt, udt_dt)
         VALUES(#{userId}, #{name}, #{email}, #{password}, #{phone}, #{status}, #{role}, #{regDt}, #{udtDt})
     </insert>
 
-    <update id="updateStatus" parameterType="com.deliveryfood.dto.MemberDto">
+    <update id="updateStatus" parameterType="com.deliveryfood.dao.model.MemberDto">
         UPDATE MEMBER
         SET status = #{status},
             udt_dt = NOW()
         WHERE user_id = #{userId}
     </update>
 
-    <update id="updateRole" parameterType="com.deliveryfood.dto.MemberDto">
+    <update id="updateRole" parameterType="com.deliveryfood.dao.model.MemberDto">
         UPDATE MEMBER
         SET role = #{role},
             udt_dt = NOW()
         WHERE user_id = #{userId}
     </update>
 
-    <update id="updateMember" parameterType="com.deliveryfood.dto.MemberDto">
+    <update id="updateMember" parameterType="com.deliveryfood.dao.model.MemberDto">
         UPDATE MEMBER
         SET phone = #{phone},
             udt_dt = NOW()

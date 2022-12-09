@@ -1,6 +1,6 @@
 package com.deliveryfood.databases;
 
-import com.deliveryfood.dto.MenuDto;
+import com.deliveryfood.dao.model.MenuDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

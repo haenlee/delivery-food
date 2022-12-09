@@ -1,7 +1,7 @@
 package com.deliveryfood.service.impl;
 
 import com.deliveryfood.dao.RestaurantDao;
-import com.deliveryfood.dto.RestaurantDto;
+import com.deliveryfood.dao.model.RestaurantDto;
 import com.deliveryfood.service.IRestaurantService;
 import com.deliveryfood.service.model.RestaurantRegisterVO;
 import lombok.RequiredArgsConstructor;

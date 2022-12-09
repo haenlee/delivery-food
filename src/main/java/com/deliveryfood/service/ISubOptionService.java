@@ -1,6 +1,6 @@
 package com.deliveryfood.service;
 
-import com.deliveryfood.dto.SubOptionDto;
+import com.deliveryfood.dao.model.SubOptionDto;
 import com.deliveryfood.service.model.SubOptionVO;
 
 import java.util.List;

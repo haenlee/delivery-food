@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.deliveryfood.mapper.UserMapper">
 
-    <select id="findByUserId" resultType="com.deliveryfood.dto.UserDto">
+    <select id="findByUserId" resultType="com.deliveryfood.dao.model.UserDto">
         SELECT *
             , USER_ID as userId
             , IMAGE_PATH as imagePath
@@ -14,12 +14,12 @@
         WHERE user_id = #{userId}
     </select>
 
-    <insert id="register" parameterType="com.deliveryfood.dto.UserDto">
+    <insert id="register" parameterType="com.deliveryfood.dao.model.UserDto">
         INSERT INTO USER(user_id, address, nickname, grade, image_path, reg_dt, udt_dt)
         VALUES(#{userId}, #{address}, #{nickname}, #{grade}, #{imagePath}, #{regDt}, #{udtDt})
     </insert>
 
-    <update id="updateUser" parameterType="com.deliveryfood.dto.UserDto">
+    <update id="updateUser" parameterType="com.deliveryfood.dao.model.UserDto">
         UPDATE USER
         SET address = #{address},
             nickname = #{nickname},

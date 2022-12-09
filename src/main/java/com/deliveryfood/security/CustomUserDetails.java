@@ -1,6 +1,6 @@
 package com.deliveryfood.security;
 
-import com.deliveryfood.dto.MemberDto;
+import com.deliveryfood.dao.model.MemberDto;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
